@@ -22,6 +22,24 @@ package-lock.json
 yarn-debug.log*
 yarn-error.log*
 packages/excalidraw/types
+
+# Auto-generated: scripts/buildWasm.js (wasm → base64 .ts)
+packages/excalidraw/fonts/wasm
+
+# Auto-generated: scripts/build-locales-coverage.js
+packages/excalidraw/locales/percentages.json
+
+# Auto-generated: cn-font-split (font subsetting)
+packages/excalidraw/fonts/Excalifont/index.ts
+packages/excalidraw/fonts/Xiaolai/index.ts
+packages/excalidraw/fonts/ComicShanns/index.ts
+
+# Auto-generated: Vitest --update snapshots
+**/__snapshots__
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
 coverage
 dev-dist
 html
