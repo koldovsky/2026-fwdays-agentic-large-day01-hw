@@ -125,6 +125,10 @@ excalidraw-app/        → Web application and UI layer
 | Hand-drawn Style | ✓ | ✓ | ✗ | ✗ |
 | AI Features | ✓ | ✓ | ✓ | ✗ |
 
+## Details
+For detailed architecture → see docs/technical/architecture.md
+For domain glossary → see docs/product/domain-glossary.md
+
 ## Project Health
 
 - **Maintenance**: Actively maintained with regular releases
