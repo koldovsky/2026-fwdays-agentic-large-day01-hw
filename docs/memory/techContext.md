@@ -81,7 +81,12 @@ Path aliases (`@excalidraw/*`) resolve to source during dev/test via `tsconfig.j
 - **Deployment:** Vercel (configured via `vercel.json`)
 - **CI:** GitHub Actions (`.github/` directory)
 
-## Details
+## Related Docs
 
-- For detailed architecture → see [docs/technical/architecture.md](../technical/architecture.md)
-- For domain glossary → see [docs/product/domain-glossary.md](../product/domain-glossary.md)
+### Technical
+- [Architecture](../technical/architecture.md) — system design, data flow, rendering pipeline
+- [Dev Setup](../technical/dev-setup.md) — onboarding guide, from git clone to first PR
+
+### Product
+- [PRD](../product/PRD.md) — reverse-engineered product requirements
+- [Domain Glossary](../product/domain-glossary.md) — core domain terms

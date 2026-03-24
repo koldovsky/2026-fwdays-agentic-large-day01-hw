@@ -39,8 +39,12 @@ Excalidraw is an open-source virtual whiteboard for sketching hand-drawn-like di
 
 **Out of scope:** Server-side rendering, native desktop/mobile apps, vector editing precision (Illustrator-level), version control for drawings
 
-## Details
+## Related Docs
 
-- For detailed architecture → see [docs/technical/architecture.md](../technical/architecture.md)
-- For domain glossary → see [docs/product/domain-glossary.md](../product/domain-glossary.md)
-- For product requirements → see [docs/product/PRD.md](../product/PRD.md)
+### Technical
+- [Architecture](../technical/architecture.md) — system design, data flow, rendering pipeline
+- [Dev Setup](../technical/dev-setup.md) — onboarding guide, from git clone to first PR
+
+### Product
+- [PRD](../product/PRD.md) — reverse-engineered product requirements
+- [Domain Glossary](../product/domain-glossary.md) — core domain terms

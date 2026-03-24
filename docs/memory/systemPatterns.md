@@ -153,7 +153,12 @@ Store.commit() detects changes → emits DurableIncrement with delta
     → Redo: History applies forward delta → updateScene()
 ```
 
-## Details
+## Related Docs
 
-- For detailed architecture → see [docs/technical/architecture.md](../technical/architecture.md)
-- For domain glossary → see [docs/product/domain-glossary.md](../product/domain-glossary.md)
+### Technical
+- [Architecture](../technical/architecture.md) — system design, data flow, rendering pipeline
+- [Dev Setup](../technical/dev-setup.md) — onboarding guide, from git clone to first PR
+
+### Product
+- [PRD](../product/PRD.md) — reverse-engineered product requirements
+- [Domain Glossary](../product/domain-glossary.md) — core domain terms

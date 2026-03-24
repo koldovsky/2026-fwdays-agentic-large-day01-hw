@@ -36,3 +36,13 @@ From the Memory Bank validation (2026-03-24):
 
 - Fix the documentation issues identified above
 - Begin actual feature development or bug fixes on this branch
+
+## Related Docs
+
+### Technical
+- [Architecture](../technical/architecture.md) — system design, data flow, rendering pipeline
+- [Dev Setup](../technical/dev-setup.md) — onboarding guide, from git clone to first PR
+
+### Product
+- [PRD](../product/PRD.md) — reverse-engineered product requirements
+- [Domain Glossary](../product/domain-glossary.md) — core domain terms

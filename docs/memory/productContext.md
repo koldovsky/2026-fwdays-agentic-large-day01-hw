@@ -36,8 +36,12 @@ Excalidraw fills the gap between heavyweight diagramming tools (Visio, Lucidchar
 - **vs. Miro/FigJam** — Excalidraw is free, self-hostable, and focused on diagrams rather than full whiteboard workflows
 - **vs. tldraw** — Similar space; Excalidraw has a larger community, library ecosystem, and established integrations
 
-## Details
+## Related Docs
 
-- For detailed architecture → see [docs/technical/architecture.md](../technical/architecture.md)
-- For domain glossary → see [docs/product/domain-glossary.md](../product/domain-glossary.md)
-- For product requirements → see [docs/product/PRD.md](../product/PRD.md)
+### Technical
+- [Architecture](../technical/architecture.md) — system design, data flow, rendering pipeline
+- [Dev Setup](../technical/dev-setup.md) — onboarding guide, from git clone to first PR
+
+### Product
+- [PRD](../product/PRD.md) — reverse-engineered product requirements
+- [Domain Glossary](../product/domain-glossary.md) — core domain terms

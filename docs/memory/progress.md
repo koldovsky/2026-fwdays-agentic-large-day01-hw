@@ -25,3 +25,13 @@
 
 - 6 minor documentation inaccuracies identified (see activeContext.md for details)
 - No functional code issues identified
+
+## Related Docs
+
+### Technical
+- [Architecture](../technical/architecture.md) — system design, data flow, rendering pipeline
+- [Dev Setup](../technical/dev-setup.md) — onboarding guide, from git clone to first PR
+
+### Product
+- [PRD](../product/PRD.md) — reverse-engineered product requirements
+- [Domain Glossary](../product/domain-glossary.md) — core domain terms
