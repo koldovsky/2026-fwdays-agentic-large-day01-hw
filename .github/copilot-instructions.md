@@ -43,3 +43,8 @@
 ## Types
 
 - Always include `packages/math/src/types.ts` in the context when your write math related code and always use the Point type instead of { x, y}
+
+## References
+- For details see the Memory Bank `docs/memory` folder, which contains the project brief, technical context, decision log, and system patterns.
+- For architecture structure and guidelines, refer to the `docs/technical` folder.
+- For product domain information, refer to the `docs/product` folder.
