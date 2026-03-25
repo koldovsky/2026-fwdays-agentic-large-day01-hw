@@ -31,7 +31,7 @@
 
 ## Working Assumptions
 - Assumption: the current repo state is mid-workshop and not necessarily a release branch.
-- Assumption: the dirty working tree changes in `package.json`, `yarn.lock`, `.gitignore`, and `.cursorignore` are local workspace changes, not authoritative product priorities.
+- If you see local changes in files such as `package.json`, `yarn.lock`, `.gitignore`, or `.cursorignore`, verify them against the current branch diff and CI status before treating them as authoritative product priorities.
 - Assumption: current maintainers care about onboarding/documentation debt, because the PR template explicitly asks for these docs.
 
 ## Immediate Risks
@@ -41,5 +41,5 @@
 ## Related Docs
 - Product requirements and user-facing priorities: [../product/PRD.md](../product/PRD.md)
 - Runtime structure and service boundaries: [../technical/architecture.md](../technical/architecture.md)
-- Fragile runtime details and hidden constraints: [../technical/behaviors.md](../technical/behaviors.md)
+- Fragile runtime details and hidden constraints: [decisionLog.md](decisionLog.md)
 - Local environment assumptions and external prerequisites: [../technical/dev-setup.md](../technical/dev-setup.md)

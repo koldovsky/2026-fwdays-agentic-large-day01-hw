@@ -69,7 +69,7 @@ Browser
 
 ## Data Flow
 
-### Startup and Scene Hydration
+### Critical Path: App Startup
 
 1. `excalidraw-app/index.tsx` registers the service worker and mounts the React tree.
 2. `App.tsx` initializes app-wide listeners and examines the URL for one of several entry paths:
@@ -81,7 +81,7 @@ Browser
 4. If an external scene is requested, the app may prompt before overwriting current content.
 5. For collaboration rooms, the remote scene is loaded and then reconciled against the current editor state instead of blindly replacing it.
 
-### Local Editing and Persistence
+### Local Editing And Persistence
 
 1. User input changes the editor scene inside `@excalidraw/excalidraw`.
 2. The hosted app receives `onChange(elements, appState, files)` from the editor.
@@ -91,16 +91,16 @@ Browser
 4. Cross-tab version markers are updated so newer browser state can win when multiple tabs are open.
 5. Image file statuses are updated after successful local file persistence.
 
-### Collaboration Flow
+### Critical Path: Collaboration Save Path
 
 1. The app creates and exposes a collaboration API through `collab/Collab.tsx`.
-2. On every editor change, `App.tsx` forwards the current element set to `collabAPI.syncElements()` when collaboration is active.
-3. Collaboration code filters to syncable elements, encrypts the payload, and emits updates over Socket.IO.
-4. Firestore stores encrypted scene snapshots for recovery and late joiners.
-5. Firebase Storage handles image/file uploads separately from scene JSON.
+2. `App.tsx` forwards current element state to `collabAPI.syncElements()` when collaboration is active.
+3. `Collab.tsx` filters to syncable elements and delegates transport work to `Portal.tsx`.
+4. `Portal.tsx` encrypts payloads and emits updates over Socket.IO.
+5. `data/firebase.ts` stores encrypted scene snapshots in Firestore and uploads files to Firebase Storage.
 6. Incoming remote updates are reconciled against the current scene instead of treated as authoritative server state.
 
-### Share-Link and Import/Export Flow
+### Critical Path: Share-Link Export Path
 
 1. The current scene is serialized by the editor and app shell.
 2. Share-link export compresses and encrypts the payload client-side.
@@ -145,6 +145,12 @@ Browser
   - localStorage quota warnings
   - app language selection
 - This split keeps the npm package embeddable while allowing the hosted app to add product features on top.
+
+### Actions And Command Dispatch
+
+- `packages/excalidraw/actions/manager.tsx` owns `ActionManager`, the command-dispatch layer for toolbar, keyboard, context-menu, command-palette, and API-triggered actions.
+- `ActionManager` evaluates `Action` definitions against the current `AppState`, ordered elements, and app props, then routes the resulting mutations through the editor updater.
+- This matters architecturally because canvas behavior is not driven only by pointer interaction; many state transitions flow through reusable action definitions shared by menus, shortcuts, and embedders.
 
 ### Persisted State and Browser Coordination
 
@@ -258,3 +264,10 @@ excalidraw-app
 - Collaboration correctness depends on client reconciliation and sync contracts rather than authoritative server-side domain logic.
 - Security for collaboration and share links depends on client-side encryption and keys kept in URL fragments.
 - Because the app resolves workspace packages to source during development, package boundaries must remain disciplined even when cross-package imports are convenient.
+
+## Related Docs
+
+- Memory-bank summary for decisions and priorities: [../memory/decisionLog.md](../memory/decisionLog.md)
+- System-level patterns and trade-offs: [../memory/systemPatterns.md](../memory/systemPatterns.md)
+- Runtime caveats and hidden behavior: [../memory/decisionLog.md](../memory/decisionLog.md)
+- Local setup, CI, and troubleshooting workflow: [dev-setup.md](dev-setup.md)

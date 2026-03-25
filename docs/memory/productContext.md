@@ -60,4 +60,4 @@
 - Full product requirements and user flows: [../product/PRD.md](../product/PRD.md)
 - Shared product terminology for scenes, rooms, links, and AI features: [../product/domain-glossary.md](../product/domain-glossary.md)
 - Technical realization of these UX goals and flows: [../technical/architecture.md](../technical/architecture.md)
-- Important edge cases behind the UX failure modes above: [../technical/behaviors.md](../technical/behaviors.md)
+- Important edge cases behind the UX failure modes above: [decisionLog.md](decisionLog.md)

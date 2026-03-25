@@ -37,4 +37,4 @@
 - Product scope and requirement baseline: [../product/PRD.md](../product/PRD.md)
 - Architectural surface area behind the current maturity assessment: [../technical/architecture.md](../technical/architecture.md)
 - Setup and validation work still needed for contributor onboarding: [../technical/dev-setup.md](../technical/dev-setup.md)
-- Behavior-level risks still likely to drive regressions: [../technical/behaviors.md](../technical/behaviors.md)
+- Behavior-level risks still likely to drive regressions: [decisionLog.md](decisionLog.md)
