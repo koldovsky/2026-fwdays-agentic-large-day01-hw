@@ -34,3 +34,6 @@ packages/excalidraw/locales/percentages.json
 **/node_modules/**
 **/.next/**
 **/.turbo/**
+/.github/assets/**
+packages/excalidraw/fonts/**
+packages/excalidraw/subset/**

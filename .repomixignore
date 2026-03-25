@@ -39,3 +39,4 @@ packages/excalidraw/subset/**
 .env.development
 .env.production
 .env.test
+/.github/assets/**
