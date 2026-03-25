@@ -27,7 +27,6 @@ coverage/
 
 # Docker/CI artifacts
 .docker/
-.github/workflows/
 
 # Fonts in dist
 packages/excalidraw/dist/**/*.woff2
