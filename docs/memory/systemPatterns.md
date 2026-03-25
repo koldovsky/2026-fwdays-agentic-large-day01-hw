@@ -150,6 +150,20 @@ shareUrl = `${origin}/share/${id}#${key}`
                                     // key is ONLY in the fragment (never sent to server)
 ```
 
+## Undocumented Behaviors
+
+These behaviors exist in the codebase but are not documented in official docs:
+
+1. **PNG files carry hidden scene data.** When exporting to PNG, the full Excalidraw JSON (elements + appState) is embedded in the image as a PNG text chunk (`tEXt`). Opening the PNG back in Excalidraw restores the full scene — not just the visual. This means a PNG screenshot IS also a save file.
+
+2. **URL fragment key is cryptographically load-bearing.** The collaboration room key (`#room=id,KEY`) is never sent to the server — it exists only in the browser's URL fragment. If the key portion is stripped (e.g., by a link shortener or some chat apps), the room becomes permanently inaccessible. There is no recovery mechanism server-side.
+
+3. **`versionNonce` is a tie-breaker, not a sequence number.** During CRDT-style reconciliation, when two collaborators modify the same element in the same tick (`version` tie), the winner is determined by whichever has the **higher `versionNonce`** — a random number. This means the "last write wins" is actually "random wins" on exact ties, which is intentional to avoid infinite conflicts.
+
+4. **Deep type imports are allowed, shallow runtime imports are not.** ESLint bans `import { atom } from 'jotai'` (direct Jotai import) and `import X from '@excalidraw/excalidraw/components/...'` (deep runtime imports), but `import type { Foo } from '@excalidraw/element/types'` is explicitly permitted. The rule targets runtime coupling, not type-only coupling.
+
+5. **`DELETED_ELEMENT_TIMEOUT` keeps deleted elements alive for 24 hours.** Elements marked `isDeleted: true` are still synced over WebSocket for 24 hours (`DELETED_ELEMENT_TIMEOUT = 24 * 60 * 60 * 1000 ms`). This prevents "resurrection" of deleted elements when a collaborator who was offline comes back online.
+
 ## PWA Caching Strategy
 | Asset Type | Strategy | TTL |
 |------------|----------|-----|
