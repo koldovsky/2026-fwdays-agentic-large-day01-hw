@@ -18,6 +18,7 @@ firebase
 logs
 node_modules
 next/
+.next/
 .nyc_output/
 *.min.js
 *.min.css
@@ -26,6 +27,7 @@ npm-debug.log*
 package-lock.json
 yarn-debug.log*
 yarn-error.log*
+yarn.lock
 # tsc emitDeclarationOnly (yarn gen:types in packages/*)
 packages/*/types
 # scripts/buildWasm.js (base64 wasm from fonteditor-core / harfbuzzjs)
@@ -34,6 +36,7 @@ packages/excalidraw/fonts/wasm
 packages/excalidraw/locales/percentages.json
 # vitest snapshot updates
 **/__snapshots__/**
+*.snap
 # Next.js example (examples/with-nextjs)
 examples/with-nextjs/.next
 examples/with-nextjs/out
