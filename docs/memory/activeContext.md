@@ -1,19 +1,21 @@
-> Last updated: 2026-03-25 (session 3)
+> Last updated: 2026-03-25 (session 4)
+> Related: [progress.md](progress.md) | [decisionLog.md](decisionLog.md) | [PRD](../product/PRD.md) | [architecture](../technical/architecture.md) | [undocumented-behavior](../technical/undocumented-behavior.md)
 
 ## Current focus
 
-Workshop PR deliverables: `docs/product/PRD.md` is done (v0.1, In Review). Only `.cursorignore` remains before the PR can be opened.
+Workshop PR deliverables: only `.cursorignore` remains. All docs complete and linked.
 
 ## What was just done
 
-- Delivered Audit 3 report (0 Critical, 2 Major, 3 Minor, 2 Suggestions).
-- Applied all Audit 3 fixes across 4 files:
-  - `CLAUDE.md` — added `packages/utils/` to monorepo table; moved `decisionLog.md` from pre-loaded to reference docs
-  - `docs/memory/progress.md` — corrected domain-glossary term list to actual 20 entries
-  - `docs/memory/decisionLog.md` — restored chronological order (two ~2020 entries moved before ~2022 Jotai entry); updated entry 7 to document the size-cap exemption for decisionLog itself
-  - `docs/memory/activeContext.md` — refreshed stale yarn.lock expiry note
-- Created `docs/product/PRD.md` — reverse-engineered PRD of Excalidraw v0.1 (In Review), covering problem statement, 5 goals, 12 requirements (P0/P1/P2), metrics with baselines and targets, user journeys, risks, 3-phase launch plan, and 4 open questions with owners/deadlines.
-- Updated `progress.md` and `activeContext.md` to mark PRD as done.
+- Added 6 undocumented-behavior entries to `decisionLog.md` (verified against source):
+  1. ShapeCache WeakMap keying — only geometry busts cache; style changes safe only via action system's `newElementWith()` (`mutateElement.ts:130–137`, `shape.ts:83`)
+  2. EVENTUALLY stale snapshot — deliberately holds `this.snapshot` stale to merge all EVENTUALLY changes into next IMMEDIATELY undo entry (`store.ts:376–385`)
+  3. Undo version exclusion — `version`/`versionNonce` excluded from delta application so each undo appears as a new user action to collaborators (`history.ts:33`)
+  4. Uninitialized image delta skip — pending image elements silently excluded from Store delta detection (`store.ts:937–943`)
+  5. triggerUpdate unconditional nonce — every call regenerates `sceneNonce`, busting renderer memo even without element changes (`Scene.ts:303–309`)
+  6. Object.assign binding bypass — `fixBindingsAfterDuplication()` bypasses `mutateElement()`; no version bump on binding ref updates (`binding.ts:1992–2047`)
+- Added markdown links to all reference and product docs in every pre-loaded Memory Bank file.
+- Updated `progress.md` (17 decisionLog entries, session 4 timestamp).
 
 ## Active decisions
 
@@ -21,7 +23,7 @@ Workshop PR deliverables: `docs/product/PRD.md` is done (v0.1, In Review). Only 
 - `docs/memory/decisionLog.md` is exempt from the pre-loaded cap — it is append-only and lives in the reference docs list in `CLAUDE.md`.
 - `docs/technical/` and `docs/product/` files are reference docs — longer is fine, depth over brevity.
 - All docs are facts-only, source-verified — no assumptions or inferred behavior without a cited file/line.
-- Memory Bank files cross-reference each other at the top rather than duplicating content.
+- Memory Bank files cross-reference each other via relative markdown links, not plain text.
 
 ## In progress (not finished)
 
@@ -34,12 +36,13 @@ Workshop PR deliverables: `docs/product/PRD.md` is done (v0.1, In Review). Only 
 - `docs/memory/techContext.md` and `systemPatterns.md` were modified by the user after creation (cross-reference links added at top) — treat user edits as authoritative, do not overwrite.
 - `frame.test.tsx` FIXME: frame detection passes in browser, fails in jsdom — root cause unknown, do not attempt to fix without more context.
 - Arrow label version-bump test (`textWysiwyg.test.tsx:335`) is non-deterministically flaky — do not mark as fixed without a reproducible root cause.
+- `fixBindingsAfterDuplication()` uses `Object.assign` bypassing `mutateElement()` — latent collaboration bug: binding ref updates on duplicated elements may not propagate to remote clients (version not bumped). See `decisionLog.md` — Object.assign binding bypass entry.
 
-*Questions* (also tracked in `docs/product/PRD.md` Open Questions):
-- Q-1: What is the minimum supported browser version? Check `excalidraw-app/vite.config.ts` `build.target` — Owner: Engineering Lead.
-- Q-2: What is the maximum acceptable gzipped bundle size for `@excalidraw/excalidraw`? — Owner: Engineering Lead.
-- Q-3: Does the collaboration server encrypt scene data in transit and at rest? — Owner: Infrastructure.
-- Q-4: Is `docs/product/PRD.md` a reverse-engineered PRD of existing Excalidraw, or a PRD for new work built on top? — Owner: Workshop Facilitator/PM.
+*Questions* (also tracked in [docs/product/PRD.md](../product/PRD.md) Open Questions):
+- Q-1: Minimum supported browser version — check `excalidraw-app/vite.config.ts` `build.target` — Owner: Engineering Lead.
+- Q-2: Maximum acceptable gzipped bundle size for `@excalidraw/excalidraw` — Owner: Engineering Lead.
+- Q-3: Collaboration server encryption — Owner: Infrastructure.
+- Q-4: PRD scope — reverse-engineered vs. new work — Owner: Workshop Facilitator/PM.
 
 ## Next steps
 

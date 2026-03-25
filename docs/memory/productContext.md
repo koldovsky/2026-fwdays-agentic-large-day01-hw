@@ -4,6 +4,11 @@ description: Why Excalidraw exists, who it serves, and what success looks like �
 type: project
 ---
 
+## Details
+For full PRD → see [docs/product/PRD.md](../product/PRD.md)
+For domain glossary → see [docs/product/domain-glossary.md](../product/domain-glossary.md)
+For WHY architectural choices were made → see [docs/memory/decisionLog.md](decisionLog.md)
+
 ## Why this product exists
 
 Digital diagramming tools produce output that looks polished and final, which discourages early-stage thinking. Excalidraw exists to make sketching feel like sketching — fast, low-fidelity, and collaborative — so teams can think visually without the overhead of a design tool or the formality of a presentation.

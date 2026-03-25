@@ -1,4 +1,5 @@
-> Last updated: 2026-03-25 (session 3)
+> Last updated: 2026-03-25 (session 4)
+> Related: [activeContext.md](activeContext.md) | [decisionLog.md](decisionLog.md) | [PRD](../product/PRD.md) | [dev-setup](../technical/dev-setup.md)
 
 ## Completion snapshot
 
@@ -19,7 +20,7 @@ Status: On track
 - [x] `docs/memory/progress.md` — this file
 
 **Reference docs**
-- [x] `docs/memory/decisionLog.md` — 11 architectural decisions (chronological): monorepo, class component, mutable elements, five-canvas rendering, withBatchedUpdates, Jotai isolation, FractionalIndex, CaptureUpdateAction, flushSync, Memory Bank size cap, facts-only policy
+- [x] `docs/memory/decisionLog.md` — 17 entries (chronological): 11 architectural decisions + 6 undocumented-behavior entries (ShapeCache WeakMap keying, EVENTUALLY stale snapshot, undo version exclusion, uninitialized image delta skip, triggerUpdate nonce unconditional, Object.assign binding bypass)
 - [x] `docs/technical/architecture.md` — Mermaid dependency graph, data-flow sequence diagrams, state management, rendering pipeline, package deps (304 lines)
 - [x] `docs/technical/dev-setup.md` — full onboarding guide: prerequisites, env config, verification checklist, troubleshooting
 - [x] `docs/product/domain-glossary.md` — 20 domain terms: Element, Scene, AppState, Tool/ActiveTool, Action/ActionResult/ActionName, Store/StoreSnapshot/StoreDelta/CaptureUpdateAction, History/Delta, Binding/BoundElement, Group/GroupId, Frame/MagicFrame, Library/LibraryItem, Collaboration/Collaborator, BinaryFiles/BinaryFileData, ShapeCache, FractionalIndex, Renderer, ViewMode/ZenMode/GridMode, EditorInterface, ExcalidrawImperativeAPI, Tunnel

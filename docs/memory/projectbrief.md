@@ -1,8 +1,8 @@
 # projectbrief.md
 
 ## Details
-For detailed architecture → see docs/technical/architecture.md
-For domain glossary → see docs/product/domain-glossary.md
+For detailed architecture → see [docs/technical/architecture.md](../technical/architecture.md)
+For domain glossary → see [docs/product/domain-glossary.md](../product/domain-glossary.md)
 
 ## What is Excalidraw?
 

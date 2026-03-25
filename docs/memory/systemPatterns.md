@@ -1,9 +1,10 @@
 # systemPatterns.md
 
 ## Details
-For detailed architecture → see docs/technical/architecture.md
-For domain glossary → see docs/product/domain-glossary.md
-For WHY these patterns were chosen → see docs/memory/decisionLog.md
+For detailed architecture → see [docs/technical/architecture.md](../technical/architecture.md)
+For domain glossary → see [docs/product/domain-glossary.md](../product/domain-glossary.md)
+For WHY these patterns were chosen → see [docs/memory/decisionLog.md](decisionLog.md)
+For undocumented behaviors → see [docs/technical/undocumented-behavior.md](../technical/undocumented-behavior.md)
 
 ## Top-Level Architecture
 
