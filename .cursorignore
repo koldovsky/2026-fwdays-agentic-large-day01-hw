@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+build/
+dist/
+dev-dist/
+coverage/
+.next/
+.nyc_output/
+
+# Minified & generated
+*.min.js
+*.min.css
+*.snap
+
+# Logs & caches
+*.log
+.eslintcache
+*.tsbuildinfo
+
+# Environment secrets
+.env.production
+.env.*.local
+
+# Firebase
+.firebase/
+firebase-debug.log
+
+# Lock files (large, not useful for AI context)
+yarn.lock
+package-lock.json
+
+# IDE & VCS
+.vscode/
+.idea/
+.git/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated assets
+public/workbox/
+
+# Repomix (full repo dump for AI — not needed for indexing)
+repomix-output.xml
