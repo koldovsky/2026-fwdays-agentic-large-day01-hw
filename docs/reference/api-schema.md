@@ -206,7 +206,7 @@ interface AppState {
   isCollaborating: boolean
   collaborators: Map<SocketId, Collaborator>
   selectedElementIds: Record<string, boolean>
-  // ... (272 fields as of v0.18.0 — this count changes with each release)
+  // ... (AppState has many more fields — exact count varies by release)
 }
 ```
 
