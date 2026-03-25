@@ -1,0 +1,49 @@
+# Build artifacts
+dist/
+build/
+.next/
+out/
+excalidraw-app/build/
+
+# Dependencies
+node_modules/
+
+# Generated / minified files
+*.min.js
+*.min.css
+*.chunk.js
+*.bundle.js
+
+# Test snapshots
+**/__snapshots__/
+**/*.snap
+
+# Lock files
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
+# Coverage & reports
+coverage/
+.nyc_output/
+lcov.info
+
+# IDE / system
+.git/
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.user
+
+# Compiled package outputs
+packages/*/dist/
+packages/*/build/
+
+# Type declaration caches
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
