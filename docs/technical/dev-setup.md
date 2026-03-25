@@ -164,7 +164,7 @@ yarn test:typecheck
 - **Unit/integration tests (Vitest)**:
 
 ```bash
-yarn test
+yarn test:app
 ```
 
 - **All validations (recommended before pushing)**:

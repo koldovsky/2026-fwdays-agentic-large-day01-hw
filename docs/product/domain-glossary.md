@@ -13,6 +13,24 @@ Onboarding reference for **Excalidraw editor** terminology in this repository. D
 
 ---
 
+## Bound Element
+
+- **Name:** Bound Element
+- **Definition:** A `BoundElement` reference record (`{ id, type: "arrow" | "text" }`) that points to another element bound to the current element.
+- **Where it is used:** `packages/element/src/types.ts` (`BoundElement`) as the element type inside `boundElements: readonly BoundElement[] | null` on elements.
+- **Do not confuse with:** The owning/container element that holds `boundElements`; this is only the lightweight binding reference.
+
+---
+
+## Linear Element
+
+- **Name:** Linear Element
+- **Definition:** An `ExcalidrawLinearElement` whose `type` is `"line"` or `"arrow"`. Linear elements are defined by a `points` array and can optionally attach to other elements via `startBinding` / `endBinding` (and include arrowhead metadata for arrows).
+- **Where it is used:** `packages/element/src/types.ts` (`ExcalidrawLinearElement`, `ExcalidrawLineElement`, `ExcalidrawArrowElement`) and the editor UI/editor logic that edits linear points (e.g. `LinearElementEditor`).
+- **Do not confuse with:** Generic geometry “line segments”; a linear element is the serialized element model with bindings + arrowhead state.
+
+---
+
 ## Scene
 
 - **Name:** Scene

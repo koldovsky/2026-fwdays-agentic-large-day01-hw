@@ -120,8 +120,10 @@ The condensed log below summarizes architectural and risk-related observations d
    - Paste handling uses this flag to decide whether pasted content should be interpreted as embeds vs. plain text.
 
 --
+ 
 ## links:
-### undocumented behavior
-  see: docs/technical/code-notes.md
-  look thought it every time you make changes to related code and features
 
+### undocumented behavior
+
+  see: docs/technical/code-notes.md
+  look through it every time you make changes to related code and features

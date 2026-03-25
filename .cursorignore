@@ -34,7 +34,6 @@ npm-debug.log*
 package-lock.json
 yarn-debug.log*
 yarn-error.log*
-packages/excalidraw/types
 coverage
 dev-dist
 # Vite/monorepo build outputs (including nested)
@@ -45,7 +44,6 @@ html
 meta*.json
 .claude
 yarn.lock
-package-lock.json
 coverage/
 # coverage outputs can be generated in nested folders
 **/coverage/

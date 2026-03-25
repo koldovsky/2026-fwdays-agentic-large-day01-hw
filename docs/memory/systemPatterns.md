@@ -1,11 +1,13 @@
 # System Patterns (Excalidraw Verified Memory)
 
 ## Scope
+
 - Editor engine orchestration inside `packages/excalidraw/components/App.tsx`
 - Public React entrypoint and providers in `packages/excalidraw/index.tsx`
 - Hosted collaboration/persistence integration in `excalidraw-app/collab/*` and `excalidraw-app/data/firebase.ts`
 
 ## 1) Integration Surface: React + imperative API
+
 - `packages/excalidraw/index.tsx` exports:
   - `ExcalidrawAPIProvider`, which provides `ExcalidrawAPIContext` and `ExcalidrawAPISetContext` so host code can access the imperative API.
   - `Excalidraw` (memoized wrapper) that renders the internal editor `<App />`.
@@ -15,6 +17,7 @@
   - `ExcalidrawActionManagerContext`
 
 ## 2) Two-state-plane model
+
 - Editor model state:
   - `packages/excalidraw/components/App.tsx` maintains the main editor model in `this.state` (type `AppState`).
 - UI atom state:
@@ -22,6 +25,7 @@
   - `App.tsx` reads Jotai-backed atoms during rendering (example: `showShapeSwitchPanel` reads `convertElementTypePopupAtom` via `editorJotaiStore.get(...)`).
 
 ## 3) Controller Architecture: ActionManager + syncActionResult bridge
+
 - `App.tsx` constructs the core orchestration objects in its constructor:
   - `this.scene = new Scene()`
   - `this.renderer = new Renderer(this.scene)`
@@ -42,11 +46,13 @@
   - If nothing else updated, triggers canvas redraw via `this.scene.triggerUpdate()`
 
 ## 4) Rendering Pipeline (render() -> renderer.getRenderableElements)
+
 - `App.tsx` render derives viewport-filtered renderables by calling:
   - `this.renderer.getRenderableElements({ sceneNonce, zoom, offsetLeft, offsetTop, scrollX, scrollY, height, width, editingTextElement, newElementId })`
 - It also stores `this.visibleElements = visibleElements` for use by downstream logic.
 
 ## 5) Lifecycle and resource management
+
 - `componentDidMount` in `App.tsx`:
   - marks `this.unmounted = false`
   - creates `this.api` via `this.createExcalidrawAPI()`
@@ -67,10 +73,12 @@
   - resets `document.documentElement.style.overscrollBehaviorX = ""`
 
 ## 6) Event listener strategy
+
 - `addEventListeners` removes previously registered listeners first, via `this.removeEventListeners()`.
 - It registers global and container events using `this.onRemoveEventListenersEmitter.once(addEventListener(...))`.
 
 ## 7) Module-scope state (shared within the module)
+
 - `App.tsx` defines several module-level variables outside the `App` class (examples):
   - `didTapTwice`, `tappedTwiceTimer`, `firstTapPosition`
   - `YOUTUBE_VIDEO_STATES` (a `Map` used by `onWindowMessage`)
@@ -82,6 +90,7 @@
   - `onWindowMessage` filters by `event.origin` (YouTube/Vimeo), parses JSON, and writes to `YOUTUBE_VIDEO_STATES` when `data.event === "infoDelivery"` and `data.info.playerState` is numeric and in `YOUTUBE_STATES`.
 
 ## 8) Collaboration boundary: encrypted socket updates + Firebase persistence
+
 - `excalidraw-app/data/firebase.ts` provides persistence helpers that:
   - initialize Firebase (`initializeApp`) and build Firestore / Storage clients
   - encrypt scene elements using a `roomKey` (`encryptData` / `decryptData`)
@@ -96,13 +105,13 @@
     - encrypts outbound payloads with `encryptData(this.roomKey!, encoded)`
     - emits encrypted bytes to the server via `this.socket.emit(...)` (payload includes encryptedBuffer and iv)
 
-
-
 ## Details
+
 For detailed architecture → see docs/technical/architecture.md
 For domain glossary → see docs/product/domain-glossary.md
 
 ## Related Documentation
+
 - [`../technical/architecture.md`](../technical/architecture.md)
 - [`../technical/code-notes.md`](../technical/code-notes.md)
 - [`../technical/dev-setup.md`](../technical/dev-setup.md)

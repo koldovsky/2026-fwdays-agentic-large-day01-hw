@@ -1,12 +1,14 @@
 # Active Context (Working Notes)
 
 ## Current focus
+
 - Expand `docs/memory/techContext.md` to include:
   - technology stack and versions (verified from root + package manifests)
   - key repo commands (verified from `package.json` scripts)
 - Update `docs/memory/decisionLog.md` to include “key design decisions” in addition to the existing findings.
 
 ## What I’m basing this on (verified sources)
+
 - Root `package.json` scripts + devDependencies (tooling + versions)
 - `excalidraw-app/package.json` dependencies/scripts (host app runtime deps)
 - `packages/excalidraw/package.json` dependencies/scripts (embeddable editor runtime deps)

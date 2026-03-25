@@ -1,6 +1,7 @@
 # Progress (Memory Bank Update)
 
 ## Completed
+
 - Created `docs/memory/` and initial memory bank files:
   - `projectbrief.md`
   - `systemPatterns.md`
@@ -16,5 +17,6 @@
   - `productContext.md`
 
 ## Next / optional
+
 - Run repo checks (optional): `yarn test:all`
 

@@ -97,7 +97,7 @@ The `Store` maintains a `scheduledMacroActions: Set<CaptureUpdateActionType>`. M
 callers can call `scheduleAction()` independently within a single render cycle.
 `getScheduledMacroAction()` resolves priority with a fixed hierarchy:
 
-```
+```text
 IMMEDIATELY > NEVER > EVENTUALLY (default)
 ```
 
@@ -225,7 +225,7 @@ this.renderer = new Renderer(this.scene);
 A fresh `Scene` and `Renderer` are created during unmount. The constructor comment
 (lines 847–852) explains this is intentional for React StrictMode:
 
-```
+```text
 // in case internal editor APIs call this early, otherwise we need
 // to construct this in componentDidMount because componentWillUnmount
 // will invalidate it (so in StrictMode, doing this in constructor alone
