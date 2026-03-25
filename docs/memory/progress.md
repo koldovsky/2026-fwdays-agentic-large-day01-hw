@@ -78,7 +78,7 @@
 
 - [x] Unit тести для утиліт, scene, дій
 - [x] Snapshot тести для rendering
-- [ ] E2E тести відсутні у цьому репо (є в okної окремій суті)
+- [ ] E2E тести відсутні у цьому репо
 - [ ] Low coverage для `App.tsx` та collab
 
 ### Internalization ✅

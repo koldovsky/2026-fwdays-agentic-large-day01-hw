@@ -57,7 +57,7 @@ Store (snapshot manager)
 
 ## Canvas Rendering
 
-**Два canvas-шари:**
+**Три canvas-шари:**
 - `StaticCanvas` — фінальні committed елементи, кешується, рідко перемальовується
 - `InteractiveCanvas` — selection handles, snap lines, cursors, перемальовується на кожен pointer event
 - `NewElementCanvas` — новий елемент що малюється

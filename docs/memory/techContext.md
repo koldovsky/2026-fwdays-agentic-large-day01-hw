@@ -8,7 +8,7 @@
 | Мова              | TypeScript          | 5.9.x    |
 | Збірка            | Vite                | 5.0.x    |
 | Пакетний менеджер | Yarn Workspaces     | 1.22.22  |
-| Стан (глобальний) | Jotai + jotai-scope | latest   |
+| Стан (глобальний) | Jotai + jotai-scope | 2.11.x / 0.7.x |
 | Стилі             | SCSS (Sass)         | via Vite |
 | Тести             | Vitest              | 3.0.x    |
 | Node.js           | min required        | ≥18.0.0  |
@@ -22,7 +22,7 @@
 | `lodash.throttle`                   | Throttle pointer events            |
 | `socket.io-client`                  | WebSocket collab                   |
 | `pako`                              | Binary compression для share links |
-| `@excalidraw/mermaid-to-excalidraw` | AI text-to-diagram                 |
+| `@excalidraw/mermaid-to-excalidraw` | Mermaid diagram converter          |
 | `firebase`                          | Shared scene storage               |
 | `idb-keyval`                        | IndexedDB для файлів і бібліотек   |
 
@@ -50,7 +50,7 @@ yarn release            # Release скрипт
 
 ## Env змінні (development)
 
-```
+```text
 VITE_APP_BACKEND_V2_GET_URL    # JSON backend (share links)
 VITE_APP_BACKEND_V2_POST_URL   # JSON backend POST
 VITE_APP_WS_SERVER_URL         # WebSocket collab (default: localhost:3002)
@@ -63,7 +63,7 @@ VITE_APP_ENABLE_ESLINT         # ESLint в dev overlay (default: true)
 
 ## Структура пакетів
 
-```
+```text
 packages/
 ├── common/     @excalidraw/common    — константи, утиліти, EVENT types
 ├── element/    @excalidraw/element   — типи, логіка елементів, Scene, Store
