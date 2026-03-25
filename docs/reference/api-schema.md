@@ -14,29 +14,30 @@ interface ExcalidrawProps {
   // Called every time elements, appState, or files change.
   onChange?: (elements: readonly ExcalidrawElement[], appState: AppState, files: BinaryFiles) => void
 
-  // Called for durable (history-creating) changes only.
-  onIncrement?: (updates: { elements?: ..., appState?: ... }) => void
+  // Called for durable (history-creating) or ephemeral incremental changes.
+  onIncrement?: (event: DurableIncrement | EphemeralIncrement) => void
 
   // Called with the imperative API once the component mounts.
   onExcalidrawAPI?: (api: ExcalidrawImperativeAPI) => void
 
   // Lifecycle
-  onMount?: () => void
+  onMount?: (payload: ExcalidrawMountPayload) => void
   onUnmount?: () => void
   onInitialize?: (api: ExcalidrawImperativeAPI) => void
 
   // Collaboration
   isCollaborating?: boolean
   onPointerUpdate?: (payload: { pointer, button, pointersMap }) => void
+  onUserFollow?: (payload: OnUserFollowedPayload) => void
 
   // Pointer events
-  onPointerDown?: (activeTool, pointerDownState) => void
-  onPointerUp?: (activeTool, pointerUpState) => void
+  onPointerDown?: (activeTool: ActiveTool, pointerDownState: PointerDownState, event: React.PointerEvent<HTMLElement>) => void
+  onPointerUp?: (activeTool: ActiveTool, pointerDownState: PointerDownState, event: PointerEvent) => void
   onScrollChange?: (scrollX: number, scrollY: number, zoom: Zoom) => void
 
-  // Custom UI injection
-  renderTopLeftUI?: (isMobile: boolean, appState: AppState) => JSX.Element | null
-  renderTopRightUI?: (isMobile: boolean, appState: AppState) => JSX.Element | null
+  // Custom UI injection (use UIAppState, a read-only subset of AppState)
+  renderTopLeftUI?: (isMobile: boolean, appState: UIAppState) => JSX.Element | null
+  renderTopRightUI?: (isMobile: boolean, appState: UIAppState) => JSX.Element | null
 
   // Feature flags
   viewModeEnabled?: boolean
@@ -52,7 +53,7 @@ interface ExcalidrawProps {
   UIOptions?: Partial<UIOptions>
 
   // Element lifecycle
-  generateIdForType?: (type: string) => string | null
+  generateIdForFile?: (file: File) => string | Promise<string>
   validateEmbeddable?: string[] | boolean | RegExp | ((link: string) => boolean | undefined)
   renderEmbeddable?: (element, appState) => JSX.Element | null
 }
@@ -131,10 +132,11 @@ updateLibrary(opts: {
 
 ```typescript
 onChange(callback: (elements, appState, files) => void): () => void
-onIncrement(callback: (updates) => void): () => void
-onPointerDown(callback: (activeTool, state) => void): () => void
-onPointerUp(callback: (activeTool, state) => void): () => void
+onIncrement(callback: (event: DurableIncrement | EphemeralIncrement) => void): () => void
+onPointerDown(callback: (activeTool, pointerDownState: PointerDownState, event: React.PointerEvent<HTMLElement>) => void): () => void
+onPointerUp(callback: (activeTool, pointerDownState: PointerDownState, event: PointerEvent) => void): () => void
 onScrollChange(callback: (scrollX, scrollY, zoom) => void): () => void
+onUserFollow(callback: (payload: OnUserFollowedPayload) => void): () => void
 onStateChange(callback: (appState) => void): () => void
 onEvent(callback: (event) => void): () => void
 ```
@@ -194,7 +196,7 @@ interface AppState {
   isCollaborating: boolean
   collaborators: Map<SocketId, Collaborator>
   selectedElementIds: Record<string, boolean>
-  // ... 272 fields total
+  // ... (272 fields as of v0.18.0 — this count changes with each release)
 }
 ```
 
