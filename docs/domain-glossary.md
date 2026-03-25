@@ -93,3 +93,11 @@
 | **Action** | A discrete user operation (align, delete, export) with associated keyboard shortcut, icon, and state transformation logic. |
 | **Atom** | A Jotai state primitive — the smallest unit of reactive state. Components subscribe to atoms and re-render only when subscribed atoms change. |
 | **Animated Trail** | A smooth, interpolated rendering of drawing paths used for the laser pointer and freedraw tools. |
+
+## Related Documentation
+
+- [Project Brief](memory/projectbrief.md) — project overview
+- [Product Context](memory/productContext.md) — audience and workflows
+- [System Patterns](memory/systemPatterns.md) — architectural patterns
+- [Architecture](technical/architecture.md) — system diagrams
+- [PRD](product/PRD.md) — full product requirements

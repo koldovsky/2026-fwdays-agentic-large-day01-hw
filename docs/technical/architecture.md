@@ -159,3 +159,12 @@ Cross-cutting concerns shared by all packages: color constants, font loading, in
 - **Vercel** — Primary hosting for the standalone web app
 - **Docker** — Available via `docker-compose.yml` for self-hosting
 - **npm** — `@excalidraw/excalidraw` published for embedding
+
+## Related Documentation
+
+- [System Patterns](../memory/systemPatterns.md) — architectural patterns and design decisions
+- [Tech Context](../memory/techContext.md) — full technology stack
+- [Decision Log](../memory/decisionLog.md) — architectural decisions and undocumented behaviors
+- [PRD](../product/PRD.md) — product requirements and SDK API reference
+- [Domain Glossary](../domain-glossary.md) — terminology reference
+- [Dev Setup](../dev-setup.md) — developer onboarding guide

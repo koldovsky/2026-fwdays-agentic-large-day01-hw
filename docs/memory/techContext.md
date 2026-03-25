@@ -57,3 +57,11 @@
 | `vercel.json`        | Vercel deployment settings     |
 | `docker-compose.yml` | Docker-based local development |
 | `crowdin.yml`        | Translation/i18n management    |
+
+## Related Documentation
+
+- [Project Brief](projectbrief.md) — project overview and goals
+- [System Patterns](systemPatterns.md) — architectural patterns
+- [Architecture](../technical/architecture.md) — system diagrams and data flow
+- [Dev Setup](../dev-setup.md) — full onboarding guide with all commands
+- [Decision Log](decisionLog.md) — undocumented behaviors and architectural decisions

@@ -72,3 +72,12 @@ Container managing the element array, providing methods for querying, adding, an
 - Data operations in `packages/excalidraw/data/`
 - Tests co-located with source or in dedicated `tests/` directories
 - Localization files in `packages/excalidraw/locales/`
+
+## Related Documentation
+
+- [Project Brief](projectbrief.md) — project overview and goals
+- [Tech Context](techContext.md) — technology stack details
+- [Architecture](../technical/architecture.md) — detailed architecture diagrams and data flow
+- [Decision Log](decisionLog.md) — architectural decisions and undocumented behaviors
+- [Domain Glossary](../domain-glossary.md) — terminology reference
+- [PRD](../product/PRD.md) — product requirements

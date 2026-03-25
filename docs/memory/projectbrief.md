@@ -42,3 +42,14 @@ The project is organized as a **Yarn workspaces monorepo**:
 - Reliable real-time collaboration with conflict resolution
 - Clean, well-typed API for third-party integrations
 - Active community contributions and ecosystem growth
+
+## Related Documentation
+
+- [Product Context](productContext.md) — audience, workflows, competitive positioning
+- [Tech Context](techContext.md) — technology stack and tooling
+- [System Patterns](systemPatterns.md) — architectural patterns and design decisions
+- [Active Context](activeContext.md) — current development state
+- [Architecture](../technical/architecture.md) — system diagrams and data flow
+- [PRD](../product/PRD.md) — full product requirements
+- [Domain Glossary](../domain-glossary.md) — terminology reference
+- [Dev Setup](../dev-setup.md) — developer onboarding guide
