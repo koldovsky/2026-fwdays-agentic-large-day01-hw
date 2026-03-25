@@ -1,0 +1,48 @@
+﻿# Build artifacts
+dist/
+build/
+.next/
+dev-dist/
+
+# Per-package `yarn gen:types` output (`.d.ts` trees), not `types.ts` sources
+packages/*/types/
+
+# Vite export / tooling output (see root .gitignore)
+html/
+
+# TypeScript / generated metadata from builds
+meta*.json
+
+# Dependencies
+node_modules/
+
+# Vite pre-bundled dependency cache (large, not source)
+**/node_modules/.vite/
+
+# Generated / minified
+*.min.js
+*.min.css
+*.snap
+
+# Lock files (large, low signal for AI context)
+yarn.lock
+package-lock.json
+
+# Coverage & reports
+coverage/
+.nyc_output/
+
+# Caches & logs
+.eslintcache
+*.log
+logs/
+
+# Deploy / local tooling (not app source)
+.firebase/
+firebase/
+.vercel/
+
+# IDE & VCS (not project semantics)
+.git/
+.vscode/
+.idea/
