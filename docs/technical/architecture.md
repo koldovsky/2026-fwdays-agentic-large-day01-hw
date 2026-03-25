@@ -22,7 +22,7 @@ Mermaid diagram (runtime module structure of the editor):
 flowchart TD
   Host[Host app / excalidraw-app / examples] -->|renders React component| ExcalidrawPkg[@excalidraw/excalidraw]
 
-  subgraph ExcalidrawPkg
+  subgraph ExcalidrawPkgGroup
     App[App (packages/excalidraw/components/App.tsx)]
     AM[ActionManager (packages/excalidraw/actions/manager.tsx)]
     Scene[Scene (packages/element/src/Scene.ts)]
