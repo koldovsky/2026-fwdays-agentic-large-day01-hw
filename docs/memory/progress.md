@@ -2,76 +2,76 @@
 
 ## Поточна версія: 0.18.0 (11 березня 2025)
 
-## Shipped фічі (v0.18.0)
+## Реалізовані можливості (v0.18.0)
 
 ### Нові можливості
 - [x] **Command Palette** — пошук команд з клавіатури
-- [x] **Multiplayer undo/redo** — Figma-натхненна модель (#7348)
+- [x] **Multiplayer undo/redo** — модель на основі Figma (#7348)
 - [x] **Editable element stats** — редагування властивостей елементів
-- [x] **Text element wrapping** — перенос тексту
+- [x] **Text element wrapping** — автоматичний перенос тексту
 - [x] **Font Picker** — розширений вибір шрифтів
-- [x] **CJK font support** — китайські, японські, корейські шрифти
-- [x] **Font subsetting для SVG** — оптимізація розміру експорту
-- [x] **Elbow arrows** — ламані стрілки для flowcharts
+- [x] **CJK font support** — підтримка китайських, японських, корейських шрифтів
+- [x] **Font subsetting** — оптимізація розміру SVG-експорту
+- [x] **Elbow arrows** — ламані стрілки для блок-схем
 - [x] **Scene search** — пошук елементів на сцені
 - [x] **Image cropping** — обрізка зображень
-- [x] **Element linking** — система зв'язків між елементами
+- [x] **Element linking** — система посилань між елементами
 
 ### Архітектурні зміни (breaking)
-- [x] **ESM формат** — перехід з UMD на ES Modules
-- [x] **Vite** — міграція з webpack/CRA
-- [x] **moduleResolution: "bundler"** — нова TS конфігурація
-- [x] **Монорепо** — розділення на пакети (common, element, math, utils, excalidraw)
+- [x] **ESM** — перехід з UMD на ES Modules
+- [x] **Vite** — міграція з webpack/CRA на Vite
+- [x] **moduleResolution: "bundler"** — нова конфігурація TypeScript
+- [x] **Monorepo** — розділення на пакети (common, element, math, utils, excalidraw)
 
-### API зміни
-- [x] **onMount / onInitialize / onUnmount** — lifecycle events
-- [x] **onStateChange()** — підписка на зміни стану (selector support)
+### Зміни API
+- [x] **onMount / onInitialize / onUnmount** — події життєвого циклу
+- [x] **onStateChange()** — підписка на зміни стану (підтримка селекторів)
 - [x] **api.onEvent()** — уніфікована система подій
-- [x] **ExcalidrawAPIProvider** — Provider + useExcalidrawAPI() hooks
-- [x] **Async export** — onExport з підтримкою async generators
+- [x] **ExcalidrawAPIProvider** — провайдер + хуки useExcalidrawAPI()
+- [x] **Async export** — асинхронний експорт через onExport
 
-## Раніше shipped (до v0.18.0)
+## Реалізовано раніше (до v0.18.0)
 
-### Core функціонал
-- [x] Hand-drawn рендеринг (roughjs)
-- [x] Базові фігури: rectangle, diamond, ellipse, line, arrow, text
-- [x] Realtime collaboration (Socket.io)
-- [x] Firebase інтеграція (auth, storage)
-- [x] Експорт: JSON, PNG, SVG
-- [x] Бібліотеки елементів
-- [x] Undo/Redo (базова версія)
-- [x] Dark/Light theme
-- [x] i18n (інтернаціоналізація)
-- [x] PWA підтримка
-- [x] Keyboard shortcuts
-- [x] Copy/Paste
-- [x] Drag & Drop
-- [x] Zoom & Pan
-- [x] Grid mode
+### Основний функціонал
+- [x] **Hand-drawn rendering** — рукописний стиль малювання (RoughJS)
+- [x] **Shape primitives** — базові фігури (прямокутник, ромб, еліпс, лінія, стрілка, текст)
+- [x] **Realtime collaboration** — колаборація в реальному часі (Socket.io)
+- [x] **Firebase integration** — аутентифікація, зберігання, база даних
+- [x] **Export** — експорт у JSON, PNG, SVG
+- [x] **Element libraries** — бібліотеки елементів
+- [x] **Undo/Redo** — скасування/повтор дій (базова версія)
+- [x] **Dark/Light theme** — темна та світла теми
+- [x] **i18n** — інтернаціоналізація
+- [x] **PWA** — підтримка Progressive Web App
+- [x] **Keyboard shortcuts** — гарячі клавіші
+- [x] **Copy/Paste** — копіювання та вставка
+- [x] **Drag & Drop** — перетягування
+- [x] **Zoom & Pan** — масштабування та прокручування
+- [x] **Grid mode** — режим сітки
 
 ### Інфраструктура
-- [x] Monorepo (Yarn Workspaces)
-- [x] CI/CD (GitHub Actions — 11+ workflows)
-- [x] Docker (multi-stage build)
-- [x] Vercel деплой
-- [x] Sentry error tracking
-- [x] Bundle size tracking (size-limit)
-- [x] Test coverage reporting
-- [x] Automated releases
-- [x] Semantic PR validation
+- [x] **Monorepo** — Yarn Workspaces
+- [x] **CI/CD** — GitHub Actions (11+ workflows)
+- [x] **Docker** — багатоетапна збірка
+- [x] **Vercel** — деплой на Vercel
+- [x] **Sentry** — відстеження помилок
+- [x] **Bundle size tracking** — контроль розміру бандлу (size-limit)
+- [x] **Test coverage** — звіти покриття тестами
+- [x] **Automated releases** — автоматичні релізи
+- [x] **Semantic PR validation** — валідація назв PR
 
-## In Progress / Emerging
+## В розробці / Заплановано
 
-### AI інтеграція
-- [ ] **Text-to-Diagram (TTD)** — генерація діаграм через AI (компонент є, backend окремий)
-- [ ] **Diagram-to-Code** — конвертація діаграм у код (plugin architecture)
+### AI-інтеграція
+- [ ] **Text-to-Diagram (TTD)** — генерація діаграм через AI (компонент є, бекенд окремий)
+- [ ] **Diagram-to-Code** — конвертація діаграм у код (архітектура плагінів)
 
-### Відомі issues для вирішення
-- [ ] Оптимізація fractional indexing продуктивності
-- [ ] Multi-group selection у multiplayer
-- [ ] WASM завантаження шрифтів із зовнішніх URL
-- [ ] Dark theme color handling вдосконалення
-- [ ] Text WYSIWYG editor стабільність у тестах
+### Відомі проблеми для вирішення
+- [ ] **Fractional indexing** — оптимізація продуктивності
+- [ ] **Multi-group selection** — виділення груп у мультиплеєрі
+- [ ] **WASM font loading** — завантаження шрифтів із зовнішніх URL
+- [ ] **Dark theme colors** — вдосконалення обробки кольорів
+- [ ] **Text WYSIWYG editor** — стабільність у тестах
 
 ## Метрики якості
 
@@ -84,7 +84,7 @@
 | Statements | 60% |
 
 ### Browser Support
-- **Production**: >0.2%, IE>11, Safari>=12, Edge>=79, Chrome>=70
+- **Production**: >0.2%, not dead, not ie <= 11, Safari>=12, Edge>=79, Chrome>=70
 - **Development**: latest Chrome, Firefox, Safari
 
 ### Пакети та їх статус

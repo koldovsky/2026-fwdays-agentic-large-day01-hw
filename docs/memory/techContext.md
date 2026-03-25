@@ -5,7 +5,7 @@
 | Параметр | Значення |
 |---|---|
 | Мова | TypeScript 5.9.3 |
-| UI фреймворк | React 19.0.10 |
+| UI фреймворк | React 19.0.0 |
 | Збірка | Vite 5.0.12 |
 | Рантайм | Node.js >= 18.0.0 |
 | Пакетний менеджер | Yarn 1.22.22 |
@@ -18,7 +18,7 @@
 
 | Назва | Призначення | Версія |
 |---|---|---|
-| react / react-dom | UI фреймворк | 19.0.10 |
+| react / react-dom | UI фреймворк | 19.0.0 |
 | roughjs | Hand-drawn стиль рендерингу | — |
 | jotai | State management (атомарний) | — |
 | socket.io-client | WebSocket для realtime collaboration | — |

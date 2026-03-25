@@ -4,7 +4,7 @@
 
 **Тип**: Монорепо (Yarn Workspaces) з розділенням на пакети.
 
-```
+```text
 excalidraw-app (додаток)
     ├── @excalidraw/excalidraw  (React-компонент, UI, actions, renderer)
     ├── @excalidraw/element      (елементи, Scene, Store, мутації)
@@ -84,7 +84,7 @@ excalidraw-app (додаток)
 
 ## Data Flow
 
-```
+```text
 Користувач (input)
     │
     ▼

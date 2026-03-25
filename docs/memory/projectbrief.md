@@ -36,7 +36,7 @@
 ```
 excalidraw/
 ├── excalidraw-app/              # Головний додаток (React + Vite)
-│   ├── App.tsx                  # Основний компонент (~40KB)
+│   ├── App.tsx                  # Основний компонент
 │   ├── components/              # AI, Footer, MainMenu, Sidebar
 │   ├── data/                    # Firebase, localStorage, tabSync
 │   ├── collab/                  # Логіка колаборації
@@ -46,8 +46,8 @@ excalidraw/
 │   ├── common/                  # @excalidraw/common — утиліти, константи
 │   ├── element/                 # @excalidraw/element — елементи, Scene, Store
 │   ├── excalidraw/              # @excalidraw/excalidraw — React-компонент
-│   │   ├── actions/             # ~48 action-файлів (command pattern)
-│   │   ├── components/          # ~156 UI-компонентів
+│   │   ├── actions/             # action-файли (command pattern)
+│   │   ├── components/          # UI-компоненти
 │   │   ├── renderer/            # Canvas рендерер (static, interactive, SVG)
 │   │   ├── data/                # Серіалізація, імпорт/експорт
 │   │   ├── fonts/               # Шрифти
@@ -60,7 +60,7 @@ excalidraw/
 ├── scripts/                     # Скрипти збірки та релізу
 ├── firebase-project/            # Конфігурація Firebase
 ├── public/                      # Статичні ресурси
-├── .github/workflows/           # CI/CD (11+ workflow файлів)
+├── .github/workflows/           # CI/CD workflows
 ├── docs/                        # Документація
 ├── package.json                 # Корінь монорепо (Yarn Workspaces)
 ├── tsconfig.json                # TypeScript конфігурація
