@@ -95,7 +95,8 @@ sequenceDiagram
 ### 2.2 Scene Mutation Details
 
 `Scene.mutateElement()` (verified: `element/src/Scene.ts:L435-468`):
-```
+
+```ts
 scene.mutateElement(element, updates, options)
   → mutateElement(element, elementsMap, updates)   // creates new element object
   → if (informMutation && version changed):
@@ -107,10 +108,11 @@ scene.mutateElement(element, updates, options)
 ### 2.3 Data Update Flow (withBatchedUpdates)
 
 `syncActionResult` is wrapped in `withBatchedUpdates` (`unstable_batchedUpdates`):
+
 - Multiple `setState` calls inside → single React render cycle
 - Verified: `App.tsx:L2735`
 
-```
+```ts
 syncActionResult(ActionResult)
   ├─ store.scheduleAction(captureUpdate)    → queues history snapshot
   ├─ scene.replaceAllElements(elements?)    → updates Scene
@@ -125,7 +127,7 @@ syncActionResult(ActionResult)
 ### 3.1 Три паралельних джерела правди
 
 | Що | Де | API |
-|---|---|---|
+| --- | --- | --- |
 | UI стан, viewport, tools | React `this.state` (`AppState`) | `this.setState({...})` |
 | Canvas елементи | `Scene` singleton | `scene.replaceAllElements()` / `scene.mutateElement()` |
 | Атомарний UI | `editorJotaiStore` (jotai-scope) | `updateEditorAtom(atom, value)` |
@@ -149,7 +151,7 @@ APP_STATE_STORAGE_CONF = {
 Ключові групи AppState:
 
 | Група | Поля |
-|---|---|
+| --- | --- |
 | Viewport | `zoom`, `scrollX`, `scrollY`, `width`, `height`, `offsetLeft`, `offsetTop` |
 | Tool | `activeTool`, `penMode`, `gridModeEnabled`, `snapLines` |
 | Selection | `selectedElementIds`, `selectedGroupIds`, `selectionElement` |
@@ -187,7 +189,7 @@ class Scene {
 
 `Store` — snapshot manager між Scene і History:
 
-```
+```ts
 Store.scheduleAction(captureUpdate)
   → CaptureUpdateAction.IMMEDIATELY → snapshot on next commit
   → CaptureUpdateAction.NEVER       → no snapshot
@@ -210,7 +212,7 @@ Store.commit(elementsMap, appState)  // called every componentDidUpdate
 Три незалежних `<canvas>` елементи:
 
 | Canvas | Компонент | Рендер | Throttle |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Static | `StaticCanvas.tsx` | Committed elements + grid + links | `throttleRAF` via `window.EXCALIDRAW_THROTTLE_RENDER` |
 | Interactive | `InteractiveCanvas.tsx` | Selection, handles, snap, cursors | `AnimationController` (RAF loop) |
 | New Element | `NewElementCanvas.tsx` | Element being drawn live | Per pointer event |
@@ -219,7 +221,7 @@ Store.commit(elementsMap, appState)  // called every componentDidUpdate
 
 Verified: `StaticCanvas.tsx:L44-72`, `staticScene.ts:L482-501`
 
-```
+```text
 React render → StaticCanvas (React.memo)
   ↓ areEqual() check:
     - sceneNonce changed?
@@ -249,7 +251,7 @@ AppState fields for StaticCanvas (verified: `StaticCanvas.tsx:L77-106`):
 
 Verified: `InteractiveCanvas.tsx:L86-198`
 
-```
+```text
 React render → InteractiveCanvas (React.memo)
   ↓ areEqual() check: selectionNonce, sceneNonce, elementsMap, selectedElements...
   → useEffect() → AnimationController.start("animateInteractiveScene")
@@ -289,7 +291,7 @@ Cache invalidated on `sceneNonce` change → O(n) viewport filter runs only when
 
 ### 4.5 renderElement() via roughjs
 
-```
+```ts
 renderElement(element, elementsMap, allElementsMap, rc, context, renderConfig, appState)
   → per element.type:
       rectangle/diamond/ellipse → rc.draw() (roughjs Canvas)
@@ -330,14 +332,15 @@ graph LR
 ```
 
 **Порядок збірки** (build order constraint):
-```
+
+```text
 @excalidraw/common → @excalidraw/math → @excalidraw/element → @excalidraw/excalidraw
 ```
 
 ### 5.2 Що в кожному пакеті
 
 | Пакет | Entry | Ключовий вміст |
-|---|---|---|
+| --- | --- | --- |
 | `@excalidraw/common` | `index.ts` | `EVENT`, `THEME`, `throttleRAF`, `debounce`, `invariant`, `arrayToMap`, `memoize`, `Emitter` |
 | `@excalidraw/math` | `index.ts` | `Point`, `Vector`, `Radians`, `pointFrom()`, `pointDistance()`, `bezierEquation()` |
 | `@excalidraw/element` | `index.ts` | `Scene`, `mutateElement()`, `renderElement()`, types, `LinearElementEditor`, `ShapeCache` |
@@ -346,13 +349,15 @@ graph LR
 ### 5.3 Node-safe exports
 
 `@excalidraw/excalidraw` має окремий entry для Node.js:
+
 - `index-node.ts` — без browser APIs (не імпортує DOM, canvas, window)
 - Дозволяє серверне використання: `exportToSvg`, `restoreElements`, `serializeAsJSON`
 
 ### 5.4 Alias resolving (dev)
 
 Vite aliases (verified: `excalidraw-app/vite.config.mts:L24-78`):
-```
+
+```text
 @excalidraw/common    → packages/common/src/index.ts
 @excalidraw/math      → packages/math/src/index.ts
 @excalidraw/element   → packages/element/src/index.ts
@@ -363,7 +368,7 @@ Vite aliases (verified: `excalidraw-app/vite.config.mts:L24-78`):
 ### 5.5 Ключові зовнішні залежності пакету
 
 | Lib | Використання |
-|---|---|
+| --- | --- |
 | `roughjs` | Canvas-рендеринг hand-drawn стилю (`rc.draw()`, `rc.linearPath()`) |
 | `jotai` + `jotai-scope` | Ізольований Jotai store (`createIsolation()` → `EditorJotaiProvider`) |
 | `lodash.throttle` | Throttle в `Scene.ts` (validateIndices: 1хв) |
