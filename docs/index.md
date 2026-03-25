@@ -32,6 +32,8 @@ Deep-dive references for contributors and integrators.
 | [dev-setup.md](technical/dev-setup.md) | Step-by-step local development setup and IDE configuration | 2026-03-25 |
 | [infrastructure.md](technical/infrastructure.md) | Docker, CI/CD, Vercel, Firebase, PWA caching | 2026-03-25 |
 
+---
+
 ## Product Documentation
 
 | File | Purpose | Updated |
@@ -39,6 +41,8 @@ Deep-dive references for contributors and integrators.
 | [PRD.md](product/PRD.md) | Reverse-engineered Product Requirements Document | 2026-03-25 |
 | [domain-glossary.md](product/domain-glossary.md) | All domain terms found in source code, by area | 2026-03-25 |
 | [feature-catalog.md](product/feature-catalog.md) | Complete catalog of implemented features with source refs | 2026-03-25 |
+
+---
 
 ## Reference
 
@@ -52,6 +56,8 @@ Deep-dive references for contributors and integrators.
 | File | Purpose | Updated |
 |------|---------|---------|
 | [rollback-guide.md](operations/rollback-guide.md) | Rollback procedures for Vercel/Docker/NPM, incident playbook | 2026-03-25 |
+
+---
 
 ## Keeping Docs Current
 
