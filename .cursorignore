@@ -1,0 +1,49 @@
+# Dependencies (already in .gitignore)
+node_modules/
+.yarn/
+# Build & reports (already in .gitignore)
+**/dist/
+**/build/
+dev-dist/
+coverage/
+html/
+.eslintcache
+# Examples / PWA (already in .eslintignore)
+examples/**/public/
+**/public/workbox
+# Optional: committed generated assets (large, script-produced)
+packages/excalidraw/fonts/wasm/
+packages/excalidraw/locales/percentages.json
+# Optional: Vitest snapshots
+**/__snapshots__/
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+.eslintcache
+.history
+.idea
+.vercel
+.vscode
+*.log
+*.tgz
+firebase
+logs
+package-lock.json
+meta*.json
+.claude
+# Build frameworks
+.next/
+# Minified / generated assets
+*.min.js
+*.min.css
+# Test snapshots
+*.snap
+# Lock files
+yarn.lock
+# Coverage
+.nyc_output/
+# VCS internals
+.git/
