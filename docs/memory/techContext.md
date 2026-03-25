@@ -5,6 +5,7 @@
 ## Tech Stack
 
 ### Runtime & Build
+
 | Layer | Technology | Version |
 |-------|-----------|---------|
 | Language | TypeScript (strict) | 5.9.3 |
@@ -14,6 +15,7 @@
 | Node Requirement | Node.js | ≥ 18.0.0 |
 
 ### Core Libraries
+
 | Library | Purpose |
 |---------|---------|
 | Rough.js 4.6.4 | Hand-drawn rendering effect on canvas |
