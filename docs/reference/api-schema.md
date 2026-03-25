@@ -29,7 +29,11 @@ interface ExcalidrawProps {
 
   // Collaboration
   isCollaborating?: boolean
-  onPointerUpdate?: (payload: { pointer, button, pointersMap }) => void
+  onPointerUpdate?: (payload: {
+    pointer: { x: number; y: number; tool: "pointer" | "laser" }
+    button: "down" | "up"
+    pointersMap: Gesture["pointers"]
+  }) => void
   onUserFollow?: (payload: OnUserFollowedPayload) => void
 
   // Pointer events
