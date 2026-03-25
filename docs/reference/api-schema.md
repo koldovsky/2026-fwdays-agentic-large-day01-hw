@@ -239,7 +239,7 @@ Base URL: `https://json.excalidraw.com/api/v2/` (production)
 
 ### Store Scene (POST)
 
-```
+```http
 POST /api/v2/post
 Content-Type: application/json
 
@@ -247,17 +247,19 @@ Body: { data: string }   // base64-encoded encrypted+compressed scene
 ```
 
 Response:
+
 ```json
 { "id": "<scene-id>" }
 ```
 
 ### Load Scene (GET)
 
-```
+```http
 GET /api/v2/<scene-id>
 ```
 
 Response:
+
 ```json
 {
   "data": { "ciphertext": "...", "iv": "..." }
@@ -302,7 +304,7 @@ enum WS_SUBTYPES {
 
 ### Collaboration Link Format
 
-```
+```text
 https://excalidraw.com/#room=[roomId],[roomKey]
 ```
 

@@ -29,6 +29,7 @@
 | Sentry 9.0.1 | Error monitoring |
 
 ### Testing
+
 | Tool | Role |
 |------|------|
 | Vitest 3.0.6 | Unit test runner |
@@ -38,6 +39,7 @@
 | @vitest/coverage-v8 | Code coverage |
 
 ### Linting & Formatting
+
 - ESLint with `@excalidraw/eslint-config`
 - Prettier with `@excalidraw/prettier-config`
 - Husky + lint-staged for pre-commit hooks
