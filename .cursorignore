@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+build/
+.next/
+excalidraw-app/build/
+
+# Generated/minified files
+*.min.js
+*.min.css
+*.snap
+
+# Lock files
+yarn.lock
+package-lock.json
+
+# Coverage
+coverage/
+.nyc_output/
+
+# IDE/system
+.git/
+.vscode/
+.DS_Store
+
+# Docker/CI artifacts
+.docker/
+.github/workflows/
+
+# Fonts in dist
+packages/excalidraw/dist/**/*.woff2
+
+# Public assets (workbox, fonts)
+public/workbox-*
+public/*.woff2
+
+# Firebase
+firebase-project/
+
+# Misc
+*.tgz
+*.log
