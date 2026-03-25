@@ -14,7 +14,7 @@
 - The editor engine defines multiple React contexts in `packages/excalidraw/components/App.tsx`, including:
   - `ExcalidrawAPIContext` / `ExcalidrawAPISetContext`
   - `ExcalidrawAppStateContext` / `ExcalidrawSetAppStateContext`
-  - `ExcalidrawActionManagerContext`
+  - `ExcalidrawActionManagerContext` (internal-only; use `useExcalidrawActionManager()` instead)
 
 ## 2) Two-state-plane model
 
