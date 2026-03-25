@@ -1,0 +1,48 @@
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+.eslintcache
+.history
+.idea
+.vercel
+.vscode
+.yarn
+*.log
+*.tgz
+build
+dist
+firebase
+logs
+node_modules
+next/
+.next/
+.nyc_output/
+*.min.js
+*.min.css
+.git/
+npm-debug.log*
+package-lock.json
+yarn-debug.log*
+yarn-error.log*
+yarn.lock
+# tsc emitDeclarationOnly (yarn gen:types in packages/*)
+packages/*/types
+# scripts/buildWasm.js (base64 wasm from fonteditor-core / harfbuzzjs)
+packages/excalidraw/fonts/wasm
+# scripts/build-locales-coverage.js
+packages/excalidraw/locales/percentages.json
+# vitest snapshot updates
+**/__snapshots__/**
+*.snap
+# Next.js example (examples/with-nextjs)
+examples/with-nextjs/.next
+examples/with-nextjs/out
+examples/with-nextjs/next-env.d.ts
+coverage
+dev-dist
+html
+meta*.json
+.claude
