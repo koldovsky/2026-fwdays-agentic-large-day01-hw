@@ -14,7 +14,7 @@
 
 ## ExcalidrawElement
 
-- **Визначення (у проєкті):** головний union-тип усіх **логічних** типів фігур на полотні (`rectangle`, `text`, `arrow`, `image`, `frame`, тимчасовий `selection` тощо). Екземпляр може мати `isDeleted: true` (сміттєзбір / історія); для елементів, які вважаються «живими» на полотні, використовують **`NonDeletedExcalidrawElement`**. За задумом тип має бути **JSON-серіалізованим**, без обчислюваних полів, щоб список можна було ділити між пірами та зберігати.
+- **Визначення (у проєкті):** головний union-тип усіх **логічних** типів елементів полотна (`rectangle`, `text`, `arrow`, `image`, `frame`, `iframe`, `embeddable` тощо). Екземпляр може мати `isDeleted: true` (сміттєзбір / історія); для елементів, які вважаються «живими» на полотні, використовують **`NonDeletedExcalidrawElement`**. За задумом тип має бути **JSON-серіалізованим**, без обчислюваних полів, щоб список можна було ділити між пірами та зберігати.
 - **Де використовується:** `packages/element/src/types.ts` (коментар і `export type ExcalidrawElement`), імпорти в `packages/excalidraw/types.ts`, `packages/excalidraw/actions/types.ts`, `excalidraw-app/collab/Collab.tsx`.
 - **Не плутати з:** назвою продукту **Excalidraw** або React-компонентом **`<Excalidraw>`**; з окремим підтипом (наприклад, лише `ExcalidrawTextElement`). `ExcalidrawElement` — це саме «будь-який елемент сцени» в одному типі, а не синонім «тільки видимі / не видалені».
 

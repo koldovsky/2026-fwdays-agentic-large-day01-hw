@@ -63,7 +63,7 @@
 ### 7. Окремі / спеціальні режими
 
 - Вбудовування з того ж origin у iframe блокується повідомленням «I'm not a pretzel!»: `isSelfEmbedding` у `App.tsx`.
-- Маршрут `/excalidraw-plus-export` ренерить окремий потік iframe-експорту в Plus: `ExcalidrawApp` у `App.tsx`, `ExcalidrawPlusIframeExport.tsx`.
+- Маршрут `/excalidraw-plus-export` рендерить окремий потік iframe-експорту в Plus: `ExcalidrawApp` у `App.tsx`, `ExcalidrawPlusIframeExport.tsx`.
 - Бічна панель: вкладки «comments» і «presentation» з промо Excalidraw+ (не повноцінний продукт у OSS): `AppSidebar.tsx`.
 
 ### 8. Діагностика та стабільність

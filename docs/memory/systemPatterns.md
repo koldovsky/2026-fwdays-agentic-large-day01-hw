@@ -57,7 +57,7 @@
 
 ### Сцена та рендер
 
-- **`Scene`** (`packages/element/src/Scene.ts`): володіє масивом/мапою елементів, кешем видимих не видалених елементів, `sceneNonce` для інвалідації кешу рендера.
+- **`Scene`** (`packages/element/src/Scene.ts`): володіє масивом/мапою елементів, похідними колекціями не видалених елементів і службовими кешами стану, `sceneNonce` для інвалідації кешу рендера.
 - **`Renderer`** (`packages/excalidraw/scene/Renderer.ts`): мемоізоване обчислення `RenderableElementsMap` і `visibleElements` від `Scene` + фрагментів `AppState` (zoom, scroll, viewport).
 - Статичний рендер канвасу: `renderStaticScene` / throttle (`renderer/staticScene`).
 
