@@ -36,4 +36,6 @@
 ## Details
 
 - For detailed architecture → see [docs/technical/architecture.md](../technical/architecture.md)
+- For developer setup → see [docs/technical/dev-setup.md](../technical/dev-setup.md)
 - For domain glossary → see [docs/product/domain-glossary.md](../product/domain-glossary.md)
+- For product requirements (PRD) → see [docs/product/PRD.md](../product/PRD.md)
