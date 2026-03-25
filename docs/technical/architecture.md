@@ -14,7 +14,7 @@ This document describes how the codebase is structured and how the editor moves 
 - **`packages/element`**: **Element model** — `Scene`, `Store`, `CaptureUpdateAction`, `StoreDelta`, rendering helpers such as `renderElement`, mutations, selection, bindings (`element/src/index.ts` barrel exports).
 - **`packages/common`**: Shared constants, utilities, events, theme helpers (`description` in `packages/common/package.json`). Depends on **`tinycolor2`** only (`dependencies` there).
 - **`packages/math`**: 2D math (`description`: “Excalidraw math functions”). Depends on **`@excalidraw/common`** (`packages/math/package.json`).
-- **`packages/utils`**: Export helpers (`exportToCanvas`, `exportToSvg`), bounds helpers, PNG tooling (`description`: “Excalidraw utility functions”). **Does not** list other `@excalidraw/*` packages in its `dependencies` (see `packages/utils/package.json`); editors still **import** it from `@excalidraw/excalidraw` sources (e.g. `@excalidraw/utils/export`).
+- **`packages/utils`**: Export helpers (`exportToCanvas`, `exportToSvg`), bounds helpers, PNG tooling (`description`: “Excalidraw utility functions”). In this monorepo, `packages/utils/package.json` **does not** declare the other workspace libraries (`@excalidraw/common`, `@excalidraw/element`, `@excalidraw/math`, `@excalidraw/excalidraw`) as `dependencies`; it still pulls **external** npm packages, including scoped ones such as **`@excalidraw/laser-pointer`** (see the table under “Declared `dependencies` between workspace libraries”). Editors still **import** `@excalidraw/utils` from `@excalidraw/excalidraw` sources (e.g. `@excalidraw/utils/export`).
 
 ### Mermaid — workspaces and primary consumers
 

@@ -106,6 +106,7 @@ All rationale/trade-offs below are inferred only from code structure and inline 
 ## Undocumented Behavior
 
 ## Undocumented Behavior #1
+
 - File: `packages/excalidraw/tests/selection.test.tsx`
 - What happens: Selection element lifecycle appears to rely on a `pointerUp` event to finalize cleanup; if `pointer up` is not triggered, a TODO notes a memory leak.
 - Where documented: partial — only as a TODO comment in the test file.
@@ -113,6 +114,7 @@ All rationale/trade-offs below are inferred only from code structure and inline 
 - Risk: missing `pointerUp` handling could leak resources/listeners in real usage and make state cleanup inconsistent (also creates fragile automation in tests).
 
 ## Undocumented Behavior #2
+
 - File: `packages/excalidraw/components/App.tsx`
 - What happens: When an action applies `appState` (or editingTextElement/contextMenu changes) through `syncActionResult`, the editor forcibly sets `contextMenu: null`, which can prevent context menu opening when triggered via an action or host programmatically.
 - Where documented: partial — in-code `NOTE` comment; not surfaced as an external/host-facing contract.
@@ -122,6 +124,7 @@ All rationale/trade-offs below are inferred only from code structure and inline 
 - Risk: host integrations (including AI or programmatic flows) may attempt to open a context menu and will silently fail, leading to confusing UX/regressions.
 
 ## Undocumented Behavior #3
+
 - File: `packages/excalidraw/components/App.tsx`
 - What happens: Host `onChange` callbacks are suppressed during initialization (`!this.state.isLoading` guard) to avoid notifying with empty elements; the component also documents an ordering dependency in `componentDidUpdate`.
 - Where documented: partial — inline comments in lifecycle methods.
@@ -133,6 +136,7 @@ All rationale/trade-offs below are inferred only from code structure and inline 
 - Risk: changing initialization/lifecycle ordering or removing the `isLoading` guard can trigger `onChange` with empty elements, which would overwrite persisted state in host apps (comment explicitly references localStorage).
 
 ## Undocumented Behavior #4
+
 - File: `packages/excalidraw/wysiwyg/textWysiwyg.tsx`
 - What happens: The WYSIWYG text editor style update mechanism depends on the editor’s `app.onChangeEmitter` behavior for `appState.theme`; the code contains a FIXME indicating this is a workaround until Store emits theme updates.
 - Where documented: FIXME comment inside the WYSIWYG module.
@@ -142,6 +146,7 @@ All rationale/trade-offs below are inferred only from code structure and inline 
 - Risk: theme-related text appearance may be stale or updated inconsistently if the Store emission semantics change, leading to visual regressions and hard-to-debug state sync bugs.
 
 ## Undocumented Behavior #5
+
 - File: `packages/excalidraw/components/App.tsx`
 - What happens: On mobile, transform/resize handles for linear elements can be disabled via a HACK condition, changing interaction affordances compared to other devices.
 - Where documented: in-code `HACK` comment/conditional branch.
