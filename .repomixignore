@@ -1,4 +1,4 @@
-﻿# Build artifacts
+# Build artifacts
 dist/
 build/
 .next/
@@ -22,7 +22,6 @@ coverage/
 # IDE-specific (не наш контекст)
 .git/
 .vscode/
-
 
 .DS_Store
 .env.development.local
@@ -63,3 +62,6 @@ packages/excalidraw/locales/percentages.json
 packages/excalidraw/fonts/**
 packages/excalidraw/subset/**
 repomix*.txt
+.env.development
+.env.production
+.env.test
