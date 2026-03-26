@@ -1,18 +1,14 @@
 # deps
 node_modules/
-
 # build & test output
 build/
 dist/
 dev-dist/
 coverage/
-
 # generated / tooling
-packages/excalidraw/types/
 .yarn/
 .eslintcache
 meta*.json
-
 # local / deploy noise
 firebase/
 html/
@@ -22,15 +18,24 @@ logs/
 .vercel/
 .history/
 .idea/
-
 # secrets (align with .gitignore)
 .env.local
 .env.*.local
 .envrc
-
 # caches
 **/.vite/
-
+.nyc_output/
+# VCS / editor
+.git/
+.vscode/
+# system / build artifacts
+.DS_Store
+*.snap
+*.min.js
+*.min.css
+# lockfiles
+yarn.lock
+package-lock.json
 # Next.js examples after build
 examples/**/.next/
 examples/**/out/
