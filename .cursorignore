@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Build output
+build/
+dist/
+dev-dist/
+
+# Logs
+*.log
+logs/
+
+# IDE & editor
+.idea/
+.vscode/
+.history/
+
+# Environment
+.env.*.local
+.env.local
+.envrc
+
+# Package artifacts
+*.tgz
+package-lock.json
+yarn.lock
+
+# Firebase
+firebase/
+
+# Coverage
+coverage/
+
+# Generated types
+packages/excalidraw/types/
+
+# Vercel
+.vercel/
+
+# Meta files
+meta*.json
+html/
