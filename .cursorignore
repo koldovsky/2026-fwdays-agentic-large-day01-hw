@@ -1,4 +1,4 @@
-﻿.DS_Store
+.DS_Store
 .env.development.local
 .env.local
 .env.production.local
@@ -34,3 +34,9 @@ dev-dist
 html
 meta*.json
 .claude
+.git/
+.next/
+*.min.js
+*.min.css
+.nyc_output/
+yarn.lock
