@@ -1,0 +1,52 @@
+# === From .gitignore ===
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+.eslintcache
+.history
+.idea
+.vercel
+.vscode
+.yarn
+*.log
+*.tgz
+build
+dist
+firebase
+logs
+node_modules
+npm-debug.log*
+package-lock.json
+yarn-debug.log*
+yarn-error.log*
+packages/excalidraw/types
+coverage
+dev-dist
+html
+meta*.json
+
+# === Lock files (large, not useful for AI context) ===
+yarn.lock
+
+# === Test snapshots (auto-generated) ===
+**/__snapshots__/
+
+# === Locale/translation files (machine-managed, 50+ files) ===
+packages/excalidraw/locales/
+
+# === CI/CD & infrastructure ===
+.github/
+.codesandbox/
+.husky/
+
+# === Firebase project config ===
+firebase-project/
+
+# === Git internals ===
+.git/
+
+# === Claude / other AI agent artifacts ===
+.claude/
