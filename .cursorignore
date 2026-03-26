@@ -46,27 +46,62 @@ html
 meta*.json
 .claude
 
-# Build artifacts
-dist/
-build/
-.next/
-
-# Dependencies
-node_modules/
-
-# Generated / minified
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+.eslintcache
+.history
+.idea
+.vercel
+.vscode
+.yarn
+*.log
+*.tgz
 *.min.js
 *.min.css
-*.snap
+*.tsbuildinfo
+firebase
+logs
+node_modules
+npm-debug.log*
 
 # Lock files (великі, не несуть семантики для AI)
-yarn.lock
 package-lock.json
+yarn.lock
+
+# Build artifacts
+build/
+dist/
+.next/
+dev-dist/
+
+# IDE/system (не наш контекст)
+.git/
 
 # Coverage & reports
 coverage/
 .nyc_output/
 
-# IDE-specific (не наш контекст)
-.git/
-.vscode/
+# Generated / minified snapshots
+*.snap
+**/__snapshots__
+
+packages/excalidraw/types
+
+# Auto-generated: scripts/buildWasm.js (wasm → base64 .ts)
+packages/excalidraw/fonts/wasm
+
+# Auto-generated: scripts/build-locales-coverage.js
+packages/excalidraw/locales/percentages.json
+
+# Auto-generated: cn-font-split (font subsetting)
+packages/excalidraw/fonts/Excalifont/index.ts
+packages/excalidraw/fonts/Xiaolai/index.ts
+packages/excalidraw/fonts/ComicShanns/index.ts
+
+html
+meta*.json
+.claude
