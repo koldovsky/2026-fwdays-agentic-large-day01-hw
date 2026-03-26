@@ -1,0 +1,60 @@
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+.eslintcache
+.history
+.idea
+.vercel
+.vscode
+.yarn
+*.log
+*.tgz
+build
+dist
+firebase
+logs
+node_modules
+npm-debug.log*
+package-lock.json
+yarn-debug.log*
+yarn-error.log*
+packages/excalidraw/types
+coverage
+dev-dist
+html
+meta*.json
+.claude
+
+# --- Cursor context: Tier A (high impact, low risk) ---
+
+# Lockfiles (repeatable; package.json remains for deps)
+yarn.lock
+examples/**/yarn.lock
+
+# WASM embedded as TS (base64)
+packages/excalidraw/subset/**/*-wasm.ts
+packages/excalidraw/fonts/wasm/*.ts
+
+# Jest snapshots
+**/__snapshots__/**/*.snap
+
+# Font binaries
+packages/excalidraw/fonts/**/*.woff2
+
+# --- Cursor context: Tier B (more aggressive) ---
+
+# Woff2 emscripten bindings (vendored glue)
+packages/excalidraw/subset/woff2/woff2-bindings.ts
+
+# i18n (keep English via negation — Cursor supports ! like gitignore)
+packages/excalidraw/locales/*.json
+!packages/excalidraw/locales/en.json
+
+# Example apps (only if you don't edit them from Cursor)
+# examples/
+
+# PWA build output (if present)
+public/workbox
