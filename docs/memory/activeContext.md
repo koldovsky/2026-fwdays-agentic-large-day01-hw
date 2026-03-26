@@ -14,12 +14,15 @@ Memory Bank so that AI agents can work reliably with the codebase.
 The assignment involves creating documentation across three categories:
 
 ### Memory Bank (`docs/memory/`)
+
 Structured markdown files capturing project context for AI-assisted development.
 
 ### Technical Docs (`docs/technical/`)
+
 Architecture diagrams, data-flow descriptions, dev-setup guides.
 
 ### Product Docs (`docs/product/`)
+
 Domain glossary, reverse-engineered PRD.
 
 ---
@@ -27,6 +30,7 @@ Domain glossary, reverse-engineered PRD.
 ## Active Work Items
 
 ### Completed
+
 - `.cursorignore` — repo root, 50+ exclusion patterns
 - `docs/memory/projectbrief.md` — project overview and dual-product structure
 - `docs/memory/techContext.md` — full tech stack with versions, build scripts, testing tools
@@ -46,6 +50,7 @@ Domain glossary, reverse-engineered PRD.
   source locations, usage context, and "do not confuse" notes
 
 ### Completed (continued)
+
 - `docs/product/PRD.md` — reverse-engineered PRD; ~260 lines; product goal, 5 user personas,
   9 key features (F1–F9), 10 technical constraints (TC1–TC10), and explicit non-goals
 
