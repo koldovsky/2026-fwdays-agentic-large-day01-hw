@@ -1,6 +1,6 @@
 # Active Context
 
-> Last updated: 2026-03-26 (session 8)
+> Last updated: 2026-03-26 (session 9)
 > Related: [progress.md](progress.md) | [decisionLog.md](decisionLog.md) | [PRD](../product/PRD.md) | [architecture](../technical/architecture.md) | [undocumented-behavior](../technical/undocumented-behavior.md)
 
 ## Current focus
@@ -9,12 +9,10 @@ Workshop PR open; review follow-up fixes applied. Awaiting further review or imp
 
 ## What was just done
 
-Session 8 — doc lint fixes (MD041, ephemeral fact cleanup). All findings verified against source before fixing.
+Session 9 — doc precision fixes (proper noun capitalisation, feature-flag fact, progress placeholders). All findings verified against source before fixing.
 
-- `docs/memory/activeContext.md` — added `# Active Context` H1 (MD041); anchored yarn.lock observation with date (commit `00b7b92`, `f48f911`)
-- `docs/memory/progress.md` — added `# Progress` H1 (MD041); anchored yarn.lock observation with date; fixed invalid `- [-]` marker; moved completed items to Done section
-- Verified `docs/technical/architecture.md` ShapeCache description — already correct from session 6, no change
-- Verified `docs/memory/progress.md` checklist markers — already correct from earlier fix, no change
+- `docs/memory/activeContext.md` — `markdown` → `Markdown` (proper noun); replaced broad feature-flag claim with source-verified statement referencing `packages/common/src/utils.ts:1282` (commit `37fa37f`)
+- `docs/memory/progress.md` — replaced `*(nothing actively in progress)*` and `*(nothing blocked)*` placeholders with timestamped factual entries (commit `37fa37f`)
 
 ## Active decisions
 
