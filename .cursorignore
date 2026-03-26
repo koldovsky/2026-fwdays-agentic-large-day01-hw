@@ -1,0 +1,77 @@
+# OS / editor / env
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+.eslintcache
+.history
+.idea
+.vercel
+.vscode
+.claude
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs
+
+# Build output
+build
+dist
+dev-dist
+html
+meta*.json
+
+# Dependencies
+.yarn
+*.tgz
+node_modules
+package-lock.json
+
+# Firebase
+firebase
+
+# Lock files (auto-generated)
+yarn.lock
+examples/with-nextjs/yarn.lock
+
+# Generated types
+packages/excalidraw/types
+
+# Generated locales (source: Crowdin)
+packages/excalidraw/locales/*.json
+
+# Generated font files (cn-font-split / buildWasm)
+packages/excalidraw/fonts/Xiaolai/
+packages/excalidraw/fonts/wasm/
+
+# Test snapshots (auto-updated by vitest)
+**/__snapshots__/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs
+
+# Minified / generated bundles
+*.min.js
+*.min.css
+*.snap
+
+# Coverage
+coverage
+.nyc_output/
+
+# CI / tooling
+.github/
+.husky/
+.git/
+
+# Next.js build output
+examples/with-nextjs/.next/
