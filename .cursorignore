@@ -27,6 +27,13 @@ dev-dist
 html
 meta*.json
 .claude
+.next/
+*.min.js
+*.min.css
+*.snap
+.nyc_output/
+.git/
+yarn.lock.
 
 # Auto-generated: WASM bindings compiled to TS (DO NOT EDIT markers)
 packages/excalidraw/subset/woff2/woff2-wasm.ts
@@ -38,11 +45,7 @@ packages/excalidraw/fonts/Excalifont/index.ts
 packages/excalidraw/fonts/ComicShanns/index.ts
 packages/excalidraw/fonts/ComicShanns/ComicShanns-Regular.sfd
 
-# Auto-generated: Crowdin-managed translation files (source is en.json)
-packages/excalidraw/locales/
-
 # Auto-generated: changelogs
-packages/excalidraw/CHANGELOG.md
 packages/utils/CHANGELOG.md
 
 # Binaries
