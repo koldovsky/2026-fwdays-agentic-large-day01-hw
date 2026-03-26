@@ -91,9 +91,13 @@ A test verifying that the arrow element's `version` is bumped when its label tex
 
 ## flushSync — Bypassing React 18 Automatic Batching
 
-`flushSync` forces a synchronous re-render, bypassing React 18's automatic batching. It is used in 15 places in `App.tsx` and at least one place in `ConfirmDialog.tsx`.
+`flushSync` forces a synchronous re-render, bypassing React 18's automatic batching. It is used in 14 places in `App.tsx`, 2 places in `ConfirmDialog.tsx`, and 1 place in `UnlockPopup.tsx`.
 
-**Confirmed call sites in App.tsx** (lines): 974, 1090, 1220, 5081, 5362, 5739, 5762, 6852, 9000, 9020, 9219, 9630, 9755, 10047.
+**Confirmed call sites in `App.tsx`** (lines): 974, 1090, 1220, 5081, 5362, 5739, 5762, 6852, 9000, 9020, 9219, 9630, 9755, 10047.
+
+**Confirmed call sites in `ConfirmDialog.tsx`** (lines): 53, 69.
+
+**Confirmed call sites in `UnlockPopup.tsx`** (lines): 52.
 
 **Why it's needed**: Several flows require the DOM to reflect updated state *before* the current JS call stack continues — for example, committing text edits before the text element is finalized, or ensuring focus is correct before processing a keyboard event.
 
@@ -207,7 +211,19 @@ A comment near hit-testing logic notes that floating-point precision degrades be
 
 ### `mutateElement` invalidates ShapeCache
 
-Calling `mutateElement(element, elementsMap, updates)` always calls `ShapeCache.delete(element)` when any geometry field (x, y, width, height, points, angle, scale) changes. This is a hidden side effect — callers that mutate geometry without going through `mutateElement` will render stale RoughJS shapes.
+Calling `mutateElement(element, elementsMap, updates)` calls `ShapeCache.delete(element)` only when `updates` contains at least one of `height`, `width`, `fileId`, or `points` — and only if any value actually changed (i.e. `didChange` is true at `mutateElement.ts:126`). Fields `x`, `y`, `angle`, and `scale` do **not** trigger `ShapeCache.delete`. This is a hidden side effect — callers that mutate shape geometry (height, width, points) without going through `mutateElement` will render stale RoughJS shapes.
+
+**Exact condition** (`packages/element/src/mutateElement.ts:130–136`):
+```ts
+if (
+  typeof updates.height !== "undefined" ||
+  typeof updates.width  !== "undefined" ||
+  typeof fileId         != "undefined"  ||
+  typeof points         !== "undefined"
+) {
+  ShapeCache.delete(element);
+}
+```
 
 **File**: `packages/element/src/mutateElement.ts`
 

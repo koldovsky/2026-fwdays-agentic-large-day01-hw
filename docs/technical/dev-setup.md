@@ -1,7 +1,7 @@
+# Developer Setup Guide
+
 > Last updated: 2026-03-25 — **not yet verified end-to-end on all platforms; treat OS-specific steps as best-effort guidance**
 > Estimated setup time: 15–25 minutes (excluding download time)
-
-# Developer Setup Guide
 
 Excalidraw is a Yarn workspaces monorepo containing a Vite-based web app
 (`excalidraw-app/`) and five TypeScript packages (`math`, `common`, `element`,
@@ -134,7 +134,7 @@ yarn install
 This installs packages for `excalidraw-app/`, all five `packages/*`, and
 `examples/*`. Expect 60–90 seconds on first install. Success looks like:
 
-```
+```text
 Done in 72.34s.
 ```
 
@@ -213,7 +213,7 @@ yarn start
 
 Expected terminal output (Vite startup):
 
-```
+```text
   VITE v5.0.12  ready in 1234 ms
 
   ➜  Local:   http://localhost:3001/
@@ -314,7 +314,7 @@ yarn test:all
 
 **Expected output when all tests pass:**
 
-```
+```text
  ✓  N tests passed
  Duration  X.XXs
 ```
@@ -480,7 +480,7 @@ gh pr create --title "fix: prevent text container crash on empty input" \
 
 **Via browser:** GitHub will show a "Compare & pull request" banner after
 pushing. Click it, or navigate to
-`https://github.com/excalidraw/excalidraw/compare/feat/YOUR_FEATURE_NAME`.
+`https://github.com/<your-username>/<your-fork-repo>/compare/feat/YOUR_FEATURE_NAME`.
 
 ### 7. Fill in the PR template
 

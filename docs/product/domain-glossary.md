@@ -9,7 +9,7 @@ Terms are listed in dependency order: primitives first, then higher-level concep
 **Definition**
 The fundamental unit of content in the editor. A plain, JSON-serializable, immutable-by-convention object that describes one drawable entity on the canvas. Defined as a TypeScript discriminated union in `packages/element/src/types.ts`.
 
-Every element shares a common base (`_ExcalidrawElementBase`) with fields: `id`, `x`, `y`, `width`, `height`, `angle`, `strokeColor`, `backgroundColor`, `fillStyle`, `roughness`, `opacity`, `version`, `versionNonce`, `updated`, `isDeleted`, `groupIds`, `frameId`, `boundElements`, `locked`, `index`.
+Every element shares a common base (`_ExcalidrawElementBase`) with fields: `id`, `x`, `y`, `width`, `height`, `angle`, `strokeColor`, `backgroundColor`, `fillStyle`, `roughness`, `opacity`, `version`, `versionNonce`, `updated`, `isDeleted`, `groupIds`, `frameId`, `boundElements`, `locked`, `index`. Additional fields not listed here include `seed`, `strokeWidth`, `strokeStyle`, `roundness`, `link`, and `customData`; see the full definition at `_ExcalidrawElementBase` in `packages/element/src/types.ts:40`.
 
 Concrete subtypes: `rectangle`, `diamond`, `ellipse`, `text`, `arrow`, `line`, `freedraw`, `image`, `frame`, `magicframe`, `iframe`, `embeddable`.
 

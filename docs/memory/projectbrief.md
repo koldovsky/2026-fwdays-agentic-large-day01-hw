@@ -43,7 +43,7 @@ excalidraw-app        ← deployed web application, wraps packages/excalidraw
 | `packages/common` | `@excalidraw/common` | 0.18.0 |
 | `packages/element` | `@excalidraw/element` | 0.18.0 |
 | `packages/math` | `@excalidraw/math` | 0.18.0 |
-| `packages/utils` | `@excalidraw/utils` | (separate versioning) |
+| `packages/utils` | `@excalidraw/utils` | 0.1.2 |
 
 ## Key User-Facing Features
 

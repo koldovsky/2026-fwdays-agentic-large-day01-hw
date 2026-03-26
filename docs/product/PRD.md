@@ -10,29 +10,15 @@
 
 ---
 
-## TL;DR
+## Product Purpose
 
-Excalidraw is a browser-based collaborative whiteboard that renders diagrams in a hand-drawn aesthetic, requiring no account, installation, or design skill to start. It serves anyone who needs to communicate an idea visually in real time — engineers, product managers, and teachers — by removing the friction and false polish of traditional diagramming tools. Success is measured by a user completing a shareable diagram in under 60 seconds from a fresh browser tab and by pointer-event latency staying below 200ms during drawing. Pixel-precise design, rich text, slideshow modes, and live data bindings are out of scope.
+Excalidraw is a browser-based collaborative whiteboard that renders diagrams in a hand-drawn aesthetic, requiring no account, installation, or design skill to start. It serves anyone who needs to communicate an idea visually in real time — engineers, product managers, and teachers — by removing the friction and false polish of traditional diagramming tools. Success is measured by a user completing a shareable diagram in under 60 seconds from a fresh browser tab and by pointer-event latency staying below 200ms during drawing.
 
----
-
-## Problem statement
-
-### The situation
-
-Digital diagramming tools — Lucidchart, draw.io, Miro, Figma FigJam — require sign-in, impose formal shape libraries and alignment grids, and produce output that looks polished and final. Remote and hybrid teams communicate increasingly through async visual artifacts, but no lightweight, zero-install option existed that preserved the "rough sketch" quality of whiteboard thinking.
-
-### The problem
-
-Engineers, product managers, and teachers routinely need to externalize an idea visually while on a call or composing an async message. With traditional tools, starting a new diagram requires signing in, picking a template, and learning a toolbar — a minimum of 3–5 minutes before any thinking can happen. The resulting artifact looks finished, which signals to collaborators that the idea is settled and discourages iteration. Sharing requires the recipient to either have an account or receive a static image they cannot edit. Teams either default to verbal descriptions (lossy) or accept the overhead of formal tools (slow), both of which impede early-stage design and architectural communication.
-
-### Why now
-
-Browser canvas APIs now support 60fps rasterization of thousands of vector elements. WebSocket infrastructure (Socket.io, Cloudflare) is cheap enough to provide real-time multiplayer at zero marginal cost for small sessions. The RoughJS library made a hand-drawn aesthetic trivially achievable without custom rendering. Remote-first work norms (accelerated post-2020) created a permanent need for shareable visual scratchpads that work in a browser without IT involvement. All three preconditions converged; no equivalent open-source product existed at the time of Excalidraw's initial release.
+**Why this exists**: Digital diagramming tools (Lucidchart, Miro, Figma FigJam) require sign-in, impose formal templates, and produce polished output that discourages early-stage thinking. Remote teams needed a zero-install visual scratchpad that preserved the rough-sketch quality of whiteboard ideation. Browser canvas performance, the RoughJS library, and cheap WebSocket infrastructure converged to make it achievable; no equivalent open-source product existed at the time.
 
 ---
 
-## Goals and non-goals
+## Goals and success metrics
 
 ### Goals
 
@@ -41,14 +27,6 @@ Browser canvas APIs now support 60fps rasterization of thousands of vector eleme
 3. Shareable collaboration for small teams: two collaborators must see each other's cursor positions and element changes within 500ms at typical broadband speeds (10+ Mbps), without either party creating an account.
 4. Round-trip export fidelity: a scene exported to PNG must re-import into the editor with full scene data intact, preserving element positions, types, styles, and text.
 5. Embeddable library for developers: a third-party developer must be able to mount `@excalidraw/excalidraw` inside their React app with zero global side effects and full isolation between multiple instances on the same page.
-
-### Non-goals
-
-- **Not a vector design tool**: no Bezier path editing, no typography controls, no pixel-level snapping or constraints. Exact measurements are secondary to speed.
-- **Not a document editor**: no rich text, pagination, structured layout engine, or versioned document history beyond in-session undo/redo.
-- **Not a presentation tool**: no slide metaphor, transitions, speaker notes, or audience mode.
-- **Not a data visualization library**: charts, graphs, live data bindings, and formula-driven shapes are out of scope.
-- **Not a mobile-first product**: canvas interaction is optimized for pointer and stylus input. Mobile is supported but not the primary design target; mobile-specific gestures and small-screen layouts are secondary P1/P2 concerns.
 
 ### Success metrics
 
@@ -68,17 +46,9 @@ Browser canvas APIs now support 60fps rasterization of thousands of vector eleme
 | Library install / embed adoption | 0 (new package) | 500 npm downloads/week by week 8 | npm download stats |
 | Returning users (sessions > 1) | Unknown | > 30% within 7 days | Session analytics |
 
-**Guardrail metrics** (must not worsen)
-
-| Metric | Threshold |
-|--------|-----------|
-| Static canvas render time for 500 elements | Must not exceed 16ms per frame (60fps floor) |
-| `.excalidraw` file round-trip fidelity | 100% — zero element loss on import of any previously exported file |
-| Bundle size of `@excalidraw/excalidraw` | Must not grow by more than 5% per minor release without explicit sign-off |
-
 ---
 
-## Users and context
+## Target Audience
 
 ### Primary user
 
@@ -92,25 +62,42 @@ Currently blocked by: all available tools require sign-in, produce polished outp
 
 **Casey, Remote Teacher.** Casey uses the web app to illustrate concepts during live online classes. Casey is less technical than Alex, relies on the toolbar UI, and values the hand-drawn aesthetic because it signals to students that the illustration is informal and evolving. Casey's blocker: tools that look "too designed" discourage students from asking questions about the diagram.
 
-### User journey — current state (without Excalidraw)
+---
 
-1. Alex needs to explain a proposed service boundary to a remote colleague during a call.
-2. Alex opens Lucidchart — is prompted to sign in; spends 45 seconds authenticating.
-3. Alex picks a blank template — the default grid and shape panel are visible; Alex must dismiss onboarding tooltips.
-4. Alex drags shapes from the panel, connects them with arrows; the result looks like a formal architecture diagram, not a sketch.
-5. Alex clicks Share — the collaborator needs a Lucidchart account to edit; Alex downgrade to "view only" link.
-6. The diagram looks final; the colleague treats it as a decision, not a proposal; the intended exploratory conversation never happens.
-7. Total elapsed time: ~8 minutes. Quality of early-stage thinking: degraded.
+## Key Features
 
-### User journey — future state (with Excalidraw)
+- **F-1 — Core shapes on infinite canvas** (P0): rectangle, diamond, ellipse, arrow (straight and elbow), line, freedraw, text, image; RoughJS hand-drawn aesthetic; consistent across light and dark themes.
+- **F-2 — Zero-account, zero-install drawing** (P0): canvas ready immediately on page open; scene auto-persisted to `localStorage` on every change.
+- **F-3 — Shareable URL** (P0): encoded scene data in URL; any recipient can open and edit without authentication; large scenes use a link-sharing backend.
+- **F-4 — PNG and SVG export** (P0): PNG export embeds scene data as metadata for round-trip re-import; SVG export also supported.
+- **F-5 — Round-trip import fidelity** (P0): `.excalidraw` JSON and PNG-with-metadata re-import with 100% element fidelity — no element loss, no style degradation.
+- **F-6 — PWA offline mode** (P0): drawing, undo/redo, export, and local persistence work offline after initial page load; collaboration explicitly unavailable offline.
+- **F-7 — Real-time collaboration** (P1): shared session URL with remote cursors visible within 500ms; no account required; ephemeral by default.
+- **F-8 — Element library** (P1): save named element groups and insert them into any session without an account.
+- **F-9 — Unlimited undo/redo** (P1): full in-session history; remote collaboration updates never enter the local undo stack.
+- **F-10 — Embeddable React library** (P1): `@excalidraw/excalidraw` npm package exposing `ExcalidrawImperativeAPI` for programmatic scene access, exports, and change subscriptions.
+- **F-11 — Mermaid diagram import** (P2): convert Mermaid syntax to Excalidraw elements.
+- **F-12 — Command palette** (P2): keyboard-activated access to all toolbar actions.
 
-1. Alex opens excalidraw.com in a new tab. Canvas is immediately ready — no sign-in, no picker.
-2. Alex draws three rectangles, connects them with arrows, types labels. The hand-drawn style signals "this is rough."
-3. Alex clicks the Share icon and copies a Live Collaboration link — one action.
-4. Colleague opens the link in their own browser — no account needed. Both cursors are visible on screen.
-5. Colleague adds a question mark shape to one of the boxes. Alex sees it within half a second.
-6. Alex exports to PNG for the meeting notes. The PNG embeds the scene data; tomorrow, Alex can drag the PNG back into Excalidraw and continue editing.
-7. Total elapsed time: < 2 minutes. The diagram looked rough intentionally — the conversation stayed exploratory.
+---
+
+## Technical constraints / Non-goals
+
+### Non-goals
+
+- **Not a vector design tool**: no Bezier path editing, no typography controls, no pixel-level snapping or constraints. Exact measurements are secondary to speed.
+- **Not a document editor**: no rich text, pagination, structured layout engine, or versioned document history beyond in-session undo/redo.
+- **Not a presentation tool**: no slide metaphor, transitions, speaker notes, or audience mode.
+- **Not a data visualization library**: charts, graphs, live data bindings, and formula-driven shapes are out of scope.
+- **Not a mobile-first product**: canvas interaction is optimized for pointer and stylus input; mobile-specific gestures and small-screen layouts are secondary P1/P2 concerns.
+
+### Guardrail constraints (must not worsen)
+
+| Metric | Threshold |
+|--------|-----------|
+| Static canvas render time for 500 elements | Must not exceed 16ms per frame (60fps floor) |
+| `.excalidraw` file round-trip fidelity | 100% — zero element loss on import of any previously exported file |
+| Bundle size of `@excalidraw/excalidraw` | Must not grow by more than 5% per minor release without explicit sign-off |
 
 ---
 
@@ -134,7 +121,7 @@ Currently blocked by: all available tools require sign-in, produce polished outp
 
 **F-8**: The system should provide a reusable element library allowing users to save named element groups and insert them into any session. Priority: **P1**.
 
-**F-9**: The system should support undo and redo across all element mutations, with no operation limit in a single session. Priority: **P1**. Notes: Remote collaboration updates must never appear in the local undo stack (see `CaptureUpdateAction.NEVER` in `docs/memory/decisionLog.md`).
+**F-9**: The system should support undo and redo across all element mutations, with no operation limit in a single session. Priority: **P1**. Notes: Remote collaboration updates must never appear in the local undo stack (see `CaptureUpdateAction.NEVER` in `docs/technical/decisionLog-archive.md`).
 
 **F-10**: The `@excalidraw/excalidraw` npm library must expose an `ExcalidrawImperativeAPI` ref allowing host applications to programmatically read and write scene state, trigger exports, and subscribe to change events. Priority: **P1**.
 
@@ -152,16 +139,6 @@ Currently blocked by: all available tools require sign-in, produce polished outp
 - **Library isolation**: Multiple `@excalidraw/excalidraw` instances on a single page must have fully isolated state — no shared atoms, no shared singletons, no global CSS pollution.
 - **File format stability**: The `.excalidraw` JSON format must remain backwards-compatible indefinitely. New fields must be additive; fields must never be removed or renamed without a migration path.
 - **Privacy**: No scene data is sent to any server unless the user explicitly initiates sharing or collaboration. Local-only usage produces zero network traffic.
-
-### Out of scope (explicit)
-
-1. Bezier curve editing and precision path tools — see non-goal: not a vector design tool.
-2. Rich text with formatting, inline images, or pagination — see non-goal: not a document editor.
-3. Slide-based presentation mode — see non-goal: not a presentation tool.
-4. Charts, graphs, or live data-bound shapes — see non-goal: not a data visualization library.
-5. Backend infrastructure for persistent collaborative sessions — library consumers must provide their own sync backend.
-6. Native mobile app (iOS/Android) — web-only; mobile browser is supported but not optimized.
-7. AI-powered shape recognition from freehand drawing — out of scope for this version; Magic Frames AI feature is a separate P2 exploration.
 
 ---
 
@@ -200,30 +177,7 @@ WCAG 2.1 AA for all non-canvas UI. Canvas drawing is pointer-dependent and is no
 
 ## Technical considerations
 
-### Known constraints
-
-- **Rendering architecture**: The five-canvas layer model (StaticCanvas, InteractiveCanvas, NewElementCanvas, SVG layer, React DOM) is fixed. New visual features must map to one of these layers. See `docs/memory/systemPatterns.md`.
-- **State management**: Element state is mutable and lives outside React. New features that mutate elements must use `mutateElement()` or `scene.mutateElement()` — not `setState`. See `docs/memory/systemPatterns.md` — Element Mutation Pattern.
-- **Jotai isolation**: All Jotai atoms must go through `editor-jotai` or `app-jotai`, never direct `jotai` imports. ESLint enforces this. Violations break multi-instance isolation.
-- **File format**: `.excalidraw` JSON is a public contract. Any schema change requires backwards-compatible migration code and version bumping.
-- **Collaboration backend**: The web app's collaboration server is not part of this repository. The library exposes sync hooks; consumers wire their own backend. Socket.io client (`4.7.2`) is the current transport in `excalidraw-app`.
-- **PWA**: Service worker registration and caching strategy must be maintained for offline P0 requirement.
-
-### Open technical questions
-
-- **Q-1**: What is the minimum supported browser version? — Owner: Engineering Lead — Needed by: before any browser-compatibility work begins — Resolution path: check `excalidraw-app/vite.config.ts` `build.target` field.
-- **Q-2**: What is the maximum acceptable `@excalidraw/excalidraw` gzipped bundle size? — Owner: Engineering Lead — Needed by: before publishing 1.0. — Status: No documented threshold; must be established as a guardrail metric.
-- **Q-3**: Does the collaboration server support end-to-end encryption for scene data? — Owner: Infrastructure — Needed by: before any enterprise or privacy-sensitive deployment guidance.
-
-### Dependencies
-
-| Dependency | Status | Risk if late |
-|------------|--------|--------------|
-| RoughJS (hand-drawn rendering) | Done — vendored | Low |
-| Socket.io client (collaboration) | Done — `4.7.2` in package.json | Low |
-| fractional-indexing (z-order) | Done — integrated | Low |
-| jotai + jotai-scope (state isolation) | Done — integrated | Low |
-| Collaboration server (excalidraw-app only) | External — not in this repo | Medium — collaboration P1 blocked if unavailable |
+Known constraints, open technical questions (Q-1–Q-3), and dependency status: `docs/technical/prd-technical-notes.md`.
 
 ---
 
@@ -242,44 +196,7 @@ WCAG 2.1 AA for all non-canvas UI. Canvas drawing is pointer-dependent and is no
 
 ## Launch plan
 
-### Phases
-
-**Phase 0 — Internal (current)**
-What: Core drawing, export, local persistence, PWA offline.
-Access: Engineering team only.
-Gate to Phase 1: All P0 functional requirements pass QA; pointer-event latency < 200ms in CI benchmark; export round-trip test passing.
-Rollback: Revert to previous commit; no external users affected.
-
-**Phase 1 — Open beta (web app)**
-What: Phase 0 + real-time collaboration, library panel, undo/redo.
-Access: Public URL, no account required.
-Gate to Phase 2: Time-to-first-shareable-diagram < 60s confirmed via session analytics; no critical export regression in first 72 hours.
-Rollback: Feature-flag collaboration off; Phase 0 canvas remains live.
-
-**Phase 2 — npm library GA**
-What: `@excalidraw/excalidraw` published to npm with stable `ExcalidrawImperativeAPI`.
-Access: All npm users.
-Gate: API surface reviewed and locked; bundle size guardrail established (Q-2 resolved); integration docs complete.
-Rollback: Yank package version; pin consumers to previous minor.
-
-### Launch checklist
-
-1. All P0 functional requirements verified by QA.
-2. Pointer-event latency benchmark passing (< 200ms p95 at 500 elements).
-3. Export round-trip test passing (PNG re-import fidelity 100%).
-4. PWA offline mode verified in Chrome, Firefox, Safari.
-5. Accessibility audit: all toolbar and dialog interactions pass WCAG 2.1 AA.
-6. Q-1 (minimum browser version) resolved and documented.
-7. Analytics events instrumented: `session_start`, `first_shape_drawn`, `share_link_copied`, `export_completed`.
-8. Rollback plan confirmed for each phase.
-9. Support team briefed on known issues (see `docs/technical/undocumented-behavior.md`).
-10. `docs/product/domain-glossary.md` up to date for support and docs team.
-
-### Communication plan
-
-**Internal**: Engineering and design leads review PRD before Phase 0 gate. Support team briefed on known quirks (flushSync, jsdom test failures) before Phase 1. Leadership informed at Phase 2 milestone.
-
-**External**: No press or partner announcement planned for Phase 0–1 (open-source, organic adoption). npm publish announcement via GitHub release notes and project README at Phase 2.
+Three-phase rollout: Phase 0 (internal, P0 requirements), Phase 1 (public beta, collaboration), Phase 2 (npm GA). Full phase gates, launch checklist, and communication plan: `docs/product/launch-plan.md`.
 
 ---
 
@@ -313,12 +230,4 @@ Rollback: Yank package version; pin consumers to previous minor.
 
 ## Appendix
 
-- `docs/memory/productContext.md` — WHY/WHO/WHAT, UX intent, success signals, constraints
-- `docs/memory/projectbrief.md` — package structure, key features, dependency order
-- `docs/memory/systemPatterns.md` — state management, rendering pipeline, mutation pattern
-- `docs/memory/decisionLog.md` — WHY architectural choices were made (monorepo, class component, mutable elements, Jotai isolation, etc.)
-- `docs/technical/architecture.md` — Mermaid dependency graph, data-flow sequence diagrams
-- `docs/technical/undocumented-behavior.md` — known HACK/FIXME findings, flushSync sites, initialization order dependencies
-- `docs/product/domain-glossary.md` — 20 project-specific terms with precise definitions
-- RoughJS: https://roughjs.com — hand-drawn rendering library
-- fractional-indexing npm package — z-order collision-free insertion
+All related docs are indexed in `CLAUDE.md` (Memory Bank + reference docs). Key pointers: `docs/memory/` (context, patterns, decisions), `docs/technical/` (architecture, undocumented behaviors, technical notes), `docs/product/domain-glossary.md` (20 domain terms).

@@ -1,9 +1,9 @@
-> Last updated: 2026-03-25 (session 5)
+> Last updated: 2026-03-26 (session 6)
 > Related: [activeContext.md](activeContext.md) | [decisionLog.md](decisionLog.md) | [PRD](../product/PRD.md) | [dev-setup](../technical/dev-setup.md)
 
 ## Completion snapshot
 
-All Workshop PR deliverables complete (Memory Bank, PRD, `.cursorignore`, `.claudeignore`). PR not yet opened. Implementation work not yet started.
+All Workshop PR deliverables complete (Memory Bank, PRD, `.cursorignore`, `.claudeignore`). Doc audit pass complete (session 6). PR not yet opened. Implementation work not yet started.
 Status: On track
 
 ---
@@ -11,7 +11,7 @@ Status: On track
 ## Done
 
 **Memory Bank — core docs**
-- [x] `CLAUDE.md` — commands, monorepo structure (incl. `packages/utils/`), import rules, test thresholds, Memory Bank index; `decisionLog.md` moved to reference docs list
+- [x] `CLAUDE.md` — commands, monorepo structure, import rules, test thresholds, Memory Bank index; reference docs list updated with `decisionLog-archive.md`
 - [x] `docs/memory/projectbrief.md` — project purpose, package hierarchy, key features
 - [x] `docs/memory/techContext.md` — versions, dev commands, build system, ESLint rules, test infra
 - [x] `docs/memory/systemPatterns.md` — state management layers, mutation pattern, action system, rendering pipeline (5 layers)
@@ -20,12 +20,15 @@ Status: On track
 - [x] `docs/memory/progress.md` — this file
 
 **Reference docs**
-- [x] `docs/memory/decisionLog.md` — 17 entries (chronological): 11 architectural decisions + 6 undocumented-behavior entries (ShapeCache WeakMap keying, EVENTUALLY stale snapshot, undo version exclusion, uninitialized image delta skip, triggerUpdate nonce unconditional, Object.assign binding bypass)
-- [x] `docs/technical/architecture.md` — Mermaid dependency graph, data-flow sequence diagrams, state management, rendering pipeline, package deps (304 lines)
-- [x] `docs/technical/dev-setup.md` — full onboarding guide: prerequisites, env config, verification checklist, troubleshooting
-- [x] `docs/product/domain-glossary.md` — 20 domain terms: Element, Scene, AppState, Tool/ActiveTool, Action/ActionResult/ActionName, Store/StoreSnapshot/StoreDelta/CaptureUpdateAction, History/Delta, Binding/BoundElement, Group/GroupId, Frame/MagicFrame, Library/LibraryItem, Collaboration/Collaborator, BinaryFiles/BinaryFileData, ShapeCache, FractionalIndex, Renderer, ViewMode/ZenMode/GridMode, EditorInterface, ExcalidrawImperativeAPI, Tunnel
-- [x] `docs/technical/undocumented-behavior.md` — 14 findings across HACK/FIXME, flushSync, StrictMode, initialization order, implicit state machines, magic numbers, non-obvious side effects
-- [x] `docs/product/PRD.md` — reverse-engineered PRD of Excalidraw v0.1 (In Review); 5 goals, 12 requirements (P0/P1/P2), metrics with baselines, user journeys, risks, 3-phase launch plan, 4 open questions with owners; see Q-4 for scope clarification needed
+- [x] `docs/memory/decisionLog.md` — 6 undocumented-behavior entries (158 lines); pre-2026 entries archived
+- [x] `docs/technical/decisionLog-archive.md` — 11 archived architectural + policy decisions (259 lines)
+- [x] `docs/technical/architecture.md` — corrected: "Five layers" (was Four); ShapeCache description fixed (element reference key, correct value type)
+- [x] `docs/technical/dev-setup.md` — corrected: H1 moved to line 1 (MD041); 3 fences tagged `text` (MD040); fork URL placeholder replaces hardcoded upstream URL
+- [x] `docs/technical/prd-technical-notes.md` — extracted from PRD; known constraints, Q-1–Q-3, dependency table
+- [x] `docs/technical/undocumented-behavior.md` — corrected: flushSync count (14 App.tsx, 2 ConfirmDialog.tsx, 1 UnlockPopup.tsx); mutateElement ShapeCache.delete triggers corrected (`height`, `width`, `fileId`, `points` only)
+- [x] `docs/product/PRD.md` — 233 lines; 4 mandated sections added (Product Purpose, Target Audience, Key Features, Technical constraints / Non-goals)
+- [x] `docs/product/domain-glossary.md` — ExcalidrawElement entry: 6 missing base fields documented with `_ExcalidrawElementBase` reference
+- [x] `docs/product/launch-plan.md` — extracted from PRD; full phase gates, launch checklist, comm plan
 
 ---
 
@@ -68,6 +71,7 @@ Status: On track
 
 - `Memory Bank setup` — **Done** — All orientation docs created, audited (3 passes), and cross-referenced; AI can onboard to this repo without verbal re-orientation.
 - `PRD v0.1` — **Done** — Reverse-engineered PRD of Excalidraw created; In Review status; scope clarification (Q-4) still needed.
+- `Doc audit pass` — **Done** (session 6) — All reference docs verified against source; 12 files corrected.
 - `Workshop PR complete` — **In progress** — All deliverables done; PR not yet opened.
 - `First implementation task` — **Not started** — Scope TBD; no code changed yet.
 - `Test coverage baseline` — **Not started** — Run `yarn test:all` to confirm current pass/fail state before any changes.

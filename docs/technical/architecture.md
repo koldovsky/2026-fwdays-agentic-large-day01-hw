@@ -201,7 +201,7 @@ Components subscribe directly via the re-exported `useAtomValue` / `useAtom` hoo
 
 ### Overview
 
-Four layers are painted on every render, stacked by z-index:
+Five layers are painted on every render, stacked by z-index:
 
 ```
 Layer 1: StaticCanvas   (HTMLCanvasElement, class "static")
@@ -251,7 +251,7 @@ Renders: selection bounding boxes, transform handles, remote pointer cursors, bi
 
 ### ShapeCache
 
-`ShapeCache` (in `packages/element/src/shape.ts`) maps element id → `{ shape: Drawable, version: number }`. `renderElement` checks this cache before calling into RoughJS. `mutateElement` calls `ShapeCache.delete(element)` when geometry fields change.
+`ShapeCache` (in `packages/element/src/shape.ts`) is a `WeakMap<ExcalidrawElement, { shape: ElementShape; theme: AppState["theme"] }>` keyed by element object reference — not by element id string. `renderElement` calls `ShapeCache.generateElementShape(element, renderConfig)`, which reads from or populates the cache using the same element reference as the lookup key. `mutateElement` calls `ShapeCache.delete(element)` — passing the element reference — when geometry fields (`height`, `width`, `points`, `fileId`) change.
 
 ---
 

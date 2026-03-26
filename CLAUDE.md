@@ -64,7 +64,7 @@ From `.github/copilot-instructions.md`:
 - **Performance:** Prefer implementations without allocation; trade RAM for CPU cycles.
 - **Immutability:** Use `const` and `readonly`.
 - **Null handling:** Use optional chaining (`?.`) and nullish coalescing (`??`).
-- **Components:** Functional components with hooks for all new code. The existing `App` class component (`packages/excalidraw/components/App.tsx`) is a documented legacy exception — do **not** attempt to convert it. See `docs/memory/decisionLog.md` (~2020 entry).
+- **Components:** Functional components with hooks for all new code. The existing `App` class component (`packages/excalidraw/components/App.tsx`) is a documented legacy exception — do **not** attempt to convert it. See `docs/technical/decisionLog-archive.md` (~2020 entry).
 - **Styling:** CSS modules.
 - **Math types:** Use `Point` type (from `packages/math/src/types.ts`) instead of raw `{ x, y }` objects.
 - **Naming:** PascalCase for components/interfaces/types, camelCase for functions/variables, ALL_CAPS for constants.
@@ -87,7 +87,8 @@ Project context is maintained in `docs/memory/`. Load these files at the start o
 | `docs/memory/productContext.md` | Product intent, constraints, anti-goals |
 
 Reference docs (load on demand, not pre-loaded):
-- `docs/memory/decisionLog.md` — WHY architectural choices were made; append-only, grows with decisions
+- `docs/memory/decisionLog.md` — Recent undocumented-behavior findings; append-only, grows with discoveries
+- `docs/technical/decisionLog-archive.md` — Archived architectural and policy decisions (~2021–2026)
 - `docs/technical/architecture.md` — Mermaid diagrams, data flow, rendering pipeline
 - `docs/technical/dev-setup.md` — Full onboarding guide (prerequisites → first PR)
 - `docs/technical/undocumented-behavior.md` — Known HACK/FIXME findings
