@@ -1,0 +1,36 @@
+# deps
+node_modules/
+
+# build & test output
+build/
+dist/
+dev-dist/
+coverage/
+
+# generated / tooling
+packages/excalidraw/types/
+.yarn/
+.eslintcache
+meta*.json
+
+# local / deploy noise
+firebase/
+html/
+logs/
+*.log
+*.tgz
+.vercel/
+.history/
+.idea/
+
+# secrets (align with .gitignore)
+.env.local
+.env.*.local
+.envrc
+
+# caches
+**/.vite/
+
+# Next.js examples after build
+examples/**/.next/
+examples/**/out/
