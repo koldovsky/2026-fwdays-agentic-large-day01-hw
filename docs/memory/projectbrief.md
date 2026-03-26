@@ -27,3 +27,10 @@
 ## Що не є частиною цього документа
 
 - Деталі бізнес-вимог конкретного курсу/дз — у репозиторії немає окремого README на корені; контекст навчання випливає лише з назви каталогу проєкту поза `package.json`.
+
+## Details
+
+- For system architecture and technical decomposition -> see `docs/technical/architecture.md`
+- For local environment and development workflow -> see `docs/technical/dev-setup.md`
+- For product requirements and scope -> see `docs/product/PRD.md`
+- For business/domain terminology -> see `docs/product/domain-glossary.md`

@@ -68,3 +68,9 @@ flowchart TB
 
 - Vitest із **jsdom**, глобальні матчери, **parallel hooks** у sequence (`vitest.config.mts` коментар про поведінку v2).
 - Пакет `excalidraw` тягне **Testing Library** (`@testing-library/react` тощо) для компонентних тестів.
+
+## Details
+
+- For complete architecture narrative and subsystem boundaries -> see `docs/technical/architecture.md`
+- For setup/running instructions of architecture-related checks -> see `docs/technical/dev-setup.md`
+- For product context behind key UX patterns -> see `docs/product/PRD.md`

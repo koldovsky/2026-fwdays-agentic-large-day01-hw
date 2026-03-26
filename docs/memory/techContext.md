@@ -65,3 +65,9 @@
 
 - **`examples/with-script-in-browser`:** Vite `5.0.12`, React `19.0.0`, залежність `@excalidraw/excalidraw: "*"`, скрипти `start` / `build` / `preview` (порт preview `5002`).
 - **`examples/with-nextjs`:** Next `14.1`, React `19.0.0`, `@types/react` `19.0.10`. Скрипти: `build:packages` → корінь; `build:workspace` = збірка пакетів + `copy:assets` (копіювання `../../packages/excalidraw/dist/prod/fonts` у `public`); `dev` на порту **3005**; `start` на **3006**.
+
+## Details
+
+- For deeper architectural breakdown of modules and flows -> see `docs/technical/architecture.md`
+- For environment prerequisites and local run commands -> see `docs/technical/dev-setup.md`
+- For product-level goals that drive technical tradeoffs -> see `docs/product/PRD.md`

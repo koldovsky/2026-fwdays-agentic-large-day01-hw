@@ -130,3 +130,9 @@
   - що є trigger;
   - які інваріанти очікуються до/після.
 - Пріоритезувати TODO/HACK/FIXME в `App.tsx`, `store.ts`, `textWysiwyg.tsx`, `colors.ts` як окремий техборг backlog.
+
+## Details
+
+- For full technical architecture context behind these decisions -> see `docs/technical/architecture.md`
+- For domain terms used in product-facing decisions -> see `docs/product/domain-glossary.md`
+- For business/product intent alignment -> see `docs/product/PRD.md`

@@ -50,3 +50,9 @@
 - `packages/utils/package.json`
 - `packages/excalidraw/editor-jotai.ts`
 - `vitest.config.mts`
+
+## Details
+
+- For architecture-level context for progress checkpoints -> see `docs/technical/architecture.md`
+- For setup and command baseline used by verification steps -> see `docs/technical/dev-setup.md`
+- For product priorities used to evaluate progress -> see `docs/product/PRD.md`

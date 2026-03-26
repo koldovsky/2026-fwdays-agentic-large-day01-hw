@@ -42,3 +42,10 @@
 - `packages/excalidraw/components/main-menu/DefaultItems.tsx`
 - `packages/excalidraw/components/welcome-screen/WelcomeScreen.tsx`
 - `packages/excalidraw/components/live-collaboration/LiveCollaborationTrigger.tsx`
+
+## Details
+
+- For detailed architecture decisions and runtime flow -> see `docs/technical/architecture.md`
+- For local setup and validation commands -> see `docs/technical/dev-setup.md`
+- For product scope and priorities -> see `docs/product/PRD.md`
+- For domain terms and shared vocabulary -> see `docs/product/domain-glossary.md`

@@ -53,3 +53,9 @@
 - `packages/excalidraw/components/main-menu/MainMenu.tsx`
 - `packages/excalidraw/components/main-menu/DefaultItems.tsx`
 - `packages/excalidraw/types.ts`
+
+## Details
+
+- For product requirements and roadmap-level intent -> see `docs/product/PRD.md`
+- For canonical domain terminology used in UX and API naming -> see `docs/product/domain-glossary.md`
+- For technical architecture that implements these product behaviors -> see `docs/technical/architecture.md`
