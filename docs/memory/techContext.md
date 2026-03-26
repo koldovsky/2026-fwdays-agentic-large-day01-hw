@@ -69,6 +69,7 @@ Dependency direction: `excalidraw-app` → `excalidraw` → `element` → `math`
 ## Tooling
 
 ### Testing
+
 - **Vitest** 3.0.6 — test runner
 - **@testing-library/react** 16.2.0 — component testing
 - **@testing-library/dom** 10.4.0
@@ -78,6 +79,7 @@ Dependency direction: `excalidraw-app` → `excalidraw` → `element` → `math`
 - **Config**: `vitest.config.mts`
 
 ### Coverage Thresholds (enforced in CI)
+
 | Metric | Threshold |
 |--------|-----------|
 | Lines | 60% |

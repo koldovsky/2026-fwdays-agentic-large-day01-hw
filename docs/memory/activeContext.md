@@ -72,8 +72,6 @@ _This file updates most frequently. Reflects state as of 2026-03-25._
 
 ## Next Steps / Known Work
 
-- Complete unreleased API changes (lifecycle events, `ExcalidrawAPIProvider` exports)
-- Finalize `onExport` async export handler
 - Decision pending: `ExcalidrawAPI.on*` subscriptions likely to be removed in favor of `api.onEvent(name)`
 - Stabilize ESM-only bundle migration (breaking for CRA users without eject/craco workaround)
 

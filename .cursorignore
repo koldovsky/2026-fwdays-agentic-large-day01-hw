@@ -1,0 +1,31 @@
+# Build artifacts
+dist/
+build/
+.next/
+out/
+
+# Dependencies
+node_modules/
+
+# Generated / minified files
+*.min.js
+*.min.css
+**/*.snap
+
+# Lock files
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
+# Coverage
+coverage/
+.nyc_output/
+
+# IDE / system files
+.git/
+.vscode/
+.idea/
+.DS_Store
+
+# Misc generated outputs
+repomix-output.xml

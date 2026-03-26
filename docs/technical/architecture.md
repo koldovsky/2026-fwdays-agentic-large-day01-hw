@@ -50,7 +50,7 @@ graph TD
 
 ### Component tree
 
-```
+```text
 [ExcalidrawAPIProvider]    # optional external wrapper — exposes useExcalidrawAPI() outside <Excalidraw>
   <Excalidraw>             # public API wrapper (index.tsx)
     <ExcalidrawBase>       # prop normalization (props.tsx)
@@ -70,7 +70,7 @@ graph TD
 
 ### User interaction → state update → render
 
-```
+```text
 Pointer/Keyboard Event on canvas
         │
         ▼
@@ -97,7 +97,7 @@ App.render()
 
 ### Remote / collaboration update
 
-```
+```text
 Socket.io message (remote delta)
         │
         ▼
@@ -112,7 +112,7 @@ triggerRender() → setState({})
 
 ### Action result capture for history
 
-```
+```text
 CaptureUpdateAction.IMMEDIATELY  → record undo snapshot now
 CaptureUpdateAction.EVENTUALLY   → batch with next action
 CaptureUpdateAction.NEVER        → skip (remote update, init)
@@ -256,7 +256,7 @@ class Renderer {
 
 ### Static scene (`packages/excalidraw/renderer/staticScene.ts`)
 
-```
+```text
 renderStaticSceneThrottled(config: StaticCanvasRenderConfig)
   └─ bootstrapCanvas()          — scale for devicePixelRatio, clear rect
   └─ strokeGrid()               — draw background grid lines
@@ -295,7 +295,7 @@ Each element type has a dedicated draw path:
 
 ### Import graph (production)
 
-```
+```text
 packages/math
     ↑
 packages/common

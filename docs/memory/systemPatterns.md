@@ -12,20 +12,12 @@ The architecture enforces strict package boundaries: app-layer code can depend o
 
 ## Component Tree
 
-```
-excalidraw-app/index.tsx        (React root, Sentry init, PWA registration)
-└── ExcalidrawApp (App.tsx)     (Firebase init, theme)
-    └── [ExcalidrawAPIProvider] (optional external wrapper — exposes useExcalidrawAPI() outside <Excalidraw>)
-        └── Excalidraw          (packages/excalidraw/index.tsx — library root, exported as ExcalidrawBase)
-            └── EditorJotaiProvider (Jotai atom store: editorJotaiStore)
-                └── InitializeApp
-                    └── App     (packages/excalidraw/components/App.tsx — core editor)
-                        ├── components/canvases/   (canvas rendering, not DOM)
-                        ├── UI overlays, menus, toolbars
-                        └── Event handlers
+```text
+[ExcalidrawAPIProvider]  ← optional outer wrapper (not inside <Excalidraw>)
+  ExcalidrawApp → Excalidraw (ExcalidrawBase) → EditorJotaiProvider → InitializeApp → App
 ```
 
-> Note: `ExcalidrawAPIProvider` is **not** rendered inside `<Excalidraw>`. It is a separately exported provider that consumers wrap around `<Excalidraw>` to enable `useExcalidrawAPI()` outside the component tree.
+`ExcalidrawAPIProvider` is a separately exported provider; consumers wrap it around `<Excalidraw>` to use `useExcalidrawAPI()` outside the tree. `App` (`packages/excalidraw/components/App.tsx`) is the core editor class component.
 
 ---
 
@@ -57,20 +49,10 @@ User interaction
 
 ## Element Immutability Pattern
 
-All `ExcalidrawElement` instances are **immutable objects**.
-
-### Rules
-
-- Never mutate elements directly
-- Always use `newElementWith(element, { ...changes })` to produce updated copies
-- Deleted elements stay in scene with `isDeleted: true` — never remove from array
-- Use `getNonDeletedElements()` to get visible elements for rendering
-
-### Why
-
-- Enables cheap reference equality checks (`===`) for change detection
-- Required for collaboration version tracking (`version` increments on each mutation)
-- Enables undo/redo via history snapshots
+All `ExcalidrawElement` instances are **immutable** — never mutate directly:
+- Use `newElementWith(element, { ...changes })` to produce updated copies
+- Deleted elements stay in scene with `isDeleted: true`; use `getNonDeletedElements()` for rendering
+- Immutability enables `===` change detection, collaboration versioning, and undo/redo snapshots
 
 ---
 
@@ -171,7 +153,7 @@ Three storage layers, used in priority order:
 ### Package Build (esbuild)
 
 - Each package builds independently via `esbuild`
-- Outputs: ESM + CJS
+- Outputs: ESM only
 - Type declarations generated separately by `tsc`
 
 ### CI/CD
@@ -200,9 +182,8 @@ Three storage layers, used in priority order:
 
 | Document | Relevance |
 |----------|-----------|
-| [decisionLog.md](./decisionLog.md) | Rationale and consequences behind each architectural pattern |
-| [techContext.md](./techContext.md) | Library versions powering these patterns (Rough.js, Jotai, Socket.io, etc.) |
-| [projectbrief.md](./projectbrief.md) | Element model details (immutability, types, key files) |
-| [activeContext.md](./activeContext.md) | Current coding standards and reminders for active work |
-| [architecture.md](../technical/architecture.md) | Deep dive: rendering pipeline, data flow diagrams, state management internals |
-| [domain-glossary.md](../product/domain-glossary.md) | Precise definitions for Scene, AppState, Action, Reconciliation, FractionalIndex |
+| [decisionLog.md](./decisionLog.md) | Rationale behind each architectural pattern |
+| [techContext.md](./techContext.md) | Library versions (Rough.js, Jotai, Socket.io, etc.) |
+| [projectbrief.md](./projectbrief.md) | Element model details and key files |
+| [architecture.md](../technical/architecture.md) | Rendering pipeline, data flow, state management internals |
+| [domain-glossary.md](../product/domain-glossary.md) | Definitions for Scene, AppState, Action, FractionalIndex |
