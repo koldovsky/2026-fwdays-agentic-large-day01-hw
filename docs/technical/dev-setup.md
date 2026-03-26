@@ -44,7 +44,7 @@ Two `.env` files are committed at the repo root. Vite reads them from there (`en
 | `.env.development` | `yarn start` — pre-wired with a dev Firebase project; `VITE_APP_WS_SERVER_URL=http://localhost:3002` |
 | `.env.production` | `yarn build` — production Firebase and public collab server |
 
-To override values locally, create `.env.local` at the **repo root** (gitignored by Vite):
+To override values locally, create `.env.local` at the **repo root** (listed in `.gitignore`):
 
 ```bash
 # .env.local — not committed
@@ -78,7 +78,7 @@ yarn start:example   # builds packages first, then starts with-script-in-browser
 
 Opens at `http://localhost:3000` (Vite default for that workspace).
 
-### Next.js example (Inference — no root-level script exists)
+### Next.js example — no root-level script in package.json
 
 ```bash
 cd examples/with-nextjs
@@ -94,7 +94,7 @@ Real-time collab requires a running `excalidraw-room` socket server (separate pr
 
 ## 6. Validation Commands
 
-These mirror CI checks exactly. Run before every push.
+These align with CI checks. Run before every push.
 
 ```bash
 # Tests
@@ -185,7 +185,7 @@ ESLint rules that commonly trip contributors:
 | Port 3001 in use | `.env.development` default | Override: `VITE_APP_PORT=3002` in `.env.local` |
 | Pre-commit hook skips lint | Hook is commented out in `.husky/pre-commit` | Run `yarn fix && yarn test:all` manually before pushing |
 | Collab fails on connect | No local room server | Expected. Use production collab or skip collab testing locally |
-| TypeScript errors on `import.meta.env` | Vite virtual types not resolved by plain `tsc` | Run via `yarn start`/`yarn build`; some are pre-existing in the repo |
+| TypeScript errors on `import.meta.env` | Vite virtual types not resolved by plain `tsc` | Run via `yarn start`/`yarn build` |
 | Coverage job fails on PR | New uncovered code | Check `vitest.config.mts` thresholds; add tests for the new code |
 | PR rejected immediately | Non-conventional commit title | Rename PR title: `<type>: <short description>` |
 
