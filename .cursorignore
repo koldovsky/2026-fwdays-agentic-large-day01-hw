@@ -52,12 +52,26 @@ packages/excalidraw/fonts/wasm/
 # Test snapshots (auto-updated by vitest)
 **/__snapshots__/
 
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs
+
+# Minified / generated bundles
+*.min.js
+*.min.css
+*.snap
+
 # Coverage
 coverage
+.nyc_output/
 
 # CI / tooling
 .github/
 .husky/
+.git/
 
 # Next.js build output
 examples/with-nextjs/.next/
