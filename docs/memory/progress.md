@@ -8,6 +8,11 @@
 - **Workspaces:** `excalidraw-app`, `packages/*`, `examples/*` — перелік у кореневому `package.json`.
 - **Приклади:** наявні каталоги на кшталт `examples/with-nextjs` (є `README.md` у прикладі).
 
+## Підтримка достовірності
+
+- Автоматична перевірка тверджень з цього файлу (версії, workspaces, скрипти, ключові шляхи): `yarn verify:memory-facts` ([скрипт](../../scripts/verify-memory-facts.js)).
+- Процес і ручний чекліст: [verification-checklist.md](./verification-checklist.md). У PR на GitHub той самий скрипт виконується в workflow **Lint** після `yarn install`.
+
 ## Документація та артефакти в робочій копії
 
 - `docs/memory/` — Memory Bank (цей файл включно).

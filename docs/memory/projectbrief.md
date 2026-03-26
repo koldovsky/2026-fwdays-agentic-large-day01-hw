@@ -32,6 +32,10 @@
 - `packages/excalidraw/package.json`: версія пакета `0.18.0`, опис «Excalidraw as a React component».
 - `excalidraw-app/App.tsx`: імпорт `Excalidraw` та пов’язаних API з `@excalidraw/excalidraw`.
 
+### Підтримка достовірності
+
+- `yarn verify:memory-facts` — закріплює перелічені вище факти в коді; деталі та чекліст: [verification-checklist.md](./verification-checklist.md). У CI (workflow **Lint**) крок виконується після встановлення залежностей.
+
 ## Technical і Product docs
 
 **Technical** (`docs/technical/`):
