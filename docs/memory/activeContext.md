@@ -19,12 +19,12 @@ Pick the active area and describe the task in the section below (depends on your
 - **Build / CI** — `vite.config.mts`, `scripts/buildPackage.js`, `.github/workflows/`.
 - **Examples** — `examples/with-nextjs`, `examples/with-script-in-browser` for embed verification.
 
-## Current task (fill in manually)
+## Current task
 
-- **Branch / PR:** _…_
-- **Summary:** _…_
-- **Files / modules:** _…_
-- **Blockers:** _…_
+- **Branch / PR:** `master`
+- **Summary:** Day 1 homework — documentation setup and agent onboarding. Memory Bank files created, technical architecture documented with diagrams.
+- **Files / modules:** `docs/memory/`, `.cursorignore`
+- **Blockers:** none
 
 ## Quick links
 
