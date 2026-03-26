@@ -29,7 +29,7 @@ Provide a fast, frictionless collaborative drawing experience in the browser wit
 | Monitoring | Sentry (guarded to `excalidraw.com` hosts only) | Not applicable |
 | PWA / service worker | Yes (`vite-plugin-pwa`) | No |
 | Published to npm | No (`private: true`) | Yes (`@excalidraw/excalidraw@0.18.0`) |
-| Peer dependencies | N/A | `react ^17 \| ^18 \| ^19`, `react-dom ^17 \| ^18 \| ^19` |
+| Peer dependencies | N/A | `react ^17 \|\| ^18 \|\| ^19`, `react-dom ^17 \|\| ^18 \|\| ^19` |
 | Version | `1.0.0` (internal) | `0.18.0` |
 
 ## Internal Sub-packages (in `packages/`)

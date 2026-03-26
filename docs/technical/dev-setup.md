@@ -128,7 +128,7 @@ During development, packages do **not** need to be built — `tsconfig.json` pat
 
 ## 7. Repository Map
 
-```
+```text
 excalidraw-app/       Web app: App.tsx, collab/, data/, share/
 packages/common/      @excalidraw/common — constants, colors
 packages/math/        @excalidraw/math — 2D geometry primitives

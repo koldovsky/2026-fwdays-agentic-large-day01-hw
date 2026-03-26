@@ -19,8 +19,11 @@ logs
 node_modules
 npm-debug.log*
 package-lock.json
+yarn.lock
 yarn-debug.log*
 yarn-error.log*
+*.snap
+.git/
 packages/excalidraw/types
 **/__snapshots__
 packages/excalidraw/fonts/ComicShanns/index.ts

@@ -47,7 +47,7 @@ graph TD
 
 ### Scene update (solo use)
 
-```
+```text
 Pointer / keyboard event
   → App event handler (App.tsx)
     → ActionManager.executeAction / direct scene mutation
@@ -64,7 +64,7 @@ Pointer / keyboard event
 
 ### Collaboration update
 
-```
+```text
 Local change detected by App.onChange emitter
   → collabAPI.syncElements(elements)   [excalidraw-app/collab/Collab.tsx]
     → broadcastElements (version-gated: only if sceneVersion increased)
@@ -88,7 +88,7 @@ Remote client receives "client-broadcast"
 
 ### Persistence decision tree
 
-```
+```text
 Collaboration active?
   YES → localStorage writes paused (LocalData.pauseSave("collaboration"))
         elements + appState → Firebase Firestore (encrypted, roomKey)
@@ -146,7 +146,7 @@ Mutations go through `scene.replaceAllElements(nextElements)`. `ActionManager` i
 
 ### ActionManager lifecycle
 
-```
+```text
 ActionManager (packages/excalidraw/actions/manager.tsx)
 │
 ├── actions: Record<ActionName, Action>  ← registered at App construction
@@ -185,7 +185,7 @@ Three stacked `<canvas>` elements plus one SVG overlay:
 
 ### Static canvas call chain
 
-```
+```text
 React re-render (App.render / setState / scene.triggerUpdate)
   → StaticCanvas component (React.memo)
     → useEffect → renderStaticScene(config, throttleEnabled)
@@ -210,7 +210,7 @@ The `Renderer` class (`packages/excalidraw/scene/Renderer.ts`) is a **viewport-c
 
 ### Interactive canvas — AnimationController loop
 
-```
+```text
 InteractiveCanvas.useEffect
   → AnimationController.start("animateInteractiveScene", animationFn)
     → requestAnimationFrame(AnimationController.tick)
@@ -240,7 +240,7 @@ rc.draw(ShapeCache.generateElementShape(element, renderConfig));
 
 Freedraw elements bypass roughjs entirely:
 
-```
+```text
 element.points (array of [x, y, pressure?])
   → getStroke(points, { simulatePressure, size, thinning, smoothing, ... })
       [perfect-freehand: returns outline polygon]
@@ -302,7 +302,7 @@ Neither TypeScript Project References (`composite`/`references`) nor npm symlink
 
 Key files and directories inspected:
 
-```
+```text
 # Root configuration
 package.json
 tsconfig.json
@@ -327,7 +327,7 @@ packages/excalidraw/types.ts             (AppState, ObservedAppState)
 packages/excalidraw/components/App.tsx   (class structure, syncActionResult, store/history wiring)
 packages/excalidraw/actions/manager.tsx  (ActionManager)
 packages/excalidraw/actions/types.ts     (Action, ActionResult)
-packages/excalidraw/store.ts             (Store, StoreSnapshot, DurableIncrement, EphemeralIncrement)
+packages/element/src/store.ts            (Store, StoreSnapshot, DurableIncrement, EphemeralIncrement)
 packages/excalidraw/history.ts           (History, HistoryDelta, undo/redo stacks)
 packages/excalidraw/editor-jotai.ts      (editorJotaiStore, jotai isolation)
 packages/element/src/Scene.ts            (Scene class, element arrays/maps)
