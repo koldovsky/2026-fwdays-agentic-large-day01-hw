@@ -161,7 +161,7 @@ yarn build:preview
 
 Packages must be built in dependency order before the app:
 
-```
+```text
 common → math → element → excalidraw → app
 ```
 
@@ -205,7 +205,7 @@ Sentry error tracking is disabled in Docker builds.
 
 ### Package dependency chain
 
-```
+```text
 excalidraw-app
   └── @excalidraw/excalidraw
         └── @excalidraw/element

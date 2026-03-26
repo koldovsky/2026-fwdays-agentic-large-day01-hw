@@ -51,11 +51,11 @@ graph TD
 ### Component tree
 
 ```
-<Excalidraw>               # public API wrapper (index.tsx)
-  <ExcalidrawBase>         # prop normalization (props.tsx)
-    <InitializeApp>        # async init (fonts, device detection)
-      <EditorJotaiProvider># isolated Jotai store
-        <ExcalidrawAPIProvider>
+[ExcalidrawAPIProvider]    # optional external wrapper — exposes useExcalidrawAPI() outside <Excalidraw>
+  <Excalidraw>             # public API wrapper (index.tsx)
+    <ExcalidrawBase>       # prop normalization (props.tsx)
+      <InitializeApp>      # async init (fonts, device detection)
+        <EditorJotaiProvider># isolated Jotai store
           <App>            # class component — all core logic
             <StaticCanvas>
             <InteractiveCanvas>
@@ -213,9 +213,9 @@ class ActionManager {
 
   registerAction(action: Action): void
   handleKeyDown(event: KeyboardEvent): boolean
-  executeAction(action, source, value?): ActionResult | false
+  executeAction(action, source, value?): void
   // calls action.perform(elements, appState, value, app)
-  // then calls app.syncActionResult(result)
+  // then passes result to this.updater()
 }
 ```
 

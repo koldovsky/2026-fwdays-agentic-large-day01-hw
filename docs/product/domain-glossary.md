@@ -176,7 +176,7 @@ A reference for terms as they are used in the Excalidraw codebase. Each entry cl
 
 ## ExcalidrawAPI
 
-**Definition:** The imperative API object returned to host applications via the `onExcalidrawAPI` prop. Exposes methods like `getSceneElements()`, `updateScene()`, `scrollToContent()`, `exportToBlob()`, and (upcoming) `onEvent()`. Allows programmatic control of the editor from outside the React component tree.
+**Definition:** The imperative API object returned to host applications via the `onExcalidrawAPI` prop. Exposes methods like `getSceneElements()`, `updateScene()`, `scrollToContent()`, `exportToBlob()`, and `onEvent()`. Allows programmatic control of the editor from outside the React component tree.
 
 **Where used:**
 - `packages/excalidraw/index.tsx` — constructed and passed out via `onExcalidrawAPI`

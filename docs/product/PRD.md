@@ -6,7 +6,7 @@ _Reverse-engineered from codebase analysis. Reflects state as of 2026-03-25 (v0.
 
 ## 1. Purpose
 
-Excalidraw is a **free, open-source, browser-based collaborative whiteboard** for creating hand-drawn style diagrams. It ships in two forms:
+Excalidraw is a **free, open-source, browser-based collaborative whiteboard** for creating hand-drawn-style diagrams. It ships in two forms:
 
 - **excalidraw.com** — hosted SaaS product with real-time collaboration rooms, end-to-end encryption, and cloud persistence
 - **`@excalidraw/excalidraw`** — publishable React component (npm, ESM-only) for embedding in third-party applications
@@ -96,7 +96,7 @@ All shapes are rendered via **Rough.js** onto an HTML5 `<canvas>`, producing an 
 - Share a room link — co-editors join instantly, no account required
 - Changes sync via **Socket.io** WebSocket rooms
 - Conflict resolution uses a **version + versionNonce** system per element — higher version wins; ties broken by nonce
-- Full scene sync every 60 seconds, incremental updates on changes
+- Full scene sync every 20 seconds (`SYNC_FULL_SCENE_INTERVAL_MS = 20000`), incremental updates on changes
 - **Multiplayer undo/redo** preserves individual user history across shared sessions (as of 0.18.0)
 - **End-to-end encryption**: AES-GCM symmetric encryption via Web Crypto API; encryption key is part of the URL fragment (never sent to server)
 - Firebase persists room data server-side
@@ -108,7 +108,7 @@ All shapes are rendered via **Rough.js** onto an HTML5 `<canvas>`, producing an 
 | PNG | Export | Scene data embedded in PNG metadata (recoverable via re-import) |
 | SVG | Export | Font subsetting included for self-contained output |
 | JSON (`.excalidraw`) | Export + Import | Open format, human-readable |
-| Clipboard | Export | Copy as PNG image or JSON data |
+| Clipboard | Export | Copy as PNG or JSON data |
 | Image / JSON | Import | Drag-and-drop or file picker |
 | Library (`.excalidrawlib`) | Export + Import | Reusable element collections |
 | Mermaid | Import | Auto-detection and conversion on paste |

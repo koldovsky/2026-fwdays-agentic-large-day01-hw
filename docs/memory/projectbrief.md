@@ -24,7 +24,7 @@
 
 ## Monorepo Layout
 
-```
+```text
 excalidraw-app/       # hosted web app
   index.tsx           # React root, Sentry init, PWA registration
   App.tsx             # app wrapper, Firebase init, theme
@@ -58,7 +58,7 @@ public/               # static assets
 ```
 
 **Package dependency chain:**
-```
+```text
 excalidraw-app → excalidraw → element → math + common
 utils (standalone, no internal deps)
 ```

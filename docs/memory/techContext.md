@@ -13,6 +13,19 @@
 
 ---
 
+## Monorepo Structure
+
+- `excalidraw-app/` — hosted web app (collab, Firebase, app-level integrations); not published to npm
+- `packages/excalidraw/` — `@excalidraw/excalidraw` — main React component library (published)
+- `packages/element/` — `@excalidraw/element` — element types, constructors, transforms (published)
+- `packages/math/` — `@excalidraw/math` — 2D geometry / vectors (published)
+- `packages/common/` — `@excalidraw/common` — shared constants, utilities, branded types (published)
+- `packages/utils/` — `@excalidraw/utils` — export/import, compression, file handling (standalone, no internal deps)
+
+Dependency direction: `excalidraw-app` → `excalidraw` → `element` → `math` + `common`. App layer may use packages; packages must not depend on app.
+
+---
+
 ## Frontend
 
 ### State Management

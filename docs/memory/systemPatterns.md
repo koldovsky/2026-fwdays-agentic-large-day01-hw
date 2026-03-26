@@ -32,6 +32,7 @@ excalidraw-app/index.tsx        (React root, Sentry init, PWA registration)
 ## State Management Pattern
 
 ### Two-Layer State
+
 1. **Jotai atoms** — reactive state for UI, live subscriptions, per-component state
    - `editorJotaiStore` (`packages/excalidraw/editor-jotai.ts`) — editor-scoped store
    - `appJotaiStore` (`excalidraw-app/app-jotai.ts`) — app-scoped store
@@ -43,6 +44,7 @@ excalidraw-app/index.tsx        (React root, Sentry init, PWA registration)
    - Key fields: `zoom`, `scrollX/Y`, `selectedElementIds`, `activeTool`, `editingGroupId`, `viewModeEnabled`, etc.
 
 ### Data Flow
+
 ```
 User interaction
   → App.tsx event handler
@@ -58,12 +60,14 @@ User interaction
 All `ExcalidrawElement` instances are **immutable objects**.
 
 ### Rules
+
 - Never mutate elements directly
 - Always use `newElementWith(element, { ...changes })` to produce updated copies
 - Deleted elements stay in scene with `isDeleted: true` — never remove from array
 - Use `getNonDeletedElements()` to get visible elements for rendering
 
 ### Why
+
 - Enables cheap reference equality checks (`===`) for change detection
 - Required for collaboration version tracking (`version` increments on each mutation)
 - Enables undo/redo via history snapshots
@@ -73,16 +77,19 @@ All `ExcalidrawElement` instances are **immutable objects**.
 ## Collaboration Pattern
 
 ### Version-Based Reconciliation
+
 - Each element has `version: number` + `versionNonce: number`
 - On conflict: higher `version` wins; equal versions use `versionNonce` as tiebreaker
 - Logic in `packages/excalidraw/data/reconcile.ts`
 
 ### Sync Strategy
+
 - **Full sync** every 20 seconds (entire scene state; `SYNC_FULL_SCENE_INTERVAL_MS = 20000`)
 - **Incremental updates** on each change (only changed elements)
 - **Transport**: Socket.io-client over WebSocket
 
 ### Z-Order Stability
+
 - **Fractional indexing** (library: `fractional-indexing` 3.2.0)
 - Each element has `index: FractionalIndex` property
 - Allows inserting elements between existing ones without reindexing all others
@@ -105,6 +112,7 @@ excalidraw-app
 ```
 
 ### Package Roles
+
 | Package | Role |
 |---------|------|
 | `common` | Shared constants, utilities, branded types |
@@ -154,17 +162,20 @@ Three storage layers, used in priority order:
 ## Build Pattern
 
 ### App Build (Vite)
+
 - Entry: `excalidraw-app/index.tsx`
 - Asset chunking: locale files split per language for lazy loading
 - Environment variables injected at build time (git SHA, Firebase config, Sentry DSN)
 - PWA: Service Worker precache via vite-plugin-pwa
 
 ### Package Build (esbuild)
+
 - Each package builds independently via `esbuild`
 - Outputs: ESM + CJS
 - Type declarations generated separately by `tsc`
 
 ### CI/CD
+
 - GitHub Actions workflows in `.github/workflows/`
 - Full test suite runs on PRs: typecheck + lint + Prettier + Vitest
 - Coverage thresholds enforced: 60% lines / 70% branches / 63% functions
