@@ -38,7 +38,16 @@ Yarn Workspaces автоматично встановлює залежності
 
 Файл `.env.development` вже є в репозиторії і містить дефолтні значення для локальної розробки (включаючи публічний Firebase dev-проєкт). Для більшості задач нічого міняти не потрібно.
 
-Якщо треба перевизначити щось локально — створи `.env.development.local` (він у `.gitignore`):
+Щоб перевизначити змінні локально — **скопіюй базовий файл**:
+
+```bash
+cp .env.development .env.development.local
+```
+
+> `.env.development.local` **не відслідковується** у репозиторії (є в `.gitignore`).
+> Ніколи не комітьте цей файл — він може містити приватні ключі або локальні налаштування.
+
+Типові локальні override-налаштування:
 
 ```bash
 # .env.development.local — не комітити!
@@ -48,6 +57,9 @@ VITE_APP_DISABLE_PREVENT_UNLOAD=true
 
 # Вимкнути live reload (потрібно для дебагу Service Worker)
 VITE_APP_DEV_DISABLE_LIVE_RELOAD=true
+
+# Перевизначити порт (якщо 3001 зайнятий)
+VITE_APP_PORT=3005
 ```
 
 Ключові змінні `.env.development`:
@@ -291,7 +303,44 @@ yarn build:app:docker
 — Vite не слідкує за збіркою пакетів. Потрібно: зміни в `packages/*` → `yarn build:<package>` → зміни відобразяться в застосунку.
 
 **Тест падає через canvas**
-— У Vitest використовується `vitest-canvas-mock`. Якщо пишеш новий тест з canvas, переконайся, що мок підключено через `setupFiles` у `vitest.config.ts`.
+— У Vitest використовується `vitest-canvas-mock`. Якщо пишеш новий тест з canvas, переконайся, що мок підключено через `setupFiles` у `vitest.config.mts`.
+
+---
+
+---
+
+## 11. Підтримка документації
+
+### Власники
+
+| Документ | Відповідальний | Коли оновлювати |
+|----------|---------------|-----------------|
+| `docs/technical/architecture.md` | Tech Lead / автор PR | При зміні пакетної структури, нових рендер-pipeline або state management рефакторингу |
+| `docs/technical/dev-setup.md` | Tech Lead / DevX | При зміні env-змінних, команд, CI-кроків або prerequisites |
+| `docs/technical/undocumented-behaviors.md` | Автор PR | При закритті або виявленні нового TODO/HACK/FIXME у коді |
+| `docs/memory/techContext.md` | Автор PR | При оновленні ключових залежностей (major version bump) |
+| `docs/memory/systemPatterns.md` | Tech Lead | При введенні нових архітектурних патернів |
+| `docs/product/domain-glossary.md` | Product / Tech Lead | При появі нових доменних концепцій або зміні типів |
+| `docs/product/PRD.md` | Product Owner | При зміні product scope або цільової аудиторії |
+
+### Частота рев'ю
+
+- **При кожному PR** з `packages/*` або `excalidraw-app/` змінами: автор перевіряє чи потребують оновлення `architecture.md`, `techContext.md`, `undocumented-behaviors.md`.
+- **Major PR / breaking change**: обов'язковий рев'ю `systemPatterns.md` та `domain-glossary.md`.
+- **Quarterly**: загальний перегляд усіх `docs/memory/*.md` на актуальність.
+
+### PR Checklist для документації
+
+Додавай до опису PR якщо зачіпаєш архітектуру або API:
+
+```markdown
+## Docs checklist
+- [ ] `architecture.md` — не потребує змін / оновлено
+- [ ] `techContext.md` — не потребує змін / оновлено (версії залежностей)
+- [ ] `systemPatterns.md` — не потребує змін / оновлено
+- [ ] `undocumented-behaviors.md` — закриті/нові UB зафіксовані
+- [ ] `domain-glossary.md` — нові терміни додано
+```
 
 ---
 
@@ -300,3 +349,4 @@ yarn build:app:docker
 - [Архітектура проєкту](architecture.md)
 - [Domain Glossary](../product/domain-glossary.md)
 - [Project Brief](../memory/projectbrief.md)
+- [Undocumented Behaviors](undocumented-behaviors.md)

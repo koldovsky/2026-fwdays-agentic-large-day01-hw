@@ -25,13 +25,13 @@
 
 | Файл | Статус | Нотатка |
 |------|--------|---------|
-| `docs/memory/productContext.md` | Створюється | UX-цілі, сценарії |
-| `docs/memory/activeContext.md` | Створюється | Цей файл |
-| `docs/memory/progress.md` | Створюється | Прогрес проєкту |
-| `docs/memory/decisionLog.md` | Створюється | Ключові рішення |
-| `docs/memory/projectbrief.md` | Існує | Загальний опис проєкту |
-| `docs/memory/techContext.md` | Існує | Стек технологій |
-| `docs/memory/systemPatterns.md` | Існує | Архітектурні патерни |
+| `docs/memory/productContext.md` | ✅ Готово | UX-цілі, сценарії |
+| `docs/memory/activeContext.md` | ✅ Готово | Цей файл |
+| `docs/memory/progress.md` | ✅ Готово | Прогрес проєкту |
+| `docs/memory/decisionLog.md` | ✅ Готово | Ключові рішення |
+| `docs/memory/projectbrief.md` | ✅ Готово | Загальний опис проєкту |
+| `docs/memory/techContext.md` | ✅ Готово | Стек технологій |
+| `docs/memory/systemPatterns.md` | ✅ Готово | Архітектурні патерни |
 
 ---
 

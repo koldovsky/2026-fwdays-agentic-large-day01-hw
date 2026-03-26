@@ -33,3 +33,4 @@ dev-dist
 html
 meta*.json
 .claude
+.git
