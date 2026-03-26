@@ -1,8 +1,8 @@
 # Progress
 
-## Статус проєкту: Production-ready codebase
+## Статус проєкту: Зрілий open-source продукт
 
-Excalidraw — зрілий open-source продукт. Нижче — поточний стан основних підсистем.
+Excalidraw — активно підтримуваний open-source проєкт з CI/CD, тестами та production deployment на excalidraw.com. Нижче — поточний стан основних підсистем.
 
 ---
 

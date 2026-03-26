@@ -55,9 +55,10 @@ VITE_APP_DEV_DISABLE_LIVE_RELOAD=true
 | Змінна | Призначення |
 |--------|-------------|
 | `VITE_APP_BACKEND_V2_GET_URL` | API для завантаження збережених сцен |
-| `VITE_APP_WS_SERVER_URL` | WebSocket-сервер для колаборації (за замовчуванням `localhost:3002`) |
+| `VITE_APP_BACKEND_V2_POST_URL` | API для збереження/оновлення сцен |
+| `VITE_APP_WS_SERVER_URL` | WebSocket-сервер для колаборації (dev: `http://localhost:3002`, prod: `https://oss-collab.excalidraw.com`) |
 | `VITE_APP_FIREBASE_CONFIG` | JSON-конфіг Firebase dev-проєкту |
-| `VITE_APP_PORT` | Порт dev-сервера (за замовчуванням `3001`) |
+| `VITE_APP_PORT` | Порт dev-сервера (Vite fallback: `3000`; `.env.development` встановлює `3001`) |
 | `VITE_APP_ENABLE_PWA` | Вмикає PWA у dev-режимі (за замовчуванням `false`) |
 
 ---

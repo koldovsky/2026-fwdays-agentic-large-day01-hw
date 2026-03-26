@@ -11,8 +11,8 @@
 
 **Де використовується:**
 
-- [packages/excalidraw/element/src/types.ts](packages/excalidraw/element/src/types.ts) — базовий тип `ExcalidrawGenericElement`
-- [packages/excalidraw/element/](packages/excalidraw/element/) — вся логіка трансформацій, геометрії, рендерингу
+- [packages/excalidraw/element/src/types.ts](../../packages/excalidraw/element/src/types.ts) — базовий тип `ExcalidrawGenericElement`
+- [packages/excalidraw/element/](../../packages/excalidraw/element/) — вся логіка трансформацій, геометрії, рендерингу
 
 **НЕ плутати з:**
 
@@ -41,7 +41,7 @@ type ExcalidrawElement =
 
 **Де використовується:**
 
-- [packages/excalidraw/element/src/types.ts](packages/excalidraw/element/src/types.ts) — визначення (рядок ~206)
+- [packages/excalidraw/element/src/types.ts](../../packages/excalidraw/element/src/types.ts) — визначення (рядок ~206)
 - Скрізь у `actions/`, `components/`, `scene/` як основний тип даних
 
 **НЕ плутати з:**
@@ -76,7 +76,7 @@ Type guard — підтип `ExcalidrawElement`, де `isDeleted: false`. Вик
 
 **Де використовується:**
 
-- [packages/excalidraw/element/src/types.ts](packages/excalidraw/element/src/types.ts) — рядок ~233
+- [packages/excalidraw/element/src/types.ts](../../packages/excalidraw/element/src/types.ts) — рядок ~233
 - Функції рендерингу, вибірки, копіювання
 
 **НЕ плутати з:**
@@ -92,7 +92,7 @@ Type guard — підтип `ExcalidrawElement`, де `isDeleted: false`. Вик
 
 **Де використовується:**
 
-- [packages/excalidraw/element/src/Scene.ts](packages/excalidraw/element/src/Scene.ts) — реалізація
+- [packages/excalidraw/element/src/Scene.ts](../../packages/excalidraw/element/src/Scene.ts) — реалізація
 - Передається в усі функції рендерингу та дії через `App` component
 
 **НЕ плутати з:**
@@ -118,7 +118,7 @@ DTO (Data Transfer Object) для завантаження стану в Scene. 
 
 **Де використовується:**
 
-- [packages/excalidraw/types.ts](packages/excalidraw/types.ts) — рядок ~702
+- [packages/excalidraw/types.ts](../../packages/excalidraw/types.ts) — рядок ~702
 - Використовується в `updateScene()` API та при імпорті файлів
 
 **НЕ плутати з:**
@@ -135,8 +135,8 @@ DTO (Data Transfer Object) для завантаження стану в Scene. 
 
 **Де використовується:**
 
-- [packages/excalidraw/types.ts](packages/excalidraw/types.ts) — визначення (рядок ~272)
-- [packages/excalidraw/appState.ts](packages/excalidraw/appState.ts) — defaults + конфігурація persistence
+- [packages/excalidraw/types.ts](../../packages/excalidraw/types.ts) — визначення (рядок ~272)
+- [packages/excalidraw/appState.ts](../../packages/excalidraw/appState.ts) — defaults + конфігурація persistence
 - Передається в усі Actions, компоненти, функції рендерингу
 
 **НЕ плутати з:**
@@ -173,7 +173,7 @@ DTO (Data Transfer Object) для завантаження стану в Scene. 
 
 **Де використовується:**
 
-- [packages/excalidraw/types.ts](packages/excalidraw/types.ts) — `ToolType` (рядок ~143), `ActiveTool` (рядок ~163)
+- [packages/excalidraw/types.ts](../../packages/excalidraw/types.ts) — `ToolType` (рядок ~143), `ActiveTool` (рядок ~163)
 - `AppState.activeTool` зберігає поточний Tool
 
 **Значення `ToolType`:**
@@ -206,8 +206,8 @@ type ActiveTool =
 
 **Де використовується:**
 
-- [packages/excalidraw/actions/types.ts](packages/excalidraw/actions/types.ts) — інтерфейс `Action` (рядок ~162)
-- [packages/excalidraw/actions/](packages/excalidraw/actions/) — всі реалізації (~100+ дій)
+- [packages/excalidraw/actions/types.ts](../../packages/excalidraw/actions/types.ts) — інтерфейс `Action` (рядок ~162)
+- [packages/excalidraw/actions/](../../packages/excalidraw/actions/) — всі реалізації (~100+ дій)
 - `ActionManager` — реєстр та диспетчер дій
 
 **Інтерфейс:**
@@ -238,7 +238,7 @@ interface Action {
 
 **Де використовується:**
 
-- [packages/excalidraw/types.ts](packages/excalidraw/types.ts) — `Collaborator`, `CollaboratorPointer`, `SocketId`, `UserToFollow`
+- [packages/excalidraw/types.ts](../../packages/excalidraw/types.ts) — `Collaborator`, `CollaboratorPointer`, `SocketId`, `UserToFollow`
 - `AppState.collaborators` — Map активних учасників
 - `packages/excalidraw/data/reconcile.ts` — алгоритм reconciliation при конфліктах
 
@@ -266,9 +266,9 @@ interface Action {
 
 **Де використовується:**
 
-- [packages/excalidraw/types.ts](packages/excalidraw/types.ts) — `LibraryItem`, `LibraryItems` (рядок ~522)
-- [packages/excalidraw/data/library.ts](packages/excalidraw/data/library.ts) — `LibraryPersistenceAdapter`, `LibraryMigrationAdapter`
-- [packages/excalidraw/components/LibraryMenu.tsx](packages/excalidraw/components/LibraryMenu.tsx) — UI бібліотеки
+- [packages/excalidraw/types.ts](../../packages/excalidraw/types.ts) — `LibraryItem`, `LibraryItems` (рядок ~522)
+- [packages/excalidraw/data/library.ts](../../packages/excalidraw/data/library.ts) — `LibraryPersistenceAdapter`, `LibraryMigrationAdapter`
+- [packages/excalidraw/components/LibraryMenu.tsx](../../packages/excalidraw/components/LibraryMenu.tsx) — UI бібліотеки
 
 **Структура `LibraryItem`:**
 
@@ -297,8 +297,8 @@ interface Action {
 
 **Де використовується:**
 
-- [packages/excalidraw/types.ts](packages/excalidraw/types.ts) — `BinaryFileData`, `BinaryFiles`, `FileId`
-- [packages/excalidraw/element/src/types.ts](packages/excalidraw/element/src/types.ts) — `ExcalidrawImageElement.fileId`
+- [packages/excalidraw/types.ts](../../packages/excalidraw/types.ts) — `BinaryFileData`, `BinaryFiles`, `FileId`
+- [packages/excalidraw/element/src/types.ts](../../packages/excalidraw/element/src/types.ts) — `ExcalidrawImageElement.fileId`
 
 **НЕ плутати з:**
 
@@ -313,7 +313,7 @@ interface Action {
 
 **Де використовується:**
 
-- [packages/excalidraw/snapping.ts](packages/excalidraw/snapping.ts) — логіка та типи
+- [packages/excalidraw/snapping.ts](../../packages/excalidraw/snapping.ts) — логіка та типи
 - `AppState.snapLines` — масив активних snap-ліній для рендерингу
 
 **НЕ плутати з:**
@@ -329,9 +329,9 @@ Branded string для задання порядку елементів у сце
 
 **Де використовується:**
 
-- [packages/excalidraw/element/src/types.ts](packages/excalidraw/element/src/types.ts) — тип `FractionalIndex`
+- [packages/excalidraw/element/src/types.ts](../../packages/excalidraw/element/src/types.ts) — тип `FractionalIndex`
 - `SceneElementsMap` — всі елементи мають поле `index: FractionalIndex`
-- [packages/excalidraw/data/reconcile.ts](packages/excalidraw/data/reconcile.ts) — reconciliation
+- [packages/excalidraw/data/reconcile.ts](../../packages/excalidraw/data/reconcile.ts) — reconciliation
 
 **НЕ плутати з:**
 
@@ -349,8 +349,8 @@ Branded string для задання порядку елементів у сце
 
 **Де використовується:**
 
-- [packages/excalidraw/data/types.ts](packages/excalidraw/data/types.ts)
-- [packages/excalidraw/data/json.ts](packages/excalidraw/data/json.ts) — функції `serializeAsJSON`, `loadFromJSON`
+- [packages/excalidraw/data/types.ts](../../packages/excalidraw/data/types.ts)
+- [packages/excalidraw/data/json.ts](../../packages/excalidraw/data/json.ts) — функції `serializeAsJSON`, `loadFromJSON`
 
 **НЕ плутати з:**
 
@@ -365,7 +365,7 @@ Branded string для задання порядку елементів у сце
 
 **Де використовується:**
 
-- [packages/excalidraw/actions/types.ts](packages/excalidraw/actions/types.ts) — рядок ~25
+- [packages/excalidraw/actions/types.ts](../../packages/excalidraw/actions/types.ts) — рядок ~25
 - `ActionManager` читає результат і застосовує зміни через `setState`
 
 **НЕ плутати з:**

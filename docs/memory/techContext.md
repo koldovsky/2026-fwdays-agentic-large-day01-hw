@@ -46,7 +46,7 @@
 
 ## TypeScript path aliases (`tsconfig.json`)
 
-```json
+```text
 "@excalidraw/common"      → "packages/common/src/index.ts"
 "@excalidraw/element"     → "packages/element/src/index.ts"
 "@excalidraw/excalidraw"  → "packages/excalidraw/index.tsx"
