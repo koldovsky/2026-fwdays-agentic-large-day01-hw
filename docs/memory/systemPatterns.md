@@ -1,5 +1,7 @@
 # System Patterns
 
+**Scope:** Recurring structural and code patterns (actions, Jotai, tunnels, naming). **Mermaid diagrams, Store/History/Renderer walkthroughs, and canvas layer detail** live in [docs/technical/architecture.md](../technical/architecture.md).
+
 ## High-level Architecture
 
 * **Pattern**: **Modular monolith** (Yarn workspaces): a publishable editor library (`@excalidraw/excalidraw`), shared domain packages (`@excalidraw/common`, `element`, `math`, `utils`), a first-party **Vite** host app (`excalidraw-app`), and optional **examples** (e.g. Next.js, script tag). There is **no single repository-wide `src/`**; library UI lives at `packages/excalidraw/`, shared logic often under `packages/<pkg>/src/`, and the app under `excalidraw-app/`.
@@ -44,3 +46,7 @@
 * **Logic location**: **Heavy editor logic** stays in **`App`** (class), **`Action`** implementations, and **`scene/` / `data/`** utilities. **Prefer hooks** for reusable UI behaviour, side effects, and subscriptions; use **context** for deep prop avoidance (API, tunnels, sidebar, menus).
 * **Styling**: **SCSS layers + `clsx`**; prefer shared constants for class names and layout tokens; **Radix-style primitives** under **`components/`** for accessible overlays/popovers where used.
 * **Extensibility**: **Tunnel slots** and **`renderTopLeftUI` / `renderTopRightUI`** props decorate chrome; **`ExcalidrawAPIProvider`** supports tools that must sit **outside** `<Excalidraw>` yet read API.
+
+## Details
+
+- For detailed system architecture and rendering pipeline → see [docs/technical/architecture.md](../technical/architecture.md)

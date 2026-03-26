@@ -1,6 +1,6 @@
 # Product context — Excalidraw (Memory Bank)
 
-Product-oriented view of this monorepo: the **first-party web app** (`excalidraw-app`) and the **embeddable editor** (`@excalidraw/excalidraw`). Technical labels below match UI and shell code (e.g. `App.tsx`, `LayerUI`, `TTDDialog`).
+Product-oriented view: **first-party app** (`excalidraw-app`) + **embeddable editor** (`@excalidraw/excalidraw`). This file keeps **personas, principles, and journey-shaped behavior**; **prioritized requirements, metrics, and roadmap-level spec** → [docs/product/PRD.md](../product/PRD.md). **Named features, acronyms, and glossary-style definitions** → [docs/product/domain-glossary.md](../product/domain-glossary.md).
 
 ---
 
@@ -81,7 +81,7 @@ Product-oriented view of this monorepo: the **first-party web app** (`excalidraw
 ## UX/UI design constraints
 
 * **Design system**
-  * **SCSS modules** across app and package (`*.scss` alongside components), **`clsx`** for class composition, **`radix-ui`** primitives for accessible overlays/controls, **`FilledButton`**, **`Dialog`**, **`DropdownMenu`**, **`TextField`** patterns in `packages/excalidraw/components`—**not** a Tailwind-first UI in this repository.
+  * **SCSS** (global and partials), **`clsx`**, **`radix-ui`** primitives; shared patterns under `packages/excalidraw/components` — **not** Tailwind-first.
 
 * **Platforms**
   * **Responsive web**: desktop-first chrome with **mobile toolbars** and **editor interface** form factors; **PWA** tooling (**`pwacompat`**, Vite PWA plugin per project setup).
@@ -92,3 +92,8 @@ Product-oriented view of this monorepo: the **first-party web app** (`excalidraw
   * **Drag-and-drop / file pickers** via **`browser-fs-access`** and blob loading patterns (`loadFromBlob`).
   * **Real-time**: **WebSocket-style collaboration** via **`socket.io-client`** (when collab server available); not generic “WebSockets” naming in UI copy, but that’s the transport class.
   * **Theming**: **`THEME`** light/dark/system with **`ToggleTheme`** in menu and app-level **`useHandleAppTheme`**.
+
+## Details
+
+- For full product requirements and vision → see [docs/product/PRD.md](../product/PRD.md)
+- For comprehensive domain-specific terminology → see [docs/product/domain-glossary.md](../product/domain-glossary.md)

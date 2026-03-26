@@ -1,8 +1,31 @@
 # Active Context
 
+## Documentation Map
+
+One row per Markdown file under `docs/`. **Layer** groups how “hot” the doc is for sessions; **Path** is clickable from this file.
+
+| Layer | Path | Purpose | When to @-load |
+|--------|------|---------|----------------|
+| **Memory Bank** | [docs/memory/activeContext.md](./activeContext.md) | Rolling session state: current focus, recent git/working-tree notes, immediate next steps. | Starting or resuming a session; need “what changed today” and open questions. |
+| **Memory Bank** | [docs/memory/projectbrief.md](./projectbrief.md) | Short project charter: purpose, stack summary, success criteria, code entry points. | Onboarding or scoping work without loading the full PRD. |
+| **Memory Bank** | [docs/memory/productContext.md](./productContext.md) | Product lens: personas, UX principles, journeys, shell workflows (collab, share, TTD). | UX, flows, or product behavior in the app shell—not formal requirements text. |
+| **Memory Bank** | [docs/memory/techContext.md](./techContext.md) | Stack versions, monorepo layout, workflow summary, env/deployment pointers. | Tooling, dependencies, scripts, or constraints without full setup prose. |
+| **Memory Bank** | [docs/memory/systemPatterns.md](./systemPatterns.md) | Code patterns: ActionManager, Jotai, tunnels, data flow, naming/file conventions. | Implementing features or refactors in editor/app code; need pattern names and boundaries. |
+| **Memory Bank** | [docs/memory/decisionLog.md](./decisionLog.md) | Compact table of major architecture/toolchain decisions + pending items. | “Why is it X?” at a glance; need the one-screen summary. |
+| **Memory Bank** | [docs/memory/progress.md](./progress.md) | Completion status, WIP checklist, roadmap hints, known-issue hotspots (short). | Sprint/status questions or where tech debt is called out briefly. |
+| **Technical** | [docs/technical/architecture.md](../technical/architecture.md) | Full system architecture: App/Store/Scene/History/Renderer, canvas pipeline, mermaid diagrams. | Editor internals, rendering, persistence loop, or cross-package runtime wiring. |
+| **Technical** | [docs/technical/dev-setup.md](../technical/dev-setup.md) | Install, prerequisites, env variable tables, scripts, Docker/Vite, troubleshooting. | First clone, CI parity, or configuring/debugging `VITE_*` and local services. |
+| **Technical** | [docs/technical/decision-log.md](../technical/decision-log.md) | Long-form decision log: context, rationale, and consequences per decision. | Audits, ADR-style detail, or when [decisionLog.md](./decisionLog.md) is too terse. |
+| **Product** | [docs/product/PRD.md](../product/PRD.md) | Full PRD: requirements, personas in depth, features, NFRs, traceability to code. | Prioritization, acceptance criteria, scope conflicts, or stakeholder-facing spec. |
+| **Product** | [docs/product/domain-glossary.md](../product/domain-glossary.md) | Domain and UI terminology, feature names, acronyms, disambiguation. | Exact naming, glossary lookups, or aligning copy with implemented concepts. |
+
+**Rule of thumb:** Default to **Memory Bank** rows for breadth; **@**-load **Deep Docs** when you need diagrams, full env tables, PRD-level requirements, or long decision narratives.
+
+---
+
 ## Current Focus
 
-* **Primary task**: **Stand up and complete the project Memory Bank** under `docs/memory/` so agents and humans share a single, accurate picture of the Excalidraw monorepo (product, architecture, and toolchain)—with **`activeContext.md` as the rolling “now” layer** on top of longer-lived briefs.
+* **Primary task**: **Stand up and complete the project Memory Bank** under [docs/memory/](./) so agents and humans share a single, accurate picture of the Excalidraw monorepo (product, architecture, and toolchain)—with **[activeContext.md](./activeContext.md)** as the rolling “now” layer on top of longer-lived briefs.
 * **Objective**: Capture what is actively being worked on **today**, reconcile **working tree vs. last commit**, and list immediate follow-ups so the next session does not lose context.
 
 ---
@@ -23,17 +46,16 @@
 ### Working tree (uncommitted — “live” editor state)
 
 * **Memory Bank (in progress)**  
-  * Staged/tracked edits: `docs/memory/projectbrief.md`, `docs/memory/systemPatterns.md`, `docs/memory/techContext.md` (paths show **add + modify** in index).  
-  * New, not yet tracked: `docs/memory/productContext.md`, and **this file** `docs/memory/activeContext.md` once saved.  
+  * Staged/tracked edits: [docs/memory/projectbrief.md](./projectbrief.md), [docs/memory/systemPatterns.md](./systemPatterns.md), [docs/memory/techContext.md](./techContext.md) (paths show **add + modify** in index).  
+  * New, not yet tracked: [docs/memory/productContext.md](./productContext.md), and **this file** [docs/memory/activeContext.md](./activeContext.md) once saved.  
 * **Tooling / repo hygiene**  
   * `yarn.lock` **modified**: large diff pattern consistent with **registry URL normalization** (`registry.yarnpkg.com` → `registry.npmjs.org`) after install—verify no unintended version bumps before commit.  
   * Untracked: `.cursorignore`, `repomix-compressed.txt`, root `systemPatterns.md` (possible duplicate or export—see considerations).  
-* **Editor activity signal**: `docs/memory/systemPatterns.md` was recently focused in the IDE; aligns with documentation-first work this session.
+* **Editor activity signal**: [docs/memory/systemPatterns.md](./systemPatterns.md) was recently focused in the IDE; aligns with documentation-first work this session.
 
 ### Structural updates
 
-* **No application package layout changes** reported in recent commits; structure remains **`excalidraw-app/`**, **`packages/*`**, **`examples/*`** per `projectBrief.md`.  
-* **New / evolving**: `docs/memory/` as the canonical **Memory Bank** root; prefer **one** copy of narrative docs (avoid drift with root-level duplicates).
+* **No application package layout changes** reported in recent commits; structure remains **`excalidraw-app/`**
 
 ---
 
@@ -41,26 +63,10 @@
 
 ### Technical challenges
 
-* **Memory Bank consistency**: Keep **`projectBrief`**, **`productContext`**, **`techContext`**, **`systemPatterns`**, and **`activeContext`** aligned when any stack or architecture claim changes (versions, commands, env vars).  
+* **Memory Bank consistency**: Keep [projectbrief.md](./projectbrief.md), [productContext.md](./productContext.md), [techContext.md](./techContext.md), [systemPatterns.md](./systemPatterns.md), and [activeContext.md](./activeContext.md) aligned when any stack or architecture claim changes (versions, commands, env vars).  
 * **`yarn.lock` noise**: Registry-only churn can swamp reviews—confirm whether to **commit** after a deliberate `yarn install` or **revert** if accidental.  
-* **Large generated artifacts**: `repomix-compressed.txt` may bloat the repo and collide with **`.cursorignore`** — decide **keep in git vs. local-only** and whether root `systemPatterns.md` should be removed or linked from `docs/memory/`.  
 * **Environment sensitivity**: Some paths (e.g. `.husky/`, `__snapshots__/`, `.github/`) may hit **permission or sandbox** warnings locally; CI remains the ground truth for hooks and workflows.
 
-### Unresolved questions
-
-* Should **root `systemPatterns.md`** be deleted, moved under `docs/memory/`, or replaced by a short pointer to avoid duplicate maintenance?  
-* Is **`repomix-compressed.txt`** intended as a **committed** project artifact for the course/homework, or should it stay **out of version control**?  
-* After Memory Bank stabilization, does the assignment require **feature work in Excalidraw** itself, or is documentation + tooling the current milestone? (Clarify against course instructions if grades depend on code changes.)
-
----
-
-## Next Steps
-
-1. [ ] **Finalize Memory Bank set**: Ensure `docs/memory/` contains `projectbrief`, `productContext`, `techContext`, `systemPatterns`, and `activeContext`; remove or reconcile duplicates at repo root.  
-2. [ ] **Review `yarn.lock`**: Confirm only registry/metadata changes (or intentional upgrades); stage or restore accordingly.  
-3. [ ] **Commit batch**: One logical commit for Memory Bank + (optional) `.cursorignore`; separate commit if `yarn.lock` is large and unrelated.  
-4. [ ] **Hygiene**: Decide fate of `repomix-compressed.txt` (`.gitignore` vs. keep).  
-5. [ ] **If code work is next**: Run **`yarn test:typecheck`** / **`yarn test:code`** / **`yarn test`** per `techContext.md` before pushing substantive Excalidraw changes.
 
 ---
 
