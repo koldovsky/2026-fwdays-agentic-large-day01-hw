@@ -6,8 +6,10 @@ Key architectural decisions made in the Excalidraw project, verified against sou
 
 ## D1 — Monorepo with Strict One-Way Package Dependencies
 
-**Decision**: Split the codebase into 5 packages with a strict unidirectional dependency graph:
-`common → math → element → excalidraw → excalidraw-app`
+**Decision**: Split the codebase into layered packages with a strict unidirectional dependency graph for library code: 
+`common → math → element → excalidraw`
+
+Application layer (`excalidraw-app`) consumes the library and sits above package graph concerns.
 
 **Rationale**:
 - Prevents circular imports that would break tree-shaking and bundling
