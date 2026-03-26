@@ -29,6 +29,17 @@
 - **App:** centralized `appJotaiStore` + atoms/helpers in `app-jotai.ts` (e.g. `useAtomWithInitialValue` for one-shot init).
 - **`excalidraw` package:** separate editor state layer (`editor-jotai`, hooks like `useAppStateValue` in `index.tsx`) — keeps editor UI decoupled from `excalidraw-app` shell.
 
+## Action system
+
+Actions are the main abstraction for user-triggered operations (draw, delete, change properties, clipboard, z-index, etc.).
+
+- **Definition:** each action implements the `Action` interface (`actions/types.ts`) — `name`, `perform` handler, optional `keyTest`, `PanelComponent`, `trackEvent`.
+- **Registration:** `register()` in `actions/register.ts` collects actions into an array at module load time. `ActionManager.registerAll()` stores them by name (`actions/manager.tsx`).
+- **Execution flow:** `ActionManager.executeAction()` calls `action.perform(elements, appState, value, app)` → returns `ActionResult` (new elements/appState/files + `captureUpdate` flag) → `App.syncActionResult` applies changes to scene, state, and `Store`.
+- **Keyboard dispatch:** `ActionManager.handleKeyDown` picks the matching action by `keyTest` (sorted by `keyPriority`), respects `viewMode`.
+- **Undo / redo:** `createUndoAction` / `createRedoAction` (`actions/actionHistory.tsx`) are registered with a live `History` instance. `History` (`history.ts`) maintains `undoStack` / `redoStack` of `HistoryDelta` objects. Normal edits record deltas via the `Store` / `captureUpdate` path; undo/redo replay deltas without re-invoking original actions.
+- **Key files:** `actions/types.ts`, `actions/register.ts`, `actions/manager.tsx`, `actions/actionHistory.tsx`, `history.ts`, `components/App.tsx` (wiring).
+
 ## Bundle optimization (Vite)
 
 - In `vite.config.mts`: **`manualChunks`** splits locales (except `en.json` / `percentages.json` for first load and offline), plus separate chunks for mermaid and codemirror/lezer.
