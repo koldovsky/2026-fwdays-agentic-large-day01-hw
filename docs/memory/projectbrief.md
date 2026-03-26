@@ -4,17 +4,14 @@ Structured memory for the **Excalidraw** monorepo in this workspace. Facts below
 
 ## Details
 
-For detailed architecture → see [`docs/technical/architecture.md`](../technical/architecture.md).
+Related references:
 
-For product requirements and feature inventory → see [`docs/product/PRD.md`](../product/PRD.md).
-
-For UX-oriented scenarios (complements the PRD) → see [`productContext.md`](./productContext.md).
-
-For domain glossary → see [`docs/product/domain-glossary.md`](../product/domain-glossary.md).
-
-For local setup and commands → see [`docs/technical/dev-setup.md`](../technical/dev-setup.md) and [`techContext.md`](./techContext.md).
-
-For repository scale and stack overview → see [`docs/findings/project-overview.md`](../findings/project-overview.md).
+- **Architecture** — [`docs/technical/architecture.md`](../technical/architecture.md)
+- **PRD** — [`docs/product/PRD.md`](../product/PRD.md)
+- **UX scenarios** (complements PRD) — [`productContext.md`](./productContext.md)
+- **Domain glossary** — [`docs/product/domain-glossary.md`](../product/domain-glossary.md)
+- **Onboarding & stack commands** — [`docs/technical/dev-setup.md`](../technical/dev-setup.md), [`techContext.md`](./techContext.md)
+- **Repo scale & stack overview** — [`docs/findings/project-overview.md`](../findings/project-overview.md)
 
 ---
 
