@@ -45,3 +45,28 @@ dev-dist
 html
 meta*.json
 .claude
+
+# Build artifacts
+dist/
+build/
+.next/
+
+# Dependencies
+node_modules/
+
+# Generated / minified
+*.min.js
+*.min.css
+*.snap
+
+# Lock files (великі, не несуть семантики для AI)
+yarn.lock
+package-lock.json
+
+# Coverage & reports
+coverage/
+.nyc_output/
+
+# IDE-specific (не наш контекст)
+.git/
+.vscode/
