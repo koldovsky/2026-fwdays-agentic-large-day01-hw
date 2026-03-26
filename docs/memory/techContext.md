@@ -63,5 +63,5 @@
 - [Project Brief](projectbrief.md) — project overview and goals
 - [System Patterns](systemPatterns.md) — architectural patterns
 - [Architecture](../technical/architecture.md) — system diagrams and data flow
-- [Dev Setup](../dev-setup.md) — full onboarding guide with all commands
+- [Dev Setup](../technical/dev-setup.md) — full onboarding guide with all commands
 - [Decision Log](decisionLog.md) — undocumented behaviors and architectural decisions

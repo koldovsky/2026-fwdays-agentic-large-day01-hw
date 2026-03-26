@@ -261,7 +261,7 @@ api.scrollToContent();
 ## Related Documentation
 
 - [Architecture](../technical/architecture.md) — system design and data flow
-- [Domain Glossary](../domain-glossary.md) — terminology reference
-- [Dev Setup](../dev-setup.md) — developer onboarding
+- [Domain Glossary](domain-glossary.md) — terminology reference
+- [Dev Setup](../technical/dev-setup.md) — developer onboarding
 - [Decision Log](../memory/decisionLog.md) — architectural decisions
 - [Product Context](../memory/productContext.md) — audience and workflows

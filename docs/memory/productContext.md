@@ -54,4 +54,4 @@ Open Text-to-Diagram → describe diagram in natural language → streaming gene
 - [Tech Context](techContext.md) — technology stack details
 - [System Patterns](systemPatterns.md) — architectural patterns
 - [Architecture](../technical/architecture.md) — detailed architecture diagrams
-- [Domain Glossary](../domain-glossary.md) — terminology reference
+- [Domain Glossary](../product/domain-glossary.md) — terminology reference

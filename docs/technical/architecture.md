@@ -166,5 +166,5 @@ Cross-cutting concerns shared by all packages: color constants, font loading, in
 - [Tech Context](../memory/techContext.md) — full technology stack
 - [Decision Log](../memory/decisionLog.md) — architectural decisions and undocumented behaviors
 - [PRD](../product/PRD.md) — product requirements and SDK API reference
-- [Domain Glossary](../domain-glossary.md) — terminology reference
-- [Dev Setup](../dev-setup.md) — developer onboarding guide
+- [Domain Glossary](../product/domain-glossary.md) — terminology reference
+- [Dev Setup](dev-setup.md) — developer onboarding guide

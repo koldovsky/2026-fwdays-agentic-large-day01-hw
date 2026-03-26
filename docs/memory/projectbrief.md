@@ -51,5 +51,5 @@ The project is organized as a **Yarn workspaces monorepo**:
 - [Active Context](activeContext.md) — current development state
 - [Architecture](../technical/architecture.md) — system diagrams and data flow
 - [PRD](../product/PRD.md) — full product requirements
-- [Domain Glossary](../domain-glossary.md) — terminology reference
-- [Dev Setup](../dev-setup.md) — developer onboarding guide
+- [Domain Glossary](../product/domain-glossary.md) — terminology reference
+- [Dev Setup](../technical/dev-setup.md) — developer onboarding guide

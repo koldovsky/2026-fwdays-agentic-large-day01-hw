@@ -27,11 +27,11 @@ docs/
 │   ├── progress.md            # This tracking file
 │   └── decisionLog.md        # Decisions and undocumented behaviors
 ├── technical/
-│   └── architecture.md        # Architecture diagrams and data flow
-├── product/
-│   └── PRD.md                 # Product Requirements Document
-├── dev-setup.md               # Developer onboarding guide
-└── domain-glossary.md         # Domain terminology glossary
+│   ├── architecture.md        # Architecture diagrams and data flow
+│   └── dev-setup.md           # Developer onboarding guide
+└── product/
+    ├── PRD.md                 # Product Requirements Document
+    └── domain-glossary.md     # Domain terminology glossary
 ```
 
 ## What's Documented vs. What's Not

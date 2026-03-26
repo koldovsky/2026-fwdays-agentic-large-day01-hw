@@ -278,6 +278,6 @@ docs: update API reference
 
 ## Related Documentation
 
-- [Architecture](technical/architecture.md) — system design and data flow
-- [Tech Context](memory/techContext.md) — full tech stack details
-- [Domain Glossary](domain-glossary.md) — project terminology
+- [Architecture](architecture.md) — system design and data flow
+- [Tech Context](../memory/techContext.md) — full tech stack details
+- [Domain Glossary](../product/domain-glossary.md) — project terminology
