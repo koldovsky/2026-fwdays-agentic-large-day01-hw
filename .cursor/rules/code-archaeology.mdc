@@ -1,0 +1,44 @@
+---
+description: Use the Memory Bank as the primary project knowledge layer
+globs:
+alwaysApply: true
+---
+
+# Memory Bank Rule
+
+The project uses a structured Memory Bank under `docs/memory/`.
+
+Primary files:
+- `docs/memory/projectbrief.md`
+- `docs/memory/productContext.md`
+- `docs/memory/techContext.md`
+- `docs/memory/systemPatterns.md`
+- `docs/memory/activeContext.md`
+- `docs/memory/progress.md`
+- `docs/memory/decisionLog.md`
+
+## Required behavior
+
+Before making non-trivial code changes:
+1. Read relevant Memory Bank files first.
+2. Treat `systemPatterns.md` as the source of system behavior and constraints.
+3. Treat `activeContext.md` as the current investigation and maintenance policy.
+4. Load deeper docs from `docs/technical/` and `docs/product/` only when the task requires them.
+
+## Do not
+
+- Do not assume architecture from local code snippets alone.
+- Do not ignore documented constraints in Memory Bank files.
+- Do not duplicate deep technical detail into memory files.
+- Do not make behavior-changing edits without checking whether docs must be updated.
+
+## If the task reveals new shared truth
+
+Update docs in the same effort:
+- architecture/behavior -> `docs/memory/systemPatterns.md` and possibly `docs/technical/architecture.md`
+- tooling/setup -> `docs/memory/techContext.md` and possibly `docs/technical/dev-setup.md`
+- product/domain -> `docs/memory/productContext.md` and/or `docs/product/*`
+- decisions -> `docs/memory/decisionLog.md` and `docs/decisions/*`
+- undocumented behavior -> `docs/technical/undocumented-behaviors.md` + summary in `docs/memory/systemPatterns.md`
+- reusable archaeology heuristics -> `docs/technical/code-archaeology-patterns.md`
+- current status / backlog -> `docs/memory/progress.md` or `docs/memory/activeContext.md`
