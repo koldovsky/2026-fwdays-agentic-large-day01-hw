@@ -75,7 +75,7 @@ State is **split by layer** so the shell and the embeddable editor do not fight 
 
 1. **Application shell (`excalidraw-app`)** — A root Jotai `Provider` uses `appJotaiStore` from `excalidraw-app/app-jotai.ts`. Atoms here cover product-level concerns: collaboration handles, quotas, feature flags, and other UI that wraps `<Excalidraw>` but is not part of the library’s internal editor model.
 
-2. **Editor package (`packages/excalidraw`)** — `editor-jotai.ts` creates an isolated Jotai context via `jotai-scope` (`EditorJotaiProvider`, `editorJotaiStore`). That lets multiple conceptual “scopes” coexist and avoids leaking editor atoms to the rest of the tree. React hooks from this module are the package-local `useAtom` / `useAtomValue` / `useSetAtom` bound to that isolation.
+2. **Editor package (`packages/excalidraw`)** — `editor-jotai.ts` creates an isolated Jotai context via `jotai-scope` (`EditorJotaiProvider`, `editorJotaiStore`). That lets multiple conceptual “scopes” coexist and avoids leaking editor atoms to the rest of the tree. React hooks from this module are the package-local `useAtom`, `useAtomValue`, and `useSetAtom` bound to that isolation.
 
 3. **Imperative editor core** — The main editor is the class `App` in `packages/excalidraw/components/App.tsx`. It keeps a large **`React.Component` state** object typed as `AppState` (defaults from `appState.ts`): active tool, zoom, scroll, selection, theme, export options, and transient UI flags. This state drives both React re-renders and canvas updates.
 
