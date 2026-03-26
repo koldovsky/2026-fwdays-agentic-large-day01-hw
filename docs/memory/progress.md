@@ -9,12 +9,12 @@
 
 ## Required Tasks
 
-| # | File / Deliverable | Status | Notes |
-|---|---|---|---|
-| 1 | `.cursorignore` in repo root | ✅ Done | 50+ exclusion patterns |
-| 2 | `docs/memory/projectbrief.md` | ✅ Done | 56 lines, structured |
+| # | File / Deliverable | Status | Notes                            |
+|---|---|---|----------------------------------|
+| 1 | `.cursorignore` in repo root | ✅ Done | 50+ exclusion patterns           |
+| 2 | `docs/memory/projectbrief.md` | ✅ Done | 56 lines, structured             |
 | 3 | `docs/memory/techContext.md` | ✅ Done | 186 lines, all versions verified |
-| 4 | `docs/memory/systemPatterns.md` | ✅ Done | 189 lines, architecture patterns |
+| 4 | `docs/memory/systemPatterns.md` | ✅ Done | 228 lines, architecture patterns |
 
 ---
 
