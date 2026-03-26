@@ -170,4 +170,55 @@
 * **Consequences**: CI/local `test:all` fails on warnings; contributors run `fix` scripts for bulk cleanup.
 
 ---
+
+## Undocumented Behavior Discovery [2026-03-26]
+
+Brownfield review (compare implementation to [docs/product/PRD.md](../product/PRD.md), [docs/technical/architecture.md](../technical/architecture.md), [docs/product/domain-glossary.md](../product/domain-glossary.md)). These are behaviors that are missing from PRD/architecture, or contradict written domain docs.
+
+### UB-1: `sceneNonce` is not a monotonic counter
+
+- **Feature/Function**: `Scene.triggerUpdate` / `sceneNonce`
+- **Documented Behavior**: [domain-glossary.md](../product/domain-glossary.md) defines **sceneNonce** as a **monotonic** invalidation counter bumped on scene updates.
+- **Actual Behavior**: Each `triggerUpdate()` assigns **`this.sceneNonce = randomInteger()`**, so values are **pseudo-random**, not strictly increasing.
+- **Impact**: Anything assuming monotonic ordering of `sceneNonce` (e.g. custom memoization or logging) would be **wrong**; equality vs ordering across updates is **not** meaningful beyond “changed.”
+- **Decision**: **Keep as is; fix documentation.** Update [docs/product/domain-glossary.md](../product/domain-glossary.md) (and any dependent Memory Bank notes) to describe **opaque cache-bust values** rather than monotonicity.
+
+#### Template entry
+
+- **File**: [`../../packages/element/src/Scene.ts`](../../packages/element/src/Scene.ts)
+- **Expectation**: Monotonic invalidation counter per glossary.
+- **Reality**: `randomInteger()` on each `triggerUpdate()` (see `replaceAllElements` → `triggerUpdate`).
+- **Rationale/Action**: Implementation is valid for “nonce changed ⇒ invalidate caches”; wording in the Memory Bank should match code. No refactor required unless a future feature truly needs monotonic ids.
+
+### UB-2: Cross-tab restore re-applies browser language detection
+
+- **Feature/Function**: Debounced `syncData` in hosted `App` (local storage version compare + `updateScene`)
+- **Documented Behavior**: PRD mentions **tab sync** only as a traceability row (`tabSync.ts`, `SYNC_BROWSER_TABS_TIMEOUT`). It does **not** state that **focus / visibility** events pull **full scene state from `localStorage`** when another tab has a newer saved version, or what runs alongside that import.
+- **Actual Behavior**: When `isBrowserStorageStateNewer(VERSION_DATA_STATE)` is true, the app calls `excalidrawAPI.updateScene({ ...localDataState, captureUpdate: CaptureUpdateAction.NEVER })` **and** `setLangCode(getPreferredLanguage())` **before** loading library from IndexedDB—so **language can change** as a side effect of catching up to storage written by another tab, independent of the saved scene’s locale fields.
+- **Impact**: Users with multiple tabs may see **UI language shift** when switching tabs, even if they did not change language in-app; QA and integrators cannot infer this from PRD/architecture alone.
+- **Decision**: **Keep as is (likely intentional i18n refresh); document.** Extend product/technical docs or onboarding notes for multi-tab behavior; Memory Bank `techContext` / PRD traceability can call out **language re-detection on cross-tab resync**.
+
+#### Template entry
+
+- **File**: [`../../excalidraw-app/App.tsx`](../../excalidraw-app/App.tsx)
+- **Expectation**: PRD/index entries imply tab-related helpers exist, not that focus-driven import **overwrites scene** and **re-runs `getPreferredLanguage()`**.
+- **Reality**: `visibilityChange` → debounced `syncData` path imports local data and sets language from `language-detector` when storage is newer.
+- **Rationale/Action**: Document the coupling; if product wants stable language per session, that would be a separate feature/refactor.
+
+### UB-3: Collaboration merge discards remote updates on a version tie using `versionNonce`
+
+- **Feature/Function**: `shouldDiscardRemoteElement` → `reconcileElements`
+- **Documented Behavior**: PRD §3.14 describes **remote merge** and **`reconcileElements`** at a high level. [domain-glossary.md](../product/domain-glossary.md) notes **`versionNonce`** breaks ties when versions collide but does **not** specify the comparison rule used during merge.
+- **Actual Behavior**: Remote element is **discarded** (local copy kept) not only when `local.version > remote.version`, but also when **`local.version === remote.version && local.versionNonce <= remote.versionNonce`**. Additionally, **any** element matching **`editingTextElement`**, **`resizingElement`**, or **`newElement`** causes the remote payload for that id to be ignored.
+- **Impact**: In rare concurrent edits, **deterministic “local wins” on equal version** can surprise collaborators; testers need this matrix to explain “why my stroke didn’t apply.”
+- **Decision**: **Keep as is; document.** Add a short subsection under collaboration / data model in PRD or architecture describing **discard conditions** (active local edit + version / versionNonce rules). Memory Bank: link from `systemPatterns` or `techContext` to [`reconcile.ts`](../../packages/excalidraw/data/reconcile.ts).
+
+#### Template entry
+
+- **File**: [`../../packages/excalidraw/data/reconcile.ts`](../../packages/excalidraw/data/reconcile.ts)
+- **Expectation**: “Merge remote with local” without spelled-out tie-breakers or live-edit shields.
+- **Reality**: `shouldDiscardRemoteElement` implements version comparison, **`versionNonce` tie-break**, and **transient tool state** guards.
+- **Rationale/Action**: Document for support/QA; changing rules affects CRDT-style convergence—treat as architecture decision if revised.
+
+---
 *Last Updated: 2026-03-26*
