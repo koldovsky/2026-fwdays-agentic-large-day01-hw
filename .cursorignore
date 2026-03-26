@@ -1,4 +1,5 @@
 .DS_Store
+.git
 .env.development.local
 .env.local
 .env.production.local
@@ -11,6 +12,8 @@
 .vscode
 .yarn
 *.log
+*.min.js
+*.min.css
 *.tgz
 build
 dist
@@ -19,10 +22,12 @@ logs
 node_modules
 npm-debug.log*
 package-lock.json
+yarn.lock
 yarn-debug.log*
 yarn-error.log*
 packages/excalidraw/types
 coverage
+.nyc_output
 dev-dist
 html
 meta*.json
