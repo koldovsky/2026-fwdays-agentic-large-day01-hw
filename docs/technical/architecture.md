@@ -13,7 +13,7 @@
 - **`packages/element`** — модель елементів, `Scene`, `Store` / знімки / дельти, експорт функцій на кшталт `renderElement`.
 - **`packages/common`** — спільні константи, утиліти, події.
 - **`packages/math`** — геометрична математика; залежить від `common`.
-- **`packages/utils`** — експорт у файли, shape helpers тощо; код у `packages/excalidraw` імпортує `@excalidraw/utils` / `@excalidraw/utils/export` (наприклад `packages/excalidraw/index.tsx`, `ImageExportDialog.tsx`). У `packages/element/package.json` пакет `utils` **не** зазначений у `dependencies`.
+- **`packages/utils`** — експорт у файли, shape helpers, bbox, `LineSegment` тощо. Код у **`packages/element`** і **`packages/excalidraw`** імпортує `@excalidraw/utils` і підшляхи (`export`, `withinBounds`, `shape`, …). У **`packages/element/package.json`** та **`packages/excalidraw/package.json`** у `dependencies` зазначено **`@excalidraw/utils`: `0.1.2`** (версія збігається з `packages/utils/package.json`; у монорепо використовується Yarn 1 — запис `workspace:*` у цьому дереві не застосовується).
 
 Кореневий компонент редактора — **class `App`** у `packages/excalidraw/components/App.tsx` (`extends React.Component<AppProps, AppState>`). Він тримає:
 
@@ -222,9 +222,9 @@ flowchart TB
 |--------|----------------|
 | `@excalidraw/common` | `tinycolor2` |
 | `@excalidraw/math` | `@excalidraw/common` |
-| `@excalidraw/element` | `@excalidraw/common`, `@excalidraw/math` |
+| `@excalidraw/element` | `@excalidraw/common`, `@excalidraw/math`, `@excalidraw/utils` (`0.1.2`) |
 | `@excalidraw/utils` | `@braintree/sanitize-url`, `@excalidraw/laser-pointer`, `browser-fs-access`, `pako`, `perfect-freehand`, PNG chunks, `roughjs` (без `@excalidraw/element` у списку dependencies) |
-| `@excalidraw/excalidraw` | У `dependencies` зазначені `@excalidraw/common`, `@excalidraw/element`, `@excalidraw/math` та інші npm-пакети (`jotai`, `roughjs`, `radix-ui`, CodeMirror, …) — повний список у `packages/excalidraw/package.json`. **`@excalidraw/utils` у цьому списку немає**, попри імпорти з коду пакета. |
+| `@excalidraw/excalidraw` | `@excalidraw/common`, `@excalidraw/element`, `@excalidraw/math`, **`@excalidraw/utils` (`0.1.2`)**, плюс інші залежності (`jotai`, `roughjs`, `radix-ui`, CodeMirror, …) — повний список у `packages/excalidraw/package.json`. |
 
 ### Зв’язок на рівні імпортів (важливі винятки)
 
@@ -238,18 +238,21 @@ flowchart TB
 flowchart LR
   common["@excalidraw/common"]
   math["@excalidraw/math"]
+  utils["@excalidraw/utils"]
   element["@excalidraw/element"]
   excalidraw["@excalidraw/excalidraw"]
 
   common --> math
   common --> element
   math --> element
+  utils --> element
   common --> excalidraw
   element --> excalidraw
   math --> excalidraw
+  utils --> excalidraw
 ```
 
-Зв’язок **коду** `excalidraw` → `utils` (імпорти) на цій діаграмі не показано, бо в `packages/excalidraw/package.json` відсутній запис `@excalidraw/utils` у `dependencies`. Пакет `utils` у своєму `package.json` не залежить від `excalidraw`.
+Пакет `utils` у своєму `package.json` не залежить від `excalidraw` (ребро `utils → excalidraw` лише як залежність пакета `excalidraw` від `utils`).
 
 ### Збірка залежностей між workspace-пакетами
 

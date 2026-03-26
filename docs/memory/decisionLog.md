@@ -22,8 +22,8 @@
 | ID | Рішення | Факт |
 |----|---------|------|
 | D11 | `element` залежить від `common` і `math`; `math` — від `common`. | `packages/element/package.json`, `packages/math/package.json`. |
-| D12 | `excalidraw` оголошує залежність на `common`, `element`, `math` у `package.json`. | `packages/excalidraw/package.json`. |
-| D13 | Код `excalidraw` імпортує `@excalidraw/utils`, але **`@excalidraw/utils` не перелічений у `dependencies` пакета `excalidraw`**. | Порівняння `packages/excalidraw/package.json` з grep імпортів `@excalidraw/utils` у `packages/excalidraw/` (зафіксовано в `docs/technical/architecture.md`). |
+| D12 | `excalidraw` оголошує залежності на `common`, `element`, `math`, `utils` (`0.1.2`) та інші пакети у `package.json`. | `packages/excalidraw/package.json`. |
+| D13 | Пакети **`element`** та **`excalidraw`** оголошують **`@excalidraw/utils`** (`0.1.2`) у своїх `package.json`, узгоджено з імпортами з коду. | `packages/element/package.json`, `packages/excalidraw/package.json`. |
 
 ## Циклічні зв’язки (навітьтність дизайну)
 
