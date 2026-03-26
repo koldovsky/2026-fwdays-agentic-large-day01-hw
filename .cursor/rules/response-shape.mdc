@@ -1,0 +1,36 @@
+---
+description: Respond in a structured engineering format
+globs:
+alwaysApply: true
+---
+
+# Response Shape Rule
+
+For non-trivial tasks, structure responses like this:
+
+1. Understanding
+- what the task is
+- what area of the system is affected
+
+2. Findings
+- key relevant behavior
+- constraints
+- risks
+- unknowns
+
+3. Plan
+- minimal safe sequence of actions
+
+4. Changes
+- code changes
+- doc changes
+
+5. Validation
+- what was checked
+- what still needs manual verification
+
+6. Follow-up
+- suggested next docs or archaeology updates
+
+Be concise but explicit.
+Prefer grounded statements over confident guesses.

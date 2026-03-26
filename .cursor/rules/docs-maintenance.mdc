@@ -1,0 +1,44 @@
+---
+description: Keep docs aligned with new findings and behavior changes
+globs:
+alwaysApply: true
+---
+
+# Documentation Maintenance Rule
+
+Documentation is part of the task, not optional cleanup.
+
+## Update docs when
+
+- new shared truth about the repo is established
+- architecture understanding changes
+- setup/tooling requirements change
+- a hidden runtime contract is confirmed
+- product/domain understanding changes
+- an intentional behavior change is introduced
+
+## Update targets
+
+- `docs/memory/techContext.md`
+- `docs/memory/systemPatterns.md`
+- `docs/memory/productContext.md`
+- `docs/memory/activeContext.md`
+- `docs/memory/progress.md`
+- `docs/memory/decisionLog.md`
+- `docs/technical/*`
+- `docs/product/*`
+- `docs/decisions/*`
+
+## Required output behavior
+
+When completing a task, explicitly state:
+- what code changed
+- what docs changed
+- what docs should change but were not updated yet
+- what remains uncertain
+
+## Do not
+
+- Do not leave newly discovered behavior only in chat output.
+- Do not create duplicate truths in multiple files.
+- Do not put deep implementation detail into memory files unless it is operationally critical.

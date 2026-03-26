@@ -1,0 +1,43 @@
+safe-refactor.mdc---
+description: Refactor carefully in legacy and brownfield areas
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+alwaysApply: true
+---
+
+# Safe Refactor Rule
+
+This codebase may contain legacy constraints, hidden contracts, and behavior-sensitive flows.
+
+## Before refactoring
+
+- inspect `docs/memory/systemPatterns.md`
+- inspect `docs/memory/activeContext.md`
+- inspect relevant docs under `docs/technical/` and `docs/product/` when needed
+- identify whether the target area involves:
+  - state transitions
+  - event ordering
+  - history/undo
+  - cache invalidation
+  - async initialization
+  - browser timing behavior
+
+## Required refactor standard
+
+- preserve behavior unless the task explicitly changes it
+- explain what invariants must remain true
+- prefer small changes over broad rewrites
+- verify assumptions before simplifying code paths
+
+## If behavior changes intentionally
+
+- add or update an ADR in `docs/decisions/`
+- add a short link entry in `docs/memory/decisionLog.md`
+- update affected memory/technical/product docs
+
+## Do not
+
+- Do not rewrite broad subsystems without explicit need.
+- Do not replace nuanced flow with generic abstractions unless verified against real behavior.
+- Do not remove legacy-looking logic just because it appears redundant.

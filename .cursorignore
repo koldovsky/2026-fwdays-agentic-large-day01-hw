@@ -1,0 +1,45 @@
+﻿# Build artifacts (див. також `yarn rm:build` у package.json)
+dist/
+build/
+.next/
+dev-dist/
+out/
+
+# Dependencies
+node_modules/
+
+# Generated / minified
+*.min.js
+*.min.css
+*.snap
+
+# Lock files (великі, не несуть семантики для AI)
+yarn.lock
+package-lock.json
+
+# TypeScript incremental / кеші лінтера
+*.tsbuildinfo
+.eslintcache
+
+# Згенеровані типи (папка `types/` у пакеті — у .gitignore пакета; не плутати з types.ts)
+packages/excalidraw/types/
+
+# Coverage & reports
+coverage/
+.nyc_output/
+html/
+
+# Repomix / агреговані дампи репо (не вихідний код)
+repomix-*.txt
+repomix-output.xml
+
+# CodeGraphContext — локальний індекс (KuzuDB тощо), див. docs/reference/codegraphcontext.md
+.cgc_home/
+
+# Локальні артефакти з кореневого .gitignore
+firebase/
+meta*.json
+
+# IDE-specific (не наш контекст)
+.git/
+.vscode/
