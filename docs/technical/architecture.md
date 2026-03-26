@@ -117,11 +117,12 @@ flowchart TB
 
 ### 4. Після оновлення React — `componentDidUpdate`
 
-У `componentDidUpdate` (`packages/excalidraw/components/App.tsx`):
+У методі **`componentDidUpdate`** (`packages/excalidraw/components/App.tsx`) після того, як React застосував оновлення до дерева, виконується низка кроків, зокрема:
 
-- Оновлюються спостерігачі (`this.appStateObserver.flush`), embeddables, тощо.
-- Викликається **`this.store.commit(elementsMap, this.state)`** з поточною мапою елементів сцени та стейтом.
-- Якщо `!this.state.isLoading`, викликаються **`this.props.onChange?.(elements, this.state, this.files)`** та **`this.onChangeEmitter.trigger(...)`** — зовнішні споживачі отримують знімок після коміту.
+- оновлення спостерігачів (`this.appStateObserver.flush`), embeddables та інша логіка реакції на зміну пропсів/стейту;
+- **`this.store.commit(elementsMap, this.state)`** — фіксація поточної мапи елементів і `AppState` у Store.
+
+Далі, за умови **`!this.state.isLoading`**, зовнішні споживачі отримують **знімок після коміту в Store**: викликаються **`this.props.onChange?.(elements, this.state, this.files)`** та **`this.onChangeEmitter.trigger(elements, this.state, this.files)`** (той самий зміст для пропа й підписників emitter). Коментар у коді пояснює, навіщо блокується нотифікація під час `isLoading` (наприклад, щоб не перезаписати дані з порожньою сценою при ініціалізації).
 
 ### 5. Колаборація та хост-застосунок (контекст репозиторію)
 
