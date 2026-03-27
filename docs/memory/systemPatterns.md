@@ -21,32 +21,39 @@ In development, Vite aliases all `@excalidraw/*` imports to workspace `src/` pat
 State is not centralized in a single store. It is split across four distinct layers:
 
 ### 1. `AppState` — primary editor state
+
 - Owned by `App` (`packages/excalidraw/components/App.tsx`), a **class component** (`React.Component<AppProps, AppState>`)
 - Contains: active tool, selection, zoom/scroll, open dialogs, theme, collaborators, UI flags
 - Updated via `setState` / `setAppState`; broadcast through React Context to all child components
 - `UIAppState` (`context/ui-appState.ts`) is a subset of `AppState` that excludes scroll/cursor internals — UI components should consume this, not the full `AppState`
 
 ### 2. `Scene` + `Store` — element-level state
+
 - `Scene` (`packages/element/src/Scene.ts`): owns the ordered element list and element maps; provides `sceneNonce` for render invalidation
 - `Store` (`packages/element/src/store.ts`): tracks structural changes; emits `StoreChange` events; uses `CaptureUpdateAction` enum to control what gets recorded
 - Both are instantiated inside `App` and passed to children via context
 
 ### 3. `ActionManager` — command dispatch
+
 - All user commands are `Action` objects registered with `ActionManager` (`packages/excalidraw/actions/manager.tsx`)
 - Each action's `perform` function returns an `ActionResult`:
+
   ```ts
   type ActionResult = {
     elements?: readonly ExcalidrawElement[] | null;
     appState?: Partial<AppState> | null;
     files?: BinaryFiles | null;
+    replaceFiles?: boolean; // forwarded to App.syncActionResult -> addMissingFiles(...)
     captureUpdate: CaptureUpdateActionType; // controls undo recording
   } | false;
   ```
+
 - Action flow is:
   `ActionManager.executeAction(action, source)` → `action.perform(...)` returns `ActionResult` → `App.syncActionResult` batches scene/files/state updates → React render/update → `componentDidUpdate` → `Store.commit(elementsMap, this.state)`
 - Sources: `"ui"` | `"keyboard"` | `"contextMenu"` | `"api"` | `"commandPalette"`
 
 ### 4. Jotai — scoped peripheral UI atoms
+
 - `packages/excalidraw/editor-jotai.ts` uses `jotai-scope`'s `createIsolation()` so atoms are scoped to `EditorJotaiProvider`, never leaking globally
 - Used only for small UI state: `editorLangCodeAtom`, `isSidebarDockedAtom`, `isLibraryMenuOpenAtom`, `convertElementTypePopupAtom`
 - A second isolated Jotai store (`tunnelsJotai`) powers `tunnel-rat` portal slots
