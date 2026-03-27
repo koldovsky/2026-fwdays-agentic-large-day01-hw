@@ -1,0 +1,96 @@
+# Build artifacts
+dist/
+build/
+.next/
+
+# Dependencies
+node_modules/
+
+# Generated / minified
+*.min.js
+*.min.css
+*.snap
+
+# Lock files (великі, не несуть семантики для AI)
+yarn.lock
+package-lock.json
+
+# Coverage & reports
+coverage/
+.nyc_output/
+
+# IDE-specific (не наш контекст)
+.git/
+.vscode/
+# Font binaries (woff2/ttf — binary, no semantic value)
+packages/excalidraw/fonts/
+scripts/woff2/assets/
+public/*.woff2
+
+# Static promo/icon assets in public/
+public/*.png
+public/*.jpg
+public/*.svg
+public/screenshots/
+
+# Locale translations (managed via Crowdin; en.json kept as key reference)
+packages/excalidraw/locales/ar-SA.json
+packages/excalidraw/locales/az-AZ.json
+packages/excalidraw/locales/bg-BG.json
+packages/excalidraw/locales/bn-BD.json
+packages/excalidraw/locales/bn-IN.json
+packages/excalidraw/locales/ca-ES.json
+packages/excalidraw/locales/cs-CZ.json
+packages/excalidraw/locales/da-DK.json
+packages/excalidraw/locales/de-CH.json
+packages/excalidraw/locales/de-DE.json
+packages/excalidraw/locales/el-GR.json
+packages/excalidraw/locales/es-ES.json
+packages/excalidraw/locales/eu-ES.json
+packages/excalidraw/locales/fa-IR.json
+packages/excalidraw/locales/fi-FI.json
+packages/excalidraw/locales/fr-FR.json
+packages/excalidraw/locales/gl-ES.json
+packages/excalidraw/locales/he-IL.json
+packages/excalidraw/locales/hi-IN.json
+packages/excalidraw/locales/hu-HU.json
+packages/excalidraw/locales/id-ID.json
+packages/excalidraw/locales/it-IT.json
+packages/excalidraw/locales/ja-JP.json
+packages/excalidraw/locales/kaa.json
+packages/excalidraw/locales/kab-KAB.json
+packages/excalidraw/locales/kk-KZ.json
+packages/excalidraw/locales/km-KH.json
+packages/excalidraw/locales/ko-KR.json
+packages/excalidraw/locales/ku-TR.json
+packages/excalidraw/locales/lt-LT.json
+packages/excalidraw/locales/lv-LV.json
+packages/excalidraw/locales/mr-IN.json
+packages/excalidraw/locales/my-MM.json
+packages/excalidraw/locales/nb-NO.json
+packages/excalidraw/locales/nl-NL.json
+packages/excalidraw/locales/nn-NO.json
+packages/excalidraw/locales/oc-FR.json
+packages/excalidraw/locales/pa-IN.json
+packages/excalidraw/locales/percentages.json
+packages/excalidraw/locales/pl-PL.json
+packages/excalidraw/locales/pt-BR.json
+packages/excalidraw/locales/pt-PT.json
+packages/excalidraw/locales/ro-RO.json
+packages/excalidraw/locales/ru-RU.json
+packages/excalidraw/locales/si-LK.json
+packages/excalidraw/locales/sk-SK.json
+packages/excalidraw/locales/sl-SI.json
+packages/excalidraw/locales/sv-SE.json
+packages/excalidraw/locales/ta-IN.json
+packages/excalidraw/locales/th-TH.json
+packages/excalidraw/locales/tr-TR.json
+packages/excalidraw/locales/uk-UA.json
+packages/excalidraw/locales/uz-UZ.json
+packages/excalidraw/locales/vi-VN.json
+packages/excalidraw/locales/zh-CN.json
+packages/excalidraw/locales/zh-HK.json
+packages/excalidraw/locales/zh-TW.json
+
+# Release notes (not source code)
+**/CHANGELOG.md
