@@ -61,7 +61,7 @@ pre-commit hooks.
 
 ## 3 — Understand the Monorepo Structure
 
-```
+```text
 excalidraw/
 ├── packages/
 │   ├── common/         # @excalidraw/common   — shared constants, utilities, color palette
@@ -80,7 +80,7 @@ excalidraw/
 
 ### Package Dependency Order (strict, one-way)
 
-```
+```text
 @excalidraw/common
     └── @excalidraw/math
           └── @excalidraw/element
@@ -185,7 +185,7 @@ yarn build:excalidraw
 
 Each package produces:
 
-```
+```text
 packages/<name>/dist/
 ├── dev/      # development build (unminified, source maps)
 ├── prod/     # production build (minified)
@@ -273,15 +273,15 @@ correct dependency order.
 
 ## 10 — Things to Never Do
 
-| Don't                                                          | Why                                                       |
-| -------------------------------------------------------------- | --------------------------------------------------------- |
-| Import from a lower package into a higher one in reverse order | Breaks tree-shaking and circular-dep lint                 |
-| Remove a `flushSync` call in `App.tsx`                         | Silent state-staleness bugs in pointer handlers           |
-| Call `scene.mutateElement()` from a bare async callback        | Each call triggers a separate React render                |
-| Edit `packages/excalidraw/locales/*.json` by hand              | Crowdin overwrites on next sync                           |
-| Modify `scripts/wasm/*.wasm` files                             | These are binary artifacts — edit the WASM source instead |
-| Add `firebase` or `socket.io-client` to `packages/excalidraw`  | Collab is an app-level concern only                       |
-| Use npm or pnpm instead of Yarn 1                              | Generates incompatible lock file, breaks workspaces       |
+| Don't                                                          | Why                                                                        |
+|----------------------------------------------------------------|----------------------------------------------------------------------------|
+| Import from a lower package into a higher one in reverse order | Breaks tree-shaking; blocked by `@typescript-eslint/no-restricted-imports` |
+| Remove a `flushSync` call in `App.tsx`                         | Silent state-staleness bugs in pointer handlers                            |
+| Call `scene.mutateElement()` from a bare async callback        | Each call triggers a separate React render                                 |
+| Edit `packages/excalidraw/locales/*.json` by hand              | Crowdin overwrites on next sync                                            |
+| Modify `scripts/wasm/*.wasm` files                             | These are binary artifacts — edit the WASM source instead                  |
+| Add `firebase` or `socket.io-client` to `packages/excalidraw`  | Collab is an app-level concern only                                        |
+| Use npm or pnpm instead of Yarn 1                              | Generates incompatible lock file, breaks workspaces                        |
 
 ---
 
