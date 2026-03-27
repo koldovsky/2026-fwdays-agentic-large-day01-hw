@@ -27,25 +27,53 @@ That's it — `.env.development` is committed and pre-configured with dev-safe d
 
 ## Environment Variables
 
-All variables are `VITE_APP_*` prefixed so Vite exposes them to the browser. The committed `.env.development` covers everything needed for local development. To override without touching the committed file, create `.env.development.local` (gitignored):
+All variables are `VITE_APP_*` prefixed so Vite exposes them to the browser. The committed `.env.development` is the canonical reference (the repo has no separate `.env.example`). To override without touching the committed file, create `.env.development.local` (gitignored).
+
+### Full variable reference
+
+| Variable | Dev default | Description | Override locally? |
+|---|---|---|---|
+| `VITE_APP_BACKEND_V2_GET_URL` | `https://json-dev.excalidraw.com/api/v2/` | Scene JSON read endpoint | Yes — point at a self-hosted backend |
+| `VITE_APP_BACKEND_V2_POST_URL` | `https://json-dev.excalidraw.com/api/v2/post/` | Scene JSON write endpoint | Yes |
+| `VITE_APP_LIBRARY_URL` | `https://libraries.excalidraw.com` | Public library browser URL | Rarely |
+| `VITE_APP_LIBRARY_BACKEND` | `https://us-central1-excalidraw-room-persistence.cloudfunctions.net/libraries` | Library read/write Cloud Function | Rarely |
+| `VITE_APP_WS_SERVER_URL` | `http://localhost:3002` | Collaboration WebSocket server (excalidraw-room) | Yes — leave default if not testing collab |
+| `VITE_APP_PLUS_LP` | `https://plus.excalidraw.com` | Excalidraw+ landing page URL | No |
+| `VITE_APP_PLUS_APP` | `http://localhost:3000` (dev) | Excalidraw+ app URL | No |
+| `VITE_APP_AI_BACKEND` | `http://localhost:3016` (dev) | AI feature (text-to-diagram) backend | Yes — point at a local AI server |
+| `VITE_APP_FIREBASE_CONFIG` | Dev Firebase project JSON | Firebase project credentials (Firestore + Auth) | No — dev project is pre-configured |
+| `VITE_APP_PLUS_EXPORT_PUBLIC_KEY` | RSA public key (PEM) | Public key used to verify Plus export signatures | No |
+| `VITE_APP_ENABLE_TRACKING` | `true` (dev), `false` (prod) | Enable/disable analytics tracking | Yes — set `false` to silence tracking locally |
+| `VITE_APP_PORT` | `3001` | Dev server port | Yes |
+| `VITE_APP_ENABLE_PWA` | `false` | Enable PWA / Service Worker in dev server | Yes — `true` to test SW behaviour |
+| `VITE_APP_ENABLE_ESLINT` | `true` (dev), `false` (prod) | Run ESLint overlay in dev server | Yes — set `false` to silence lint overlay |
+| `VITE_APP_COLLAPSE_OVERLAY` | `true` (dev), `false` (prod) | Start with debug overlay collapsed | Yes |
+| `VITE_APP_DISABLE_PREVENT_UNLOAD` | _(empty = off)_ | Suppress the "unsaved changes" beforeunload dialog | Yes — set `true` during development |
+| `VITE_APP_DEV_DISABLE_LIVE_RELOAD` | _(empty = off)_ | Disable HMR / live reload | Yes — set `true` when debugging Service Workers |
+| `VITE_APP_DEBUG_ENABLE_TEXT_CONTAINER_BOUNDING_BOX` | _(empty = off)_ | Render bounding boxes around text containers | Yes — debug aid only |
+| `FAST_REFRESH` | `false` | React Fast Refresh (Vite default handles this; kept for legacy) | No |
+
+### Common local overrides
+
+Create `.env.development.local` with only the variables you need to change:
 
 ```bash
-# .env.development.local — overrides only, never commit this file
+# .env.development.local — never commit this file
 
-# Change dev server port (default 3001)
+# Change dev server port
 VITE_APP_PORT=3001
 
-# Point at a local collaboration WebSocket server (default 3002)
+# Point at a local collaboration WebSocket server
 VITE_APP_WS_SERVER_URL=http://localhost:3002
 
-# Disable the "unsaved changes" dialog during development
+# Disable the "unsaved changes" dialog
 VITE_APP_DISABLE_PREVENT_UNLOAD=true
 
 # Disable HMR when debugging Service Workers
 VITE_APP_DEV_DISABLE_LIVE_RELOAD=true
 
-# Enable PWA in dev server (off by default)
-VITE_APP_ENABLE_PWA=false
+# Enable PWA in dev server
+VITE_APP_ENABLE_PWA=true
 ```
 
 The dev server serves the app at port `3001`. Collaboration WebSocket (excalidraw-room) runs separately on port `3002` — leave `VITE_APP_WS_SERVER_URL` at its default if you don't need live collaboration locally.

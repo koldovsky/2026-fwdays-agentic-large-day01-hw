@@ -23,7 +23,6 @@ node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-packages/excalidraw/types
 coverage
 dev-dist
 html
@@ -55,5 +54,3 @@ pnpm-lock.yaml
 # Source maps
 *.map
 
-# Locales (translation files)
-packages/excalidraw/locales/
