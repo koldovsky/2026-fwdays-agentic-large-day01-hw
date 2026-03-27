@@ -29,6 +29,13 @@ meta*.json
 .claude
 .sfd
 .wasm
+.next/
+*.min.js
+*.min.css
+*.snap
+.nyc_output/
+.git/
+yarn.lock
 
 # Auto-generated code
 packages/excalidraw/subset/woff2/woff2-wasm.ts
