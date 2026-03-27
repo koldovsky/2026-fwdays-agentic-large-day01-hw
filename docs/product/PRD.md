@@ -1,6 +1,6 @@
 ---
 doc_type: product
-doc_id: PRD-core-editor-experience
+doc_id: PRD-excalidraw
 status: draft
 owner: "@product-and-engineering"
 last_updated: "2026-03-27"
@@ -15,18 +15,35 @@ links:
   - "docs/product/ux-patterns.md"
 ---
 
-# PRD: Core Editor Experience
+# PRD: Excalidraw (Reverse-Engineered)
 
-## Problem / Goal
+## Product Goal
 - End users need a browser whiteboard that feels immediate for solo work and team sessions.
 - Integrators need a stable React component that can be embedded without product-specific backend coupling.
 - Maintainers need to ship new editor capabilities without breaking old scenes, links, and collaboration behavior.
 
-## Users and Scenarios
+## Target Audience
 - Product teams embedding `<Excalidraw />` into an existing React app.
 - Individual users resuming local work in the standalone app.
 - Teams sharing a scene through a link or live room and editing concurrently.
 - Users importing from files/links and exporting to JSON, PNG, or SVG.
+
+## Key Features
+- Embeddable editor package (`@excalidraw/excalidraw`) with public integration API.
+- Standalone app flows for local restore, share links, collaboration, and library usage.
+- Scene compatibility and migration behavior for historical data formats.
+- Import/export flows for JSON, PNG, and SVG.
+- Collaboration with encrypted room payloads, presence, and remote update application.
+- Library reuse/import flows for repeatable content.
+- Optional advanced generation flows (Mermaid, text-to-diagram, diagram-to-code, AI endpoints).
+
+## Technical Constraints
+- Node.js `>=18` and Yarn `1.x` workspaces are required by repository tooling.
+- The package contract stays browser-first and supports React `17/18/19`.
+- Minimal embed requires package CSS import and a non-zero-height container.
+- Local-first behavior is expected outside active collaboration sessions.
+- Collaboration and import/share paths must preserve undo/redo semantics and migration compatibility.
+- Core editing works without optional external services, but collaboration/share/library publish/AI flows depend on configured endpoints.
 
 ## Scope
 - Embeddable editor package (`@excalidraw/excalidraw`) with public integration API.

@@ -64,6 +64,6 @@ This document captures recurring UX behavior patterns that should stay consisten
   - Avoid introducing product behavior that requires undocumented deep imports for common host needs.
 
 ## Related Docs
-- `docs/product/prd/core-editor-experience.md`
+- `docs/product/PRD.md`
 - `docs/product/domain-glossary.md`
 - `docs/product/feature-catalog.md`

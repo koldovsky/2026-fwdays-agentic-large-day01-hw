@@ -80,7 +80,7 @@ This catalog tracks the main product-facing capabilities in this repository and 
   - New features should preserve existing keyboard and localization behavior.
 
 ## Related Docs
-- `docs/product/prd/core-editor-experience.md`
+- `docs/product/PRD.md`
 - `docs/product/domain-glossary.md`
 - `docs/product/ux-patterns.md`
 - `docs/memory-bank/productContext.md`
