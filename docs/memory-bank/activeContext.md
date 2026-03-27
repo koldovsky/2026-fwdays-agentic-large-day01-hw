@@ -9,6 +9,9 @@ See [progress.md](./progress.md) for broader status and [hidden invariants](../t
 ## Recent Changes
 - Added the core Memory Bank files under `docs/memory-bank/`.
 - Added the deep technical doc [hidden invariants](../technical/hidden-invariants.md) to capture behavior that is easy to miss during future edits.
+- Added full architecture reference in [architecture.md](../technical/architecture.md), grounded in source code and focused on data/state/rendering/package relationships.
+- Added deep package-focused architecture documentation in [packages-architecture.md](../technical/packages-architecture.md), with a source-grounded analysis of `packages/*`.
+- Expanded [hidden invariants](../technical/hidden-invariants.md) with package-level invariants for lifecycle events, store observation, fractional-index sync, and utils export normalization.
 - Added a repo-level `AGENTS.md` instructing future sessions to read all Memory Bank markdown files first.
 - Audited `docs/memory-bank/` and removed obvious duplicate context so stable architecture stays in [systemPatterns.md](./systemPatterns.md) while deeper caveats live in [hidden invariants](../technical/hidden-invariants.md).
 - Validated the `## Commands` section in [techContext.md](./techContext.md) against current root/app package scripts and corrected the `yarn test:app` label.
@@ -27,4 +30,4 @@ See [progress.md](./progress.md) for broader status and [hidden invariants](../t
 - Whether collaboration and persistence need dedicated ADR-style docs beyond the summary kept in [decisinLog.md](./decisinLog.md).
 
 ## Validation Notes
-- No test suite was run as part of this Memory Bank initialization; the task changed documentation only.
+- No test suite was run in this documentation update; changes are docs-only.

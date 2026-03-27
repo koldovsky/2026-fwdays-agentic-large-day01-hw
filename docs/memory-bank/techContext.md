@@ -14,6 +14,11 @@ See [systemPatterns.md](./systemPatterns.md) for architecture and [progress.md](
 - `excalidraw-app`: standalone/reference app.
 - `examples/with-nextjs`, `examples/with-script-in-browser`.
 
+## Deep Technical Docs
+- End-to-end architecture reference: [architecture.md](../technical/architecture.md)
+- Package architecture deep dive: [packages-architecture.md](../technical/packages-architecture.md)
+- Risky source behavior and non-obvious constraints: [hidden-invariants.md](../technical/hidden-invariants.md)
+
 ## Tooling
 - Root `tsconfig.json` and `vitest.config.mts` alias package imports directly to workspace source files.
 - Package builds are driven by custom scripts in `scripts/` such as `buildBase.js`, `buildPackage.js`, `buildUtils.js`, and `build-node.js`.

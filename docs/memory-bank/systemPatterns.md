@@ -1,6 +1,6 @@
 # System Patterns
 
-See [techContext.md](./techContext.md) for commands/tooling and [hidden invariants](../technical/hidden-invariants.md) for source-grounded edge cases.
+See [techContext.md](./techContext.md) for commands/tooling, [architecture reference](../technical/architecture.md) for full system structure, [packages architecture deep dive](../technical/packages-architecture.md) for `packages/*` internals, and [hidden invariants](../technical/hidden-invariants.md) for risky edge cases.
 
 ## Architecture Overview
 - The repo is a layered monorepo with these runtime boundaries:
