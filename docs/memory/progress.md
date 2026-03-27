@@ -51,15 +51,15 @@
 
 ## Dependency Health
 
-- **TypeScript**: 5.9.3 — current
-- **React**: 19.0.0 — latest major
-- **Vite**: 5.0.12 — one major behind (Vite 6.x exists)
-- **Jotai**: 2.11.0 — current
-- **Firebase**: 11.3.1 — current
-- **Yarn**: 1.22.22 — classic Yarn (not Berry/modern)
+- **TypeScript**: 5.9.3
+- **React**: 19.0.0
+- **Vite**: 5.0.12
+- **Jotai**: 2.11.0
+- **Firebase**: 11.3.1
+- **Yarn**: 1.22.22 (classic, not Berry/modern)
 - **Node requirement**: >=18.0.0 (see `package.json` engines)
 - **Known resolution**: `strip-ansi` pinned to 6.0.1 (see root `package.json` resolutions)
-- **@vitejs/plugin-react**: 3.1.0 — behind latest (would need update for Vite 6)
+- **@vitejs/plugin-react**: 3.1.0
 
 ## Documentation Completeness
 

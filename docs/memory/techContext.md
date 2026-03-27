@@ -35,6 +35,21 @@
 - Coverage thresholds: lines 60%, branches 70%, functions 63%, statements 60%
 - 127 test files across the monorepo
 
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `yarn start` | Start Vite dev server (port 3001 via `.env.development`) |
+| `yarn test:app` | Run unit tests in watch mode (Vitest) |
+| `yarn test:app --watch=false` | Run tests once (CI mode) |
+| `yarn test:all` | Full suite: typecheck + lint + prettier + unit tests |
+| `yarn build:app` | Build production app via Vite |
+| `yarn build:packages` | Build all packages: common → math → element → excalidraw |
+| `yarn build` | Build app (alias for `build:app`) |
+| `yarn test:code` | Run ESLint (max 0 warnings) |
+| `yarn test:other` | Check Prettier formatting |
+| `yarn test:typecheck` | Run TypeScript type checking |
+
 ## Build & Bundle
 
 - **Vite** for dev server and production builds

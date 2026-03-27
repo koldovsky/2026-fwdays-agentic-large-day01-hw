@@ -23,10 +23,19 @@ Create a `.env` file in the **root** directory (env files are loaded from `../` 
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `VITE_APP_FIREBASE_CONFIG` | For collab | JSON string of Firebase config object |
+| `VITE_APP_WS_SERVER_URL` | For collab | WebSocket server URL for real-time collaboration (default in `.env.development`: `http://localhost:3002`) |
+| `VITE_APP_BACKEND_V2_GET_URL` | Optional | Backend API GET endpoint for shared scenes |
+| `VITE_APP_BACKEND_V2_POST_URL` | Optional | Backend API POST endpoint for shared scenes |
+| `VITE_APP_AI_BACKEND` | Optional | AI backend URL for text-to-diagram feature |
+| `VITE_APP_PLUS_LP` / `VITE_APP_PLUS_APP` | Optional | Excalidraw+ landing page and app URLs |
 | `VITE_APP_DISABLE_SENTRY` | Optional | Set to `"true"` to disable Sentry |
 | `VITE_APP_GIT_SHA` | Optional | Git SHA for Sentry release tracking |
 | `VITE_APP_ENABLE_TRACKING` | Optional | Enable analytics tracking |
-| `VITE_APP_PORT` | Optional | Dev server port (default: 3000) |
+| `VITE_APP_ENABLE_PWA` | Optional | Set to `"true"` to enable PWA in dev |
+| `VITE_APP_ENABLE_ESLINT` | Optional | Set to `"false"` to disable ESLint checker plugin in dev |
+| `VITE_APP_PORT` | Optional | Dev server port (set to `3001` in `.env.development`; `vite.config.mts` falls back to `3000` if unset) |
+
+> **Note**: This table is not exhaustive. See `excalidraw-app/vite-env.d.ts` and `packages/excalidraw/vite-env.d.ts` for the full list of typed env vars.
 
 The app works without Firebase config — collaboration features will be disabled.
 
@@ -36,7 +45,7 @@ The app works without Firebase config — collaboration features will be disable
 yarn start
 ```
 
-This runs `yarn --cwd ./excalidraw-app start`, which starts Vite dev server on port 3000 (configurable via `VITE_APP_PORT`). Opens browser automatically.
+This runs `yarn --cwd ./excalidraw-app start`, which starts Vite dev server on port 3001 (per `.env.development`; `vite.config.mts` falls back to 3000 if `VITE_APP_PORT` is unset).
 
 ## Run Tests
 

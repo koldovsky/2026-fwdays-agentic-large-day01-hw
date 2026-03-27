@@ -49,19 +49,20 @@ public/screenshots/
 firebase-project/
 firebase/
 
-# Docker
+# Docker (container config, rarely edited in-IDE)
 Dockerfile
 docker-compose.yml
 
 # Vercel
 .vercel/
 
-# Wasm / font build scripts
+# Wasm / font build scripts (large generated binaries, rarely modified)
 scripts/wasm/
 scripts/woff2/
 
-# Locales (large translation files)
-packages/excalidraw/locales/
+# Locales (40+ translation JSON files — keep en.json indexed via .cursorrules if needed)
+packages/excalidraw/locales/**
+!packages/excalidraw/locales/en.json
 
 # Snapshots
 **/__snapshots__/

@@ -65,14 +65,14 @@ graph LR
     Utils["@excalidraw/utils<br/>depends: roughjs, pako, etc."]
     App["excalidraw-app<br/>depends: excalidraw + firebase, sentry, socket.io"]
 
-    Common --> Math
-    Common --> Element
-    Math --> Element
-    Common --> Excalidraw
-    Element --> Excalidraw
-    Math --> Excalidraw
-    Excalidraw --> Utils
-    Excalidraw --> App
+    Math --> Common
+    Element --> Common
+    Element --> Math
+    Excalidraw --> Common
+    Excalidraw --> Element
+    Excalidraw --> Math
+    Utils --> Excalidraw
+    App --> Excalidraw
 ```
 
 Derived from each package's `package.json` dependencies:
@@ -87,7 +87,7 @@ Derived from each package's `package.json` dependencies:
 | `excalidraw-app` | all packages + `firebase`, `socket.io-client`, `@sentry/browser`, `jotai` |
 
 Build order is enforced in root `package.json` script `build:packages`:
-`common → math → element → excalidraw` (see `package.json` line 62).
+`common → math → element → excalidraw` (see `package.json` line 59).
 
 ## Data Flow
 

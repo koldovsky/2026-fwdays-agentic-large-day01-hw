@@ -26,7 +26,7 @@ Excalidraw is a browser-based, collaborative whiteboard tool that produces hand-
 - **Dark/light theme** with system preference detection
 - **Internationalization** via Crowdin (40+ locales)
 - **Embedding** as a React component (`@excalidraw/excalidraw` package)
-- **Text-to-diagram (TTD)** and AI-assisted features
+- **Text-to-diagram (TTD)** via Mermaid conversion and AI-assisted generation (see `packages/excalidraw/components/TTDDialog/`, `aiEnabled` prop, `VITE_APP_AI_BACKEND`)
 - **Laser pointer** and **follow mode** for presentations
 - **Command palette** for keyboard-driven workflows
 

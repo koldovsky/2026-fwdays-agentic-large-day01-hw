@@ -1,8 +1,19 @@
 # Reverse-Engineered PRD
 
+## Product Purpose
+
+Provide a fast, zero-setup, browser-based collaborative whiteboard for creating informal hand-drawn-style diagrams, wireframes, and sketches — embeddable as a React component for third-party applications.
+
 ## Problem Statement
 
 Teams and individuals need a fast, low-friction way to create informal diagrams, wireframes, and sketches collaboratively. Existing tools are either too heavyweight (Figma, Visio) or lack real-time collaboration (pen and paper). Excalidraw fills the gap with a browser-based whiteboard that feels like drawing on paper.
+
+## Target Audience
+
+- **Solo Developer** — quick architecture diagrams, flowcharts, wireframes for personal use
+- **Remote Team Member** — real-time collaborative system design during video calls
+- **Technical Writer / Blogger** — hand-drawn-style diagrams for articles and docs
+- **Embedded App Developer** — integrates `@excalidraw/excalidraw` as a whiteboard component
 
 ## User Personas
 
