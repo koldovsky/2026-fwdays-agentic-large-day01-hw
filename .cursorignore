@@ -1,0 +1,56 @@
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+.eslintcache
+.git
+.history
+.idea
+.next
+.nyc_output
+.vercel
+.vscode
+.yarn
+*.log
+*.tgz
+build
+dist
+firebase
+logs
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+coverage
+dev-dist
+html
+meta*.json
+.claude
+
+# Lock files
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
+# Font files
+*.woff
+*.woff2
+*.ttf
+*.otf
+*.eot
+
+# Images & media
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.ico
+*.mp4
+*.mp3
+
+# Source maps
+*.map
+
