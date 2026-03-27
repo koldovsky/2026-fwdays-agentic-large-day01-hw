@@ -43,7 +43,7 @@
 
 ## Memory Bank Completion Summary
 
-```
+```text
 docs/memory/
 ├── projectbrief.md      ✅  56 lines
 ├── techContext.md       ✅ 186 lines
