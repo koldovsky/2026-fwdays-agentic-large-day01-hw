@@ -46,6 +46,16 @@ yarn fix:other              # prettier --write
 | Dev server (Vite) | 3001 |
 | Collaboration WebSocket | 3002 |
 
+## Monorepo Packages
+
+| Package | Role |
+|---------|------|
+| `packages/common` | Shared constants, theme tokens, and type definitions used across all packages |
+| `packages/math` | 2D geometry primitives (`Point`, `Vector`, intersection, transformation) |
+| `packages/element` | Element tree, Scene, Store, History, mutation logic (`mutateElement`) |
+| `packages/excalidraw` | The embeddable `<Excalidraw />` React component published to npm |
+| `packages/utils` | Standalone export helpers (SVG, PNG, Blob) for consumers |
+
 ## Key Config Files
 
 | File | Purpose |

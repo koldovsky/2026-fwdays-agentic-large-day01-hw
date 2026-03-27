@@ -8,9 +8,9 @@
 - [x] `docs/memory/projectbrief.md` — project description
 - [x] `docs/memory/techContext.md` — tech stack & commands
 - [x] `docs/memory/systemPatterns.md` — architecture & patterns
-- [x] `docs/memory/architecture.md` — detailed architecture
-- [x] `docs/memory/domain-glossary.md` — domain glossary
-- [x] `docs/memory/PRD.md` — reverse-engineered PRD
+- [x] `docs/technical/architecture.md` — detailed architecture
+- [x] `docs/product/domain-glossary.md` — domain glossary
+- [x] `docs/product/PRD.md` — reverse-engineered PRD
 
 ### Bonus
 

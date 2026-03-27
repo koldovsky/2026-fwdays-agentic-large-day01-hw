@@ -14,15 +14,19 @@ Most diagramming tools optimize for polish — grids snap to perfection, shapes 
 ## Key User Scenarios
 
 ### Scenario 1: Quick architecture sketch during a call
+
 Engineer opens excalidraw.com, draws a system diagram in 3 minutes, shares the room link in Slack. Remote teammates join and annotate in real time. After the call, exports to PNG and pastes into the doc.
 
 ### Scenario 2: Async feedback on a design
+
 Designer creates a diagram, exports the `.excalidraw` file, commits it to the repo. Reviewer opens it locally, adds comments as text elements, commits back.
 
 ### Scenario 3: Embedded whiteboard in a product
+
 Developer embeds `@excalidraw/excalidraw` in their note-taking app. Uses `ExcalidrawImperativeAPI` to save/load diagrams from their own backend. Hides the toolbar and exposes only the tools relevant to their use case.
 
 ### Scenario 4: Personal diagramming without a backend
+
 User works offline. Diagrams auto-save to IndexedDB. User exports `.excalidraw` files to their filesystem for long-term storage.
 
 ## UX Principles Observed in the Codebase
