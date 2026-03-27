@@ -1,6 +1,6 @@
 # Developer Setup
 
-Grounded in: `package.json` (root + `excalidraw-app`), `excalidraw-app/vite.config.mts`, `vitest.config.mts`, `tsconfig.json`, `.env.development`, `.env.production`, `.github/workflows/`, `.husky/`.
+Grounded in: `package.json` (root + `excalidraw-app`), `excalidraw-app/vite.config.mts`, `vitest.config.mts`, `tsconfig.json`, `.env.development`, `.env.production`, GitHub workflows (`.github/workflows/`), `.husky/`.
 
 ---
 
@@ -47,7 +47,7 @@ yarn start
 
 This runs `vite` inside `excalidraw-app/`. The dev server:
 - Reads env vars from `.env.development` at the **repository root** (not inside `excalidraw-app/`) — `envDir: "../"` in `vite.config.mts`
-- Defaults to port **3001** (`VITE_APP_PORT=3001` in `.env.development`)
+- Uses port **3001** when `.env.development` is loaded (`VITE_APP_PORT=3001`); the code fallback in `vite.config.mts` is `3000` via `port: Number(envVars.VITE_APP_PORT || 3000)`
 - Opens the browser automatically (`open: true`)
 - Uses **path aliases** that point directly to TypeScript source in `packages/*/src/` — package builds are **not** required for the dev server
 
@@ -77,7 +77,7 @@ All `.env.*` files live at the **repository root** (not inside `excalidraw-app/`
 
 | Variable | Default value | Purpose |
 |---|---|---|
-| `VITE_APP_PORT` | `3001` | Dev server port |
+| `VITE_APP_PORT` | `3001` in `.env.development` (`3000` code fallback) | Dev server port |
 | `VITE_APP_BACKEND_V2_GET_URL` | `https://json-dev.excalidraw.com/api/v2/` | Scene load endpoint |
 | `VITE_APP_BACKEND_V2_POST_URL` | `https://json-dev.excalidraw.com/api/v2/post/` | Scene save endpoint |
 | `VITE_APP_WS_SERVER_URL` | `http://localhost:3002` | Collaboration WebSocket |

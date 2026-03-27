@@ -55,7 +55,7 @@ During local development Vite aliases all `@excalidraw/*` imports to the workspa
 
 Packages must be built in dependency order:
 
-```
+```text
 yarn build:common   →   yarn build:math   →   yarn build:element   →   yarn build:excalidraw
 ```
 
@@ -115,21 +115,30 @@ type ActionResult = {
 
 #### 2. syncActionResult (App.tsx line 2735)
 
-Wrapped in `withBatchedUpdates` to batch React state updates:
+`syncActionResult` is wrapped in `withBatchedUpdates`, so it batches scene/state work for the current React update. It does **not** call `store.commit()` directly.
 
-1. `store.scheduleAction(captureUpdate)` — marks whether the upcoming commit creates a history entry.
-2. `scene.replaceAllElements(actionResult.elements)` — updates the element list in `Scene`.
-3. `this.setState(appState patch)` — triggers React re-render.
+Inside `syncActionResult`, the main steps are:
+
+1. `store.scheduleAction(captureUpdate)` — marks whether the *later* commit should create a durable history entry.
+2. `scene.replaceAllElements(actionResult.elements)` — updates the element list in `Scene` immediately.
+3. `addMissingFiles(...)` and `addNewImagesToImageCache()` — merge incoming files and warm the image cache when `actionResult.files` is present.
+4. `this.setState(appState patch)` — schedules the React state update and render.
+
+This means `syncActionResult` prepares the next render and queues commit-related intent, but the actual store snapshot diff is deferred until `componentDidUpdate`.
 
 #### 3. componentDidUpdate → Store commit (App.tsx line 3509)
 
-After every React state update:
+After the React render/update cycle completes, `componentDidUpdate` performs the post-render commit step:
 
 ```
 store.commit(elementsMap, this.state)
 ```
 
-`Store.commit` compares the new snapshot against the previous one, computes `ElementsDelta` / `AppStateDelta`, and emits:
+So the flow is:
+
+`syncActionResult` → batched scene/state updates → React render/update → `componentDidUpdate` → `store.commit(elementsMap, this.state)`
+
+`Store.commit` then compares the new snapshot against the previous one, computes `ElementsDelta` / `AppStateDelta`, and emits:
 - `onDurableIncrementEmitter` (when `captureUpdate === IMMEDIATELY`) → `History.record(delta)` pushes an undo entry.
 - `onStoreIncrementEmitter` (always) → forwarded to `props.onIncrement` for collaboration.
 

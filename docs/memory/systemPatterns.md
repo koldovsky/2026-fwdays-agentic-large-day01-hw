@@ -4,7 +4,7 @@
 
 Dependencies always flow inward — no package imports from a package above it:
 
-```
+```text
 excalidraw-app          ← application layer (not published)
   └── @excalidraw/excalidraw   ← editor component (published)
         ├── @excalidraw/element ← element/scene/store logic
@@ -81,7 +81,7 @@ State is not centralized in a single store. It is split across four distinct lay
 
 Canvas is split into three layers drawn on top of each other:
 
-```
+```text
 StaticCanvas      ← all committed elements (rough.js, images, grid)
 InteractiveCanvas ← selection handles, transform controls, snapping lines, remote cursors
 NewElementCanvas  ← the in-progress element while drawing
