@@ -10,13 +10,13 @@ Setting up the AI-assisted development memory bank for the fwdays workshop (Day 
 - Created `CLAUDE.md` — guidance file for Claude Code covering commands, architecture, and code rules
 - Created full `docs/` memory bank: projectbrief, techContext, systemPatterns, architecture, domain-glossary, PRD, decisionLog, productContext, progress, activeContext
 
-## What's Next (if continuing)
+## What's Done
 
-- `docs/technical/dev-setup.md` — onboarding guide for new contributors
-- Find and document 3+ undocumented behaviors in the codebase
-- Submit PR with completed checklist
+- `docs/technical/dev-setup.md` — onboarding guide for new contributors ✓
+- `docs/technical/undocumented-behaviors.md` — 6 non-obvious behaviors documented ✓
+- `CLAUDE.md` — Claude Code guidance file ✓
 
 ## Open Questions / Risks
 
-- The `.env.development` file contains Firebase config and feature flags — verify it is gitignored before committing
+- `.env.development` is intentionally committed with dev-safe defaults (public OSS Firebase project); secrets should go in `.env.development.local` (gitignored)
 - `excalidraw-app/collab/` contains WebSocket logic tightly coupled to excalidraw.com infrastructure; local collab requires running a separate server on port 3002

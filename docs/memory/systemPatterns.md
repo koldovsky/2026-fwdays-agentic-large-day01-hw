@@ -26,7 +26,7 @@ History.record(delta)                              ← undo stack entry
 **CaptureUpdateAction modes** (controls whether a change goes to undo history):
 - `IMMEDIATELY` — pushed to undo stack right away (most user actions)
 - `NEVER` — never recorded (remote/collaboration updates)
-- `EVENTUALLY` — batched with next `IMMEDIATELY` action
+- `EVENTUALLY` — emits an ephemeral increment (like `NEVER`) but does **not** advance the snapshot; the next `IMMEDIATELY` diff will include these changes
 
 ## Rendering Pipeline
 
