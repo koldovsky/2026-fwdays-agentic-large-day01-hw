@@ -42,7 +42,8 @@ State is not centralized in a single store. It is split across four distinct lay
     captureUpdate: CaptureUpdateActionType; // controls undo recording
   } | false;
   ```
-- `ActionManager.executeAction(action, source)` merges results back into `Scene` + `App.setState`
+- Action flow is:
+  `ActionManager.executeAction(action, source)` → `action.perform(...)` returns `ActionResult` → `App.syncActionResult` batches scene/files/state updates → React render/update → `componentDidUpdate` → `Store.commit(elementsMap, this.state)`
 - Sources: `"ui"` | `"keyboard"` | `"contextMenu"` | `"api"` | `"commandPalette"`
 
 ### 4. Jotai — scoped peripheral UI atoms
