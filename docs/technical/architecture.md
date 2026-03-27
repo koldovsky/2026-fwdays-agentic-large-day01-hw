@@ -16,6 +16,54 @@ excalidraw-app
 
 Each package has its own `package.json` with `exports` map. Packages are built with esbuild; the app is built with Vite.
 
+## State Management
+
+Excalidraw uses three complementary state systems, each with a distinct scope:
+
+### AppState (monolithic UI state)
+
+Defined in `packages/excalidraw/types.ts`. A single large object owned by `App.tsx` that covers:
+
+- **Tool selection** — `activeTool`, `editingElement`, `resizingElement`
+- **Viewport** — `scrollX`, `scrollY`, `zoom`
+- **UI panels** — `openMenu`, `openDialog`, `showStats`
+- **Collaboration UI** — `collaborators`, `isLoading`
+
+`AppState` is updated via `setState()` on the `App` class component. Because it is monolithic, updates trigger a top-level re-render; the rendering pipeline then decides what actually needs to be redrawn.
+
+### Jotai atoms (fine-grained reactive state)
+
+Used for state that needs to be shared across components without prop-drilling, or that must update independently from `AppState` to avoid unnecessary re-renders. Always import atoms from the project wrappers:
+
+- `excalidraw-app/app-jotai.ts` — app-level atoms (collaboration, sync status)
+- `packages/excalidraw/editor-jotai.ts` — editor-level atoms (sidebar, active panel)
+
+Never import directly from `jotai`. Atoms are read with `useAtom` / `useAtomValue` and written with `useSetAtom`.
+
+### Scene / Store / History pipeline
+
+The authoritative element list flows through three layers:
+
+```
+mutateElement() / newElementWith()
+        ↓
+Scene  — ordered element array + O(1) Map lookup
+        ↓
+Store  — produces delta snapshots (DurableIncrement / EphemeralUpdate)
+        ↓
+History — undo/redo stacks, driven by CaptureUpdateAction enum
+```
+
+| Layer | File | Responsibility |
+|-------|------|----------------|
+| `Scene` | `packages/element/src/Scene.ts` | In-memory element registry; `replaceAllElements()`, spatial queries |
+| `Store` | `packages/element/src/store.ts` | Snapshot diffs; feeds collaboration sync and history |
+| `History` | `packages/excalidraw/history.ts` | Delta-based undo/redo; `CaptureUpdateAction.IMMEDIATELY` records, `.NEVER` skips |
+
+**Golden rule:** never mutate element properties directly. Use:
+- `mutateElement(element, { prop: value })` — in-place mutation, triggers reactivity
+- `newElementWith(element, { prop: value })` — returns an immutable copy (safe for derived state)
+
 ## Key Files
 
 | File | Role |
