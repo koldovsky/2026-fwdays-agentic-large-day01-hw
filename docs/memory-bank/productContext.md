@@ -30,3 +30,10 @@ See [projectbrief.md](./projectbrief.md) for scope/constraints and [activeContex
 - Compatibility and migration logic are favored over aggressively simplifying old data paths.
 - The base package remains host-agnostic; app-specific concerns such as Firebase, collaboration UI, Excalidraw+, and AI stay in `excalidraw-app`.
 - Images/files are handled asynchronously, so UX correctness depends on status tracking and delayed persistence side effects.
+
+## Deep Product Docs
+- Product docs index: [../product/README.md](../product/README.md)
+- Baseline PRD: [../product/prd/core-editor-experience.md](../product/prd/core-editor-experience.md)
+- Feature inventory: [../product/feature-catalog.md](../product/feature-catalog.md)
+- Domain language: [../product/domain-glossary.md](../product/domain-glossary.md)
+- UX conventions: [../product/ux-patterns.md](../product/ux-patterns.md)

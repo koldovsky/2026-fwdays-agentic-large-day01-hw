@@ -9,6 +9,7 @@ See [activeContext.md](./activeContext.md) for the current session state.
 - Added source-grounded architecture reference in [architecture.md](../technical/architecture.md) with high-level structure, data/state/rendering flow, and package dependency mapping.
 - Added deep package-level architecture documentation in [packages-architecture.md](../technical/packages-architecture.md), focused on `packages/*` boundaries, flows, and build/runtime coupling.
 - Expanded [hidden-invariants.md](../technical/hidden-invariants.md) with package-level invariants for lifecycle events, increment subscriptions, store observation scope, fractional-index sync behavior, and utility export normalization.
+- Added foundational product docs under `docs/product/`: [README](../product/README.md), [baseline PRD](../product/prd/core-editor-experience.md), [feature catalog](../product/feature-catalog.md), [domain glossary](../product/domain-glossary.md), and [UX patterns](../product/ux-patterns.md).
 
 ## In Progress
 - Backend/service setup is still inferred from source code rather than a checked-in setup guide.
@@ -17,6 +18,7 @@ See [activeContext.md](./activeContext.md) for the current session state.
 - Add canonical contributor-facing setup docs for required app services and env vars.
 - Document repo-specific divergences if this checkout intentionally differs from upstream Excalidraw.
 - Expand ADR depth if future work is expected in collaboration, persistence, or import/export internals.
+- Validate product doc assumptions with maintainers (especially advanced-feature status and required vs optional service dependencies).
 
 ## Known Issues
 - The codebase contains legacy migration paths and TODO/FIXME hotspots around restore, store/delta behavior, and editor edge cases.
