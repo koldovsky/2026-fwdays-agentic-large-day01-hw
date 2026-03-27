@@ -239,7 +239,7 @@ disabled.
 
 ### TC2 — Canvas Size & Large Scene Performance
 
-- The rendering pipeline uses two HTML canvas layers. For large scenes
+- The rendering pipeline uses three HTML canvas layers. For large scenes
   (thousands of elements), rendering becomes a CPU bottleneck.
 - `isElementInFrame()` is called on every pointer move and re-render — it is a
   **known performance bottleneck** (TODO in source: "this is a huge bottleneck
