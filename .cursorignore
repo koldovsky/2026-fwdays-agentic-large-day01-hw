@@ -1,0 +1,74 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+build/
+dist/
+dev-dist/
+.next/
+html/
+coverage/
+.nyc_output/
+
+# Git
+.git/
+
+# IDE / editor
+.idea/
+.vscode/
+.history/
+.DS_Store
+
+# Environment / secrets
+.env.local
+.env.*.local
+.envrc
+
+# Logs
+*.log
+logs/
+
+# Package manager
+yarn.lock
+package-lock.json
+.yarn/
+.eslintcache
+
+# Generated / binary assets
+*.min.js
+*.min.css
+public/*.png
+public/*.jpg
+public/*.ico
+public/*.svg
+public/*.woff2
+public/screenshots/
+.github/assets/
+
+# Firebase
+firebase-project/
+firebase/
+
+# Docker (container config, rarely edited in-IDE)
+Dockerfile
+docker-compose.yml
+
+# Vercel
+.vercel/
+
+# Wasm / font build scripts (large generated binaries, rarely modified)
+scripts/wasm/
+scripts/woff2/
+
+# Locales (40+ translation JSON files — keep en.json indexed via .cursorrules if needed)
+packages/excalidraw/locales/**
+!packages/excalidraw/locales/en.json
+
+# Snapshots
+**/__snapshots__/
+*.snap
+
+# Misc generated files
+meta*.json
+*.tgz
+crowdin.yml
