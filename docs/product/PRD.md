@@ -1,7 +1,7 @@
 # Product Requirements Document
 
 **Product:** Excalidraw
-**Version covered:** 0.18.0 (released 2025-03-11); Unreleased section also noted
+**Version covered:** Repository state with `@excalidraw/excalidraw` at `0.18.0`
 **Evidence base:** Source code, `packages/excalidraw/CHANGELOG.md`, `packages/excalidraw/README.md`, existing memory files
 
 ---
@@ -39,7 +39,7 @@ Developers who install `@excalidraw/excalidraw` and embed it in their applicatio
 - `isCollaborating` prop signals to the editor that a collaboration session is active (managed externally by the host app)
 - SSR constraint: must render client-side only; Next.js pattern using `dynamic(..., { ssr: false })` is documented in [`packages/excalidraw/README.md`](../../packages/excalidraw/README.md)
 
-### 2.3 [Tentative] Excalidraw+ Subscribers
+### 2.3 Excalidraw+ UI Entry Points
 
 The codebase references `VITE_APP_PLUS_LP`, `VITE_APP_PLUS_APP`, `ExcalidrawPlusPromoBanner`, `ExportToExcalidrawPlus`, and `isExcalidrawPlusSignedUser` checks in `excalidraw-app/App.tsx`. A paid tier ("Excalidraw+") exists as a product, but its feature set, paywall logic, and backend are not present in this repository. The codebase only contains UI entry points and promo banners that link to `VITE_APP_PLUS_APP`.
 
@@ -74,7 +74,7 @@ The codebase references `VITE_APP_PLUS_LP`, `VITE_APP_PLUS_APP`, `ExcalidrawPlus
 | Text element wrapping | `autoResize` flag; (0.18.0, PR #7999) |
 | 9 built-in fonts + CJK support | `packages/common/src/font-metadata.ts`; Excalifont, Virgil, Cascadia, Nunito, Lilita One, etc. |
 | Font subsetting for SVG export | HarfBuzz + woff2 WASM; `packages/excalidraw/subset/` |
-| Internationalization | 46 locales + `en` default; managed via Crowdin; `langCode` prop; `packages/excalidraw/i18n.ts` |
+| Internationalization | `en` fallback plus runtime-enabled locale files gated by `percentages.json`; `langCode` prop; `packages/excalidraw/i18n.ts` |
 | RTL language support | `rtl: true` on Arabic (`ar-SA`) locale entry in `i18n.ts` |
 
 ### 3.3 Collaboration
@@ -86,7 +86,7 @@ The codebase references `VITE_APP_PLUS_LP`, `VITE_APP_PLUS_APP`, `ExcalidrawPlus
 | Collaborator cursors + presence | `Collaborator` type; idle states `active`/`away`/`idle` |
 | Follow mode | `userToFollow` / `followedBy` in `AppState` |
 | Multiplayer undo/redo | `Store` + `CaptureUpdateAction`; (0.18.0, PR #7348) |
-| Scene reconciliation | `reconcileElements` with `FractionalIndex` z-order; [`packages/element/src/reconcile.ts`](../../packages/element/src/reconcile.ts) |
+| Scene reconciliation | `reconcileElements` with `FractionalIndex` z-order; [`packages/excalidraw/data/reconcile.ts`](../../packages/excalidraw/data/reconcile.ts) |
 
 ### 3.4 Persistence and Export
 
@@ -98,7 +98,7 @@ The codebase references `VITE_APP_PLUS_LP`, `VITE_APP_PLUS_APP`, `ExcalidrawPlus
 | PNG export (1×, 2×, 3×) | `EXPORT_SCALES` in `packages/common/src/constants.ts`; `exportToBlob` |
 | SVG export | `exportToSvg`; optional scene embed; font subsetting applied |
 | Clipboard export | `exportToClipboard` |
-| `onExport` async handler | Host apps can intercept export and inject async logic; Unreleased API, wired in `App.tsx` |
+| `onExport` async handler | Host apps can intercept export and inject async logic; wired in `App.tsx` |
 | Library of reusable shapes | `LibraryItem[]`; IDB-persisted; install from URL (`VITE_APP_LIBRARY_BACKEND`) |
 
 ### 3.5 AI Features
@@ -128,9 +128,9 @@ All AI features are gated by `props.aiEnabled !== false` (default: enabled). Hos
 |---|---|
 | `<Excalidraw />` React component | `packages/excalidraw/index.tsx` |
 | `ExcalidrawImperativeAPI` | `updateScene`, `getSceneElements`, `scrollToContent`, `onEvent`, etc. |
-| Lifecycle props | `onMount`, `onInitialize`, `onUnmount` (Unreleased, wired in `App.tsx`) |
-| Event subscription | `api.onEvent(name, callback)` (Unreleased, replaces `api.onChange`/`api.onPointerUpdate`) |
-| `ExcalidrawAPIProvider` + hooks | `useExcalidrawAPI`, `useAppStateValue`, `useOnExcalidrawStateChange` (Unreleased) |
+| Lifecycle props | `onMount`, `onInitialize`, `onUnmount` |
+| Event subscription | `api.onEvent(name, callback)` and promise form via `onEvent(name)` |
+| `ExcalidrawAPIProvider` + hooks | `useExcalidrawAPI`, `useAppStateValue`, `useOnExcalidrawStateChange` |
 | UI customization | `renderTopRightUI`, `renderCustomStats`, `UIOptions` (canvas actions, toolbar items) |
 | `viewModeEnabled` | Read-only viewer mode; toolbar hidden, all editing disabled |
 
@@ -146,8 +146,7 @@ All AI features are gated by `props.aiEnabled !== false` (default: enabled). Hos
 | **React 17, 18, or 19** | Peer dependency: `"react": "^17.0.2 \|\| ^18.2.0 \|\| ^19.0.0"` | `packages/excalidraw/package.json` |
 | **Canvas 2D API required** | Rendering uses the HTML5 Canvas 2D API; no WebGL or OffscreenCanvas. Tests mock the Canvas API via `vitest-canvas-mock`. | `packages/excalidraw/components/canvases/` |
 | **No IE support** | `browserslist`: `not ie <= 11`, `not edge < 79`, `not chrome < 70`, `not safari < 12` | `packages/excalidraw/package.json` |
-| **ESM only** | UMD bundle deprecated in 0.18.0. Consumers must use ES module–capable environments. Webpack requires `resolve.fullySpecified: false`. | `CHANGELOG.md` (0.18.0 breaking changes) |
-| **TypeScript `moduleResolution`** | Consuming projects must use `"bundler"`, `"node16"`, or `"nodenext"` — `"node"` does not support `package.json` `exports` fields | `CHANGELOG.md` (0.18.0) |
+| **Package exports map** | `@excalidraw/excalidraw` publishes through `package.json` `exports`, with `development` and `production` conditions. | `packages/excalidraw/package.json` |
 
 ### 4.2 Component Sizing
 

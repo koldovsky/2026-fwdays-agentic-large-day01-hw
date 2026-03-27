@@ -81,7 +81,7 @@ The full React state of the `App` class component. It is the primary source of t
 ## BinaryFiles
 
 **Definition**  
-A flat record of file attachments stored on `App`, keyed by `FileId` (a branded string). Used primarily for image elements: the element stores only a `fileId`, while the actual pixel data lives in `BinaryFiles`. Files are passed to `onChange` and serialized alongside the scene.
+A flat record of file attachments stored on `App`. Used primarily for image elements: the element stores only a `fileId`, while the actual pixel data lives in `BinaryFiles`. Each `BinaryFileData` carries its own branded `FileId` in the `id` field. Files are passed to `onChange` and serialized alongside the scene.
 
 **Structure** (`packages/excalidraw/types.ts`)
 ```ts

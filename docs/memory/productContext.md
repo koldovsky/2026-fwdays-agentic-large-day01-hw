@@ -77,7 +77,7 @@ Built-in: **Excalifont** (default hand-drawn), Virgil, Cascadia, Comic Shanns, N
 | `Frame` | Container element that visually clips child elements |
 | `Group` | Logical grouping via shared `groupIds[]` on elements; no separate object |
 | `Library` | User-curated set of `LibraryItem[]` (named groups of elements), persisted in IDB |
-| `BinaryFiles` | Flat record of image data keyed by `FileId`; decoupled from elements |
+| `BinaryFiles` | Flat record of attached file data stored separately from elements; image elements reference files through `fileId` |
 | `FractionalIndex` | Stable z-order string per element; allows concurrent insert without renumbering |
 
 ---
@@ -163,9 +163,9 @@ When `viewModeEnabled` is `true`, all editing interactions are disabled. The too
 
 ---
 
-## What Is Unclear from the Source Code
+## What Is Not Defined In This Repository
 
 - **Excalidraw+**: The codebase references `VITE_APP_PLUS_LP` and `VITE_APP_PLUS_APP` env vars and a "Plus" product, but the Plus feature set, paywall logic, and backend are not present in this repository.
 - **AI backend contract**: `VITE_APP_AI_BACKEND` is used for TTD and magic frame, but the API schema is not defined in this repo.
 - **Firebase size threshold**: the exact byte limit that triggers "too big" for share links is not validated in client code — it depends on Firebase response errors.
-- **`diagramToCode` plugin**: referenced as `app.plugins.diagramToCode` in `ShapesSwitcher` but the plugin registration mechanism and interface are not fully visible in this repo's source.
+- **External collaboration server**: local development expects a separate `excalidraw-room` server via `VITE_APP_WS_SERVER_URL`, but that server does not live in this repository.

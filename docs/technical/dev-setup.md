@@ -119,7 +119,7 @@ yarn build
 The dev server does **not** require pre-built packages (aliases point to source). Package builds are only needed before publishing or when testing the package as a consumer would.
 
 ```bash
-# Build all packages in dependency order
+# Build the core package chain in dependency order
 yarn build:packages
 # Which expands to:
 yarn build:common && yarn build:math && yarn build:element && yarn build:excalidraw
@@ -217,7 +217,7 @@ yarn fix
 
 **Pre-commit hook**: `.husky/pre-commit` runs `yarn lint-staged` on staged files before every commit.
 
-TypeScript configuration is at `tsconfig.json` (root). `"strict": true` is enabled. `"moduleResolution": "node"` is used for the dev/test environment — **note**: the published package requires `"bundler"` or `"node16"` in consuming projects (see `CHANGELOG.md` 0.18.0 breaking changes).
+TypeScript configuration is at `tsconfig.json` (root). `"strict": true` is enabled and the workspace itself uses `"moduleResolution": "node"` for development and tests.
 
 ---
 

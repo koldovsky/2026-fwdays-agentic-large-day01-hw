@@ -37,7 +37,7 @@ All workspace packages use `"type": "module"` and export both `development` and 
 
 ## Vite Configuration
 
-- **Dev server port**: `VITE_APP_PORT` env var, defaults to `3000`
+- **Dev server port**: `VITE_APP_PORT` env var; checked-in `.env.development` sets it to `3001`, and `vite.config.mts` falls back to `3000` when the env var is absent
 - **Env dir**: parent of `excalidraw-app/` (root `.env`)
 - **Build output**: `excalidraw-app/build/`
 - **Path aliases**: all `@excalidraw/*` packages are aliased to their `src/` directories, enabling hot reload across workspace packages without building
@@ -78,12 +78,13 @@ yarn start
 # Production build (app)
 yarn build
 
-# Build all publishable packages
+# Build the core package chain used by the app
 yarn build:packages          # common → math → element → excalidraw (in order)
 yarn build:common
 yarn build:math
 yarn build:element
 yarn build:excalidraw
+yarn --cwd ./packages/utils build:esm
 
 # Tests
 yarn test                    # vitest (watch mode)

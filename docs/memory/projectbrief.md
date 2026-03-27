@@ -19,7 +19,7 @@ This repository is a **monorepo** that ships two things simultaneously:
 - Embeddable as `<Excalidraw />` with a full imperative API (`ExcalidrawImperativeAPI`)
 - AI-powered diagram generation (Mermaid-to-Excalidraw, magic frame / diagram-to-code)
 - Library of reusable shapes, shareable via URL
-- i18n — 59 languages, managed via Crowdin
+- i18n — English fallback plus runtime-enabled translations gated by `packages/excalidraw/locales/percentages.json`
 
 ## Repository Layout
 
@@ -32,7 +32,7 @@ This repository is a **monorepo** that ships two things simultaneously:
 │   ├── data/                # Persistence, Firebase, sharing
 │   └── tests/               # App-level tests
 │
-├── packages/                # Published npm packages (all at version 0.18.0)
+├── packages/                # Published npm packages
 │   ├── excalidraw/          # @excalidraw/excalidraw — main React component
 │   ├── element/             # @excalidraw/element — element logic, Scene, Store
 │   ├── common/              # @excalidraw/common — shared constants & utilities
@@ -68,7 +68,7 @@ This repository is a **monorepo** that ships two things simultaneously:
 | Firebase (v11) | Scene persistence and link-based sharing |
 | Socket.io (v4) | Real-time collaboration |
 | Sentry (v9) | Error tracking in production |
-| Crowdin | Translation management (59 locales) |
+| Crowdin | Translation management for locale JSON files and completion coverage |
 | Vercel | Hosting and preview deployments |
 
 ## License

@@ -10,7 +10,8 @@ excalidraw-app          ← application layer (not published)
         ├── @excalidraw/element ← element/scene/store logic
         │     ├── @excalidraw/common
         │     └── @excalidraw/math
-        └── @excalidraw/utils  ← export helpers (standalone)
+
+@excalidraw/utils       ← standalone published helper package
 ```
 
 In development, Vite aliases all `@excalidraw/*` imports to workspace `src/` paths, so no build step is needed during local development.
@@ -109,7 +110,7 @@ Key props (`ExcalidrawProps`):
 - `isCollaborating`, `onPointerUpdate` — collaboration hooks
 - `aiEnabled` — gates AI features (TTD dialog, magic frame)
 
-`ExcalidrawImperativeAPI` methods: `updateScene`, `getAppState`, `getSceneElements`, `history.undo/redo`, `registerAction`, `onStateChange`, `onEvent`.
+`ExcalidrawImperativeAPI` methods include `updateScene`, `getAppState`, `getSceneElements`, `history.undo/redo`, `registerAction`, `onChange`, `onStateChange`, and `onEvent`.
 
 ## Collab Pattern (excalidraw-app)
 
