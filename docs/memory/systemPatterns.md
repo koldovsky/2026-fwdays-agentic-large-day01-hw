@@ -4,7 +4,7 @@
 
 Strict one-way dependency graph (no circular imports):
 
-```
+```text
 @excalidraw/common → @excalidraw/math → @excalidraw/element → @excalidraw/excalidraw → excalidraw-app
 ```
 
