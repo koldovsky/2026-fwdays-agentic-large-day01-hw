@@ -27,3 +27,15 @@ dev-dist
 html
 meta*.json
 .claude
+
+.next/
+*.min.js
+*.min.css
+*.snap
+yarn.lock
+package-lock.json
+.nyc_output/
+.git/
+.vscode/
+.idea/
+
