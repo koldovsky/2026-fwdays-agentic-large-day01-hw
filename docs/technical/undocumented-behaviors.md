@@ -21,9 +21,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
 - **Where documented**: Only in the JSDoc comment of the function itself
   (`WARNING: this won't trigger the component to update…`). Not in any
   architectural doc.
-- **Risks**: An AI that calls the low-level `mutateElement` directly instead of
-  going through `scene.mutateElement` will produce silent bugs—elements change
-  on disk but the canvas never redraws.
 
 ---
 
@@ -39,9 +36,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
   event fires. This is a deliberate workaround for React's async batching.
 - **Where documented**: Nowhere—no diagram, no comment explaining the full state
   flow or its invariants.
-- **Risks**: Modifying arrow-binding pointer-event logic without understanding
-  this machine will silently break the three-mode cycle. The `flushSync` calls
-  are load-bearing; removing them causes state to lag by one event.
 
 ---
 
@@ -58,10 +52,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
   decides which path to use by inspecting the raw event `type` string.
 - **Where documented**: Only a TODO comment at line 689: "we should ideally
   unify touch and pointer events."
-- **Risks**: Adding new pointer-event handlers that don't account for both paths
-  will cause double-click to behave inconsistently between mouse and
-  touchscreen. Removing either tracking mechanism breaks one device class
-  silently.
 
 ---
 
@@ -79,10 +69,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
 - **Where documented**: Only the
   `// FIXME move this into the editor instance to keep utility methods stateless`
   comment.
-- **Risks**: If this function is ever called from two different Excalidraw
-  instances mounted simultaneously, they share state and will corrupt each
-  other's cache. An AI that calls `clearCache` at the wrong time (or never)
-  causes stale selections.
 
 ---
 
@@ -99,9 +85,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
   this update until after the handler returns.
 - **Where documented**: A partial TODO at line 5737: "either move this into
   finalize as well, or handle all state updates in one place."
-- **Risks**: Any change that removes or reorders this `flushSync` before the
-  finalize dispatch will cause keyboard-triggered finalization to use stale
-  selection state, silently selecting nothing.
 
 ---
 
@@ -118,10 +101,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
 - **Where documented**: Only the
   `// FIXME after we start emitting updates from Store for appState.theme`
   comment.
-- **Risks**: The WYSIWYG editor rescans theme on every element mutation. This is
-  a performance risk for large scenes. An AI that routes theme changes through
-  the Store (the "right" path) would inadvertently skip this listener and leave
-  the text editor unstyled.
 
 ---
 
@@ -137,10 +116,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
 - **Where documented**: Only the
   `// FIXME normalize/set defaults in parent component so that the memo resolver compares the same values`
   comment.
-- **Risks**: Any attempt to optimize re-renders by wrapping the exported
-  component in `React.memo` will not work as long as this issue persists. An AI
-  might try to add memoization and conclude it works in isolation, but the root
-  issue is upstream.
 
 ---
 
@@ -157,9 +132,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
 - **Where documented**: TODOs in
   `packages/excalidraw/actions/actionFinalize.tsx` (lines 142, 232) and
   `packages/element/src/sizeHelpers.ts` (line 27).
-- **Risks**: An AI that adds cleanup logic after `finalize` without knowing this
-  may double-delete, or may accidentally prevent the Store from recording the
-  deletion—breaking undo.
 
 ---
 
@@ -175,9 +147,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
   mutation independently—causing performance degradation or visual glitches.
 - **Where documented**: Only the inline comment: "Make sure you are calling it
   either from a React event handler or within unstable_batchedUpdates()."
-- **Risks**: AI-generated async operations (e.g., AI agent applying a batch of
-  element changes) that call `scene.mutateElement` in a loop outside
-  `unstable_batchedUpdates` will cause N separate renders instead of 1.
 
 ---
 
@@ -194,11 +163,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
 - **Where documented**: Only the
   `// TODO uncomment after/if we make jotai store scoped to each excal instance`
   comment.
-- **Risks**: When multiple Excalidraw instances are mounted on the same page,
-  destroying one instance does NOT clear its library items from the global Jotai
-  atom. Items from the destroyed instance remain visible in surviving instances.
-  An AI generating multi-instance embedding code must account for this
-  shared-state lifetime.
 
 ---
 
@@ -214,9 +178,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
   registered globally.
 - **Where documented**: Only the TODO comments: "Remove this once
   Scene.getScene() is removed."
-- **Risks**: Any refactoring that removes `Scene.getScene()` before updating
-  elbow-arrow routing will silently produce straight/broken arrows instead of
-  properly routed elbow arrows.
 
 ---
 
@@ -233,10 +194,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
 - **Where documented**: Only the
   `// HACK: Disable transform handles for linear elements on mobile until a better way of showing them is found`
   comment.
-- **Risks**: An AI adding new transform handle interactions for linear elements
-  will need to know that mobile suppression is intentional and not a bug.
-  Removing the HACK without a mobile UI replacement will expose unfinished
-  handles.
 
 ---
 
@@ -251,10 +208,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
   update—the full containment check runs every time.
 - **Where documented**: Only the
   `// TODO: this a huge bottleneck for large scenes, optimise` comment.
-- **Risks**: An AI that adds more call-sites to `isElementInFrame()` (e.g., for
-  validation or rendering) will further degrade performance on large scenes.
-  Performance profiling will show this function dominating pointer-move CPU
-  time.
 
 ---
 
@@ -271,9 +224,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
 - **Where documented**: Only the
   `// TODO: we should not do this since it breaks sync / versioning when we exchange / apply just deltas and restore the elements`
   comment.
-- **Risks**: AI-generated sync or restore flows that expect all mutations to go
-  through the Store will miss these silent deletions. Collaborators will see
-  ghost elements that the local user cannot see.
 
 ---
 
@@ -287,10 +237,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
   (`// TODO rewrite (mostly vibe-coded)`). The logic handles edge cases
   empirically without formal geometric guarantees.
 - **Where documented**: Only the TODO comment.
-- **Risks**: Any AI agent that relies on `positionElementsOnGrid` for precise
-  layout of generated elements may get subtly wrong positions for unusual inputs
-  (non-square groups, single elements, nested arrays). The function's contract
-  is not formally defined.
 
 ---
 
@@ -305,9 +251,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
   a correctness constraint.
 - **Where documented**: Only the `// TODO increase or remove once we optimize`
   comment.
-- **Risks**: On scenes with more than 99,999 elements along a single axis,
-  snapping silently stops computing gap guides. An AI generating large
-  auto-layouts may produce scenes where snapping is partially broken.
 
 ---
 
@@ -322,9 +265,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
   undo/redo sequences may produce groups with the same IDs in a different
   order—subtly different from the original. This is a known open issue (#7348).
 - **Where documented**: Only `// TODO: #7348` comments in test files.
-- **Risks**: An AI that generates elements with explicit group ordering and then
-  allows undo/redo may produce reordered groups, breaking visual layering within
-  groups.
 
 ---
 
@@ -341,9 +281,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
 - **Where documented**: Only
   `//TODO: elements with curve outside minMax points have a wrong bounding box!!!`
   comments in tests.
-- **Risks**: An AI that relies on element bounding boxes for snapping, collision
-  detection, or layout will get incorrect results for curved shapes. The bug
-  affects flip, rotate, resize, and any operation that reads `getBoundingBox()`.
 
 ---
 
@@ -358,9 +295,6 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
   would go outside the viewport, but this is not implemented.
 - **Where documented**: Only the
   `// FIXME swap offset when the preview gets outside viewport` comment.
-- **Risks**: Near the right and bottom edges of the viewport, the eye-dropper
-  preview is partially clipped. An AI refactoring the eye-dropper positioning
-  must implement the flip logic.
 
 ---
 
@@ -378,6 +312,3 @@ risky side effects, and known-broken areas discovered by searching for `HACK`,
 - **Where documented**: Only the
   `// TODO: Suspicious that this is called so many places. Seems error-prone.`
   comment.
-- **Risks**: An AI adding a new action or mutation that calls `scheduleCapture`
-  in the wrong lifecycle phase (e.g., during render or during undo itself) will
-  pollute the undo stack with empty entries.
