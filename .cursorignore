@@ -1,0 +1,73 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+build/
+dist/
+dev-dist/
+.next/
+html/
+coverage/
+.nyc_output/
+
+# Git
+.git/
+
+# IDE / editor
+.idea/
+.vscode/
+.history/
+.DS_Store
+
+# Environment / secrets
+.env.local
+.env.*.local
+.envrc
+
+# Logs
+*.log
+logs/
+
+# Package manager
+yarn.lock
+package-lock.json
+.yarn/
+.eslintcache
+
+# Generated / binary assets
+*.min.js
+*.min.css
+public/*.png
+public/*.jpg
+public/*.ico
+public/*.svg
+public/*.woff2
+public/screenshots/
+.github/assets/
+
+# Firebase
+firebase-project/
+firebase/
+
+# Docker
+Dockerfile
+docker-compose.yml
+
+# Vercel
+.vercel/
+
+# Wasm / font build scripts
+scripts/wasm/
+scripts/woff2/
+
+# Locales (large translation files)
+packages/excalidraw/locales/
+
+# Snapshots
+**/__snapshots__/
+*.snap
+
+# Misc generated files
+meta*.json
+*.tgz
+crowdin.yml
