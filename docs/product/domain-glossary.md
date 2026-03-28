@@ -6,7 +6,7 @@ This glossary defines key terms as they are used **in this codebase**. Each entr
 
 ## Element
 
-**Name (in code):** `Element`, `ExcalidrawElement`, `_ExcalidrawElementBase`
+**Name (in code):** `ExcalidrawElement`, `_ExcalidrawElementBase` (commonly `element` as a variable name)
 
 **Definition in this project:**
 The fundamental unit of content on the canvas. Every shape, line, text block, image, frame, or embedded widget that a user draws is an `ExcalidrawElement`. All elements share a common base (`_ExcalidrawElementBase`) with fields like `id`, `x`/`y` coordinates, stroke/fill styling, `version`, `isDeleted`, `groupIds`, `frameId`, and `locked`. The concrete type is a discriminated union of all specific element shapes.
@@ -95,7 +95,7 @@ Key fields of note:
 - `activeTool` — which tool is currently selected
 - `selectedElementIds` — map of selected element IDs
 - `collaborators` — live map of remote users and their cursors
-- `editingElement` / `newElement` — element currently being created or edited
+- `editingTextElement` / `newElement` — element currently being created or edited
 - `scrollX`, `scrollY`, `zoom` — viewport position
 
 **Where used (key files):**
@@ -215,7 +215,7 @@ The set of types, state fields, and rendering logic that support **real-time mul
 The host application (e.g. `excalidraw.com`) is responsible for the actual sync layer; the package renders whatever collaborator data is provided to it.
 
 ```ts
-type Collaborator = {
+type Collaborator = Readonly<{
   pointer?: CollaboratorPointer;
   button?: "up" | "down";
   selectedElementIds?: AppState["selectedElementIds"];
@@ -224,7 +224,8 @@ type Collaborator = {
   color?: { background: string; stroke: string };
   avatarUrl?: string;
   id?: string;
-};
+  socketId?: SocketId;
+}>;
 ```
 
 **Where used (key files):**
@@ -284,7 +285,7 @@ export type LibraryItems = readonly LibraryItem[];
 | `Scene` | `class` | `packages/element/src/Scene.ts` | Owned by `App`, holds all `ExcalidrawElement`s |
 | `AppState` | `interface` | `packages/excalidraw/types.ts` | React state of `App`; references `ActiveTool`, `Collaborator` |
 | `ToolType` / `ActiveTool` | `type` | `packages/excalidraw/types.ts` | Stored in `AppState.activeTool` |
-| `Action` / `ActionResult` | `interface` / `type` | `packages/excalidraw/actions/types.ts` | Managed by `ActionManager`; inputs/outputs are `Element[]` + `AppState` |
+| `Action` / `ActionResult` | `interface` / `type` | `packages/excalidraw/actions/types.ts` | Managed by `ActionManager`; inputs/outputs are `ExcalidrawElement[]` + `AppState` |
 | `Collaborator` | `type` | `packages/excalidraw/types.ts` | Map in `AppState.collaborators`; rendered by `interactiveScene` |
 | `Library` / `LibraryItem` | `class` / `type` | `packages/excalidraw/data/library.ts`, `types.ts` | Stores `ExcalidrawElement[]` groups; owned by `App` |
 | `SceneData` | `type` | `packages/excalidraw/types.ts` | External API payload for `updateScene` |
