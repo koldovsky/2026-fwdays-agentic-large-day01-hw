@@ -1,4 +1,4 @@
-# Project progress
+﻿# Project progress
 
 This file describes **what exists in the codebase today** (implementation status), not a roadmap. **Verified against** file layout and key entry points as of the Memory Bank authoring pass.
 
@@ -9,7 +9,7 @@ This file describes **what exists in the codebase today** (implementation status
 | Item | Status | Evidence |
 |------|--------|----------|
 | Yarn workspaces | Done | Root `package.json` — `workspaces: ["excalidraw-app", "packages/*", "examples/*"]` |
-| Shared TS paths | Done | Root `tsconfig.json` — `@excalidraw/*` → `packages/*/src` |
+| Shared TS paths | Done | Root `tsconfig.json` — `@excalidraw/*` → `packages/*/src` (except `excalidraw` which maps to `packages/excalidraw/index.tsx` / package root, not `src/`) |
 | Tooling | Done | ESLint, Prettier, Vitest, Husky — root `package.json` `devDependencies` / `scripts` |
 | Node requirement | Documented | `engines.node: ">=18.0.0"` |
 
@@ -36,8 +36,8 @@ This file describes **what exists in the codebase today** (implementation status
 | Vite dev/build | Done | `excalidraw-app/package.json` scripts |
 | Excalidraw embed | Done | `App.tsx` — `<Excalidraw>` with children (menus, collab, share, AI) |
 | Scene init from URL | Done | `initializeScene` — query `id`, `#json=`, `#url=`, collab links |
-| Local persistence | Done | `data/localStorage.ts`, `LocalData`, `STORAGE_KEYS` |
-| Firebase (files / storage prefixes) | Done | `data/firebase.ts`, `FIREBASE_STORAGE_PREFIXES` |
+| Local persistence | Done | `data/localStorage.ts`, `data/LocalData.ts`; `STORAGE_KEYS` defined in `app_constants.ts` |
+| Firebase (files / storage prefixes) | Done | `data/firebase.ts` (uses it); `FIREBASE_STORAGE_PREFIXES` defined in `app_constants.ts` |
 | Real-time collaboration | Done | `collab/Collab.tsx`, `socket.io-client`, `WS_SUBTYPES` / `WS_EVENTS` |
 | Share dialog + QR | Done | `share/ShareDialog.tsx`, `QRCode.tsx` |
 | Sentry | Done | `index.tsx` imports `./sentry` |
