@@ -46,21 +46,21 @@
 
 ### U-002 — Дефолтна «округлість» кутів залежить від тестового режиму
 
-- **Що очікується з боку продукту:** користувач за замовчуванням малює з однаковими стилями.
-- **Що робить код:** у `getDefaultAppState()` (`packages/excalidraw/appState.ts`) поле `currentItemRoundness` встановлюється як `isTestEnv() ? "sharp" : "round"`. `isTestEnv()` у `packages/common/src/utils.ts` перевіряє `import.meta.env.MODE === ENV.TEST`.
-- **Висновок:** у Vitest/тестовому режимі дефолтні нові фігури стартують з **іншим** roundness, ніж у продакшн-деві; у публічній продуктовій документації це зазвичай не згадується.
+- У `packages/excalidraw/appState.ts` у `getDefaultAppState()` полю `currentItemRoundness` присвоюється вираз `isTestEnv() ? "sharp" : "round"`.
+- У `packages/common/src/utils.ts` `isTestEnv()` визначено як `import.meta.env.MODE === ENV.TEST`.
+- У `packages/excalidraw/README.md` немає пояснення, що початкове `currentItemRoundness` залежить від `isTestEnv()`.
 
 ### U-003 — Часові мітки та ID елементів у тестах детерміновані
 
-- **Що очікується:** «реальний» час і випадкові id для елементів.
-- **Що робить код:** `getUpdatedTimestamp()` у `packages/common/src/utils.ts` повертає **`1`** у тестовому середовищі замість `Date.now()`. `randomId()` у `packages/common/src/random.ts` у тестах видає послідовні `id0`, `id1`, … замість `nanoid()`.
-- **Висновок:** знімки тестів і реплеї стабільні, але поведінка **відрізняється** від runtime у браузері; у PRD/README це не розкрито для кінцевого користувача.
+- У `packages/common/src/utils.ts` `getUpdatedTimestamp()` повертає `1`, якщо `isTestEnv()` істинне, інакше `Date.now()`.
+- У `packages/common/src/random.ts` `randomId()` повертає `` `id${testIdBase++}` ``, якщо `isTestEnv()` істинне, інакше результат виклику `nanoid()`.
+- У `packages/excalidraw/README.md` немає опису гілок `getUpdatedTimestamp` / `randomId` для інтеграторів пакета.
 
 ### U-004 — Скрипт `start` у `excalidraw-app` завжди запускає `yarn`
 
-- **Що очікується:** `start` лише піднімає dev-server після одноразового `install`.
-- **Що робить код:** `excalidraw-app/package.json` → `"start": "yarn && vite"` — перед Vite виконується **`yarn`** (перевірка/догортання залежностей workspace).
-- **Висновок:** з каталогу `excalidraw-app` кожен `yarn start` може бути повільнішим, ніж очікує новачок; з **кореня** зручніше `yarn start`, який делегує в app. Деталі — у [dev-setup.md](../technical/dev-setup.md).
+- У `excalidraw-app/package.json` значення `scripts.start` — рядок `"yarn && vite"`.
+- У кореневому `package.json` значення `scripts.start` — рядок `"yarn --cwd ./excalidraw-app start"`.
+- Локальний порядок команд для розробника: [dev-setup.md](../technical/dev-setup.md).
 
 ---
 
