@@ -1,6 +1,22 @@
 # Progress snapshot
 
-**As of: 2026-03-26** (repository tree and config files; no separate changelog consulted).
+**As of: 2026-03-28** (repository tree and config files; no separate changelog consulted).
+
+### How to update this snapshot
+
+1. **Bump the date** above when you re-verify the inventory.
+2. **Package versions** — from repo root, print `version` fields (repeat for each package path as needed):
+   - `node -p "require('./packages/common/package.json').version"`
+   - `node -p "require('./packages/excalidraw/package.json').version"`
+   - Same pattern for `packages/math`, `packages/element`, `packages/utils`, plus `excalidraw-app/package.json` for React, and `examples/with-script-in-browser/package.json` / `examples/with-nextjs/package.json` for examples.
+3. **Root toolchain** — read `devDependencies` in root `package.json` (`typescript`, `vite`, `vitest`) or:  
+   `node -p "const p=require('./package.json'); [p.devDependencies.typescript,p.devDependencies.vite,p.devDependencies.vitest].join(' ')"`
+4. **Rebuild artifacts** (when checking examples that copy `dist`):
+   - All library packages: `yarn build:packages` (root `package.json`).
+   - Next.js example workspace (fonts): `yarn --cwd ./examples/with-nextjs build:workspace` — expects `packages/excalidraw/dist/prod/fonts` after `build:packages` (see `examples/with-nextjs/package.json` `copy:assets`).
+5. **CI parity** — local equivalents to `.github/workflows/test.yml` / `lint.yml`: `yarn test:app` (or `yarn test:all` for a fuller gate). Open those workflow files if triggers or Node version change.
+
+After updates, refresh the **TODO/FIXME** counts in `docs/memory/activeContext.md` using `node scripts/count-todo-fixme.js` (from repo root), then edit the paragraph and **As of** date there.
 
 ## Monorepo
 

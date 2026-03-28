@@ -21,7 +21,23 @@ Other workflows present: `build-docker.yml`, `publish-docker.yml`, `sentry-produ
 
 ## TODO / FIXME signal (hotspots, not a backlog)
 
-Across `*.ts` / `*.tsx` (excluding `node_modules`), a scan finds **113** `TODO`/`FIXME` **matches** in **63** files—distributed maintenance debt, not one module.
+**Scope:** `*.ts` and `*.tsx` only; any directory path containing `node_modules` is skipped (no `examples/node_modules` edge case if present).
+
+As of **2026-03-28**, that scan reports **113** `TODO`/`FIXME` substring **matches** across **63** files—distributed maintenance debt, not one module. Re-run when refreshing this doc; counts will drift.
+
+**Reproduce (repo root):**
+
+- **ripgrep** (if installed): same globs as below.  
+  - Match count (substring occurrences):  
+    `rg -o 'TODO|FIXME' -g '*.ts' -g '*.tsx' --glob '!**/node_modules/**' | wc -l`  
+  - Files with at least one match:  
+    `rg -l 'TODO|FIXME' -g '*.ts' -g '*.tsx' --glob '!**/node_modules/**' | wc -l`
+
+**Node.js** (no `rg`; same rules — see `scripts/count-todo-fixme.js`):
+
+```bash
+node scripts/count-todo-fixme.js
+```
 
 **Notable concentrations** (useful when debugging related behavior):
 
