@@ -14,7 +14,7 @@
 4. **Rebuild artifacts** (when checking examples that copy `dist`):
    - All library packages: `yarn build:packages` (root `package.json`).
    - Next.js example workspace (fonts): `yarn --cwd ./examples/with-nextjs build:workspace` — expects `packages/excalidraw/dist/prod/fonts` after `build:packages` (see `examples/with-nextjs/package.json` `copy:assets`).
-5. **CI parity** — local equivalents to `.github/workflows/test.yml` / `lint.yml`: `yarn test:app` (or `yarn test:all` for a fuller gate). Open those workflow files if triggers or Node version change.
+5. **CI parity** — local equivalents: `.github/workflows/test.yml` (`yarn test:app`), `.github/workflows/lint.yml` (`yarn test:other`, `yarn test:code`, `yarn test:typecheck`), `.github/workflows/test-coverage-pr.yml` (`yarn test:coverage`). Prefer `yarn test:all` for a fuller gate. Open those workflow files if triggers or Node version change.
 
 After updates, refresh the **TODO/FIXME** counts in `docs/memory/activeContext.md` using `node scripts/count-todo-fixme.js` (from repo root), then edit the paragraph and **As of** date there.
 

@@ -1,6 +1,6 @@
 # Decision log
 
-**Context → Decision → Consequences** (+ reference). Dates for decisions are **not evidenced in this repo**; entries reflect the **current tree**.
+**Context → Decision → Consequences** (+ reference). Dates for decisions are **not evidenced in this repo**; entries reflect the **current tree**. Entries **13–15** intentionally use an expanded **code / documentation** layout to record gaps between behavior and docs; entries **1–12** stay in the concise three-field shape.
 
 ---
 
@@ -72,7 +72,7 @@
 
 **11. CI split: tests on push, lint on PR, coverage on PR**
 
-- **Context**: Signal vs cost.
+- **Context**: Signal vs cost for GitHub Actions workload.
 - **Decision**: `test.yml` on push to `master` (`yarn test:app`); `lint.yml` on PR (prettier/eslint/tsc); `test-coverage-pr.yml` runs `yarn test:coverage`.
 - **Ref**: `.github/workflows/test.yml`, `.github/workflows/lint.yml`, `.github/workflows/test-coverage-pr.yml`
 

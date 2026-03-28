@@ -11,6 +11,15 @@ Short definitions of core concepts in this **Excalidraw** codebase. Wording is a
 | **Tool** | The user’s **current drawing or navigation mode**, represented by **`ActiveTool`** in `packages/excalidraw/types.ts`: a **`ToolType`** (e.g. `selection`, `rectangle`, `arrow`, `text`, `hand`, `eraser`, `frame`, …) or `type: "custom"` with a `customType` string, plus fields such as **`locked`** and **`lastActiveTool`**. `AppState.activeTool` drives pointer handling and toolbar highlighting. |
 | **Action** | A **named editor command** object implementing **`Action`** in `packages/excalidraw/actions/types.ts`: **`name`**, **`perform`** (current elements, `appState`, optional form payload, `App`), optional **`keyTest`** / **`predicate`**, UI **`PanelComponent`**, **`trackEvent`**. **`ActionManager`** in `packages/excalidraw/actions/manager.tsx` routes keyboard, UI panels, and `executeAction` into **`perform`**; results are **`ActionResult`** (elements / `appState` / files updates). Default actions are registered via `packages/excalidraw/actions/register.ts`; undo/redo are extra actions wired to **`History`** (`packages/excalidraw/components/App.tsx`). |
 
+## Do not confuse with (general vs. this codebase)
+
+- **Excalidraw** — Not a generic “whiteboard file” hand-wave: here it denotes the **`Excalidraw`** React export from `packages/excalidraw/index.tsx` and the `@excalidraw/excalidraw` package, distinct from the **`excalidraw-app/`** shell.
+- **Element** — Not a DOM **element**: here **`ExcalidrawElement`** (`packages/element/src/types.ts`) is the serializable drawable model on the canvas.
+- **Scene** — Not “whatever is on screen” as informal shorthand: here **`Scene`** (`packages/element/src/Scene.ts`) is the class that owns the **element graph**; **`Renderer`** reads it.
+- **AppState** — Not app-wide Redux or server config: here **`AppState`** (`packages/excalidraw/types.ts`) is the editor **`App`** React **`state`** (tools, viewport, dialogs, …), separate from document data in **`Scene`**.
+- **Tool** — Not browser devtools: here **`ActiveTool`** / **`ToolType`** (`packages/excalidraw/types.ts`) is the current editor mode behind **`AppState.activeTool`**.
+- **Action** — Not Redux `action` objects or HTTP verbs: here **`Action`** plus **`ActionManager`** (`packages/excalidraw/actions/`) are editor commands whose **`perform`** updates elements / **`AppState`** / files.
+
 ## Boundaries (quick reference)
 
 - **Document data** — the ordered element graph and maps live in **`Scene`** (`packages/element/src/Scene.ts`), not inside **`AppState`**.

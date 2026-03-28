@@ -9,9 +9,12 @@
 .idea
 .vercel
 .vscode
+.git/
 .yarn
 *.log
 *.tgz
+*.min.js
+*.min.css
 build
 dist
 firebase
@@ -19,6 +22,7 @@ logs
 node_modules
 npm-debug.log*
 package-lock.json
+yarn.lock
 yarn-debug.log*
 yarn-error.log*
 packages/excalidraw/types
@@ -38,7 +42,8 @@ packages/excalidraw/locales/percentages.json
 **/*.snap
 # TypeScript incremental
 *.tsbuildinfo
-# Next.js (examples/with-nextjs)
+# Next.js build output (any workspace) + example app
+.next/
 examples/with-nextjs/.next
 examples/with-nextjs/out
 **/next-env.d.ts

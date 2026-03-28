@@ -23,7 +23,7 @@ Other workflows present: `build-docker.yml`, `publish-docker.yml`, `sentry-produ
 
 **Scope:** `*.ts` and `*.tsx` only; any directory path containing `node_modules` is skipped (no `examples/node_modules` edge case if present).
 
-As of **2026-03-28**, that scan reports **113** `TODO`/`FIXME` substring **matches** across **63** files—distributed maintenance debt, not one module. Re-run when refreshing this doc; counts will drift.
+As of **2026-03-28** (run from repo root: `node scripts/count-todo-fixme.js` — `*.ts` / `*.tsx` only, skips any path segment `node_modules`), the scan reports **113** `TODO`/`FIXME` substring **matches** across **63** files—distributed maintenance debt, not one module. The **ripgrep** commands below use the same globs and exclusions; re-run when refreshing this doc; counts will drift.
 
 **Reproduce (repo root):**
 
