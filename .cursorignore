@@ -1,0 +1,82 @@
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+.eslintcache
+.history
+.idea
+.vercel
+.vscode
+.yarn
+*.log
+*.tgz
+build
+dist
+firebase
+logs
+node_modules
+npm-debug.log*
+package-lock.json
+yarn-debug.log*
+yarn-error.log*
+
+# Auto-generated: Vitest --update snapshots
+**/__snapshots__
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
+coverage
+dev-dist
+html
+meta*.json
+.claude
+
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+.eslintcache
+.history
+.idea
+.vercel
+.vscode
+.yarn
+*.log
+*.tgz
+*.min.js
+*.min.css
+*.tsbuildinfo
+firebase
+logs
+node_modules
+npm-debug.log*
+
+# Lock files (великі, не несуть семантики для AI)
+package-lock.json
+yarn.lock
+
+# Build artifacts
+build/
+dist/
+.next/
+dev-dist/
+
+# IDE/system (не наш контекст)
+.git/
+
+# Coverage & reports
+coverage/
+.nyc_output/
+
+# Generated / minified snapshots
+*.snap
+**/__snapshots__
+
+html
+meta*.json
+.claude
