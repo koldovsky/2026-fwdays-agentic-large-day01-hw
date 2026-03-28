@@ -59,12 +59,15 @@ The overarching goal is to make **collaborative visual thinking as effortless as
 | **Element palette** | Rectangle, diamond, ellipse, line, arrow, freehand draw, text, image, frame, magic frame, embeddable widget, eraser, laser pointer. All map to `ToolType` values in `AppState.activeTool`. |
 | **Hand-drawn rendering** | RoughJS renders shapes with a natural, sketchy stroke; `perfect-freehand` smooths freehand paths. |
 | **Infinite canvas** | Pan (`hand` tool) and zoom with scroll/pinch; viewport stored as `scrollX`, `scrollY`, `zoom` in `AppState`. |
-| **Text editing** | Inline text on canvas via CodeMirror 6 integration. |
+| **Text editing** | Inline text on canvas via a native `<textarea>` overlay (`wysiwyg/textWysiwyg.tsx`). CodeMirror 6 is used only in the TTD (Text-to-Diagram) dialog, not for canvas text. |
 | **Undo / redo** | Full history stack (`HistoryDelta`, `Store`, `ElementsDelta`, `AppStateDelta`); committed via `CaptureUpdateAction`. |
 | **Snap & grid** | Snap-to-grid and snap-to-object helpers controlled by `AppState` flags. |
 | **Lasso selection** | Polygon-based multi-element selection (`lasso` tool). |
 | **Frames** | Group elements into named frames (`ExcalidrawFrameElement`); magic frames enable AI-assisted content. |
 | **Embeddable widgets** | Embed iframes on the canvas (`ExcalidrawEmbeddableElement`, `ExcalidrawIframeElement`). |
+| **Dark / light theme** | Theme toggle stored as `AppState.theme` (`THEME.LIGHT` / `THEME.DARK`); affects canvas background, UI chrome, and element rendering. |
+| **Element type conversion** | Convert an element from one type to another in-place (`ConvertElementTypePopup`, backed by `convertElementTypePopupAtom`). |
+| **Search** | Searchable element finder within the canvas (`SearchMenu`, `searchItemInFocusAtom`). |
 
 ### 3.2 Collaboration
 
@@ -75,6 +78,7 @@ The overarching goal is to make **collaborative visual thinking as effortless as
 | **Laser pointer sync** | Collaborator laser trails broadcast and rendered via `laser-trails.ts`. |
 | **Offline warning** | Banner displayed when the user is collaborating but loses network (`alerts.collabOfflineWarning`). |
 | **Collaboration disabled in iframes** | `isCollabDisabled = isRunningInIframe()` prevents nested collab sessions. |
+| **Follow mode** | Follow another collaborator's viewport in real time (`FollowMode` component, `onUserFollow` callback). |
 | **User list** | Live avatar/name list of all collaborators in the session (`UserList.tsx`). |
 
 ### 3.3 Sharing & Persistence
@@ -84,7 +88,7 @@ The overarching goal is to make **collaborative visual thinking as effortless as
 | **Auto-save to localStorage** | Scene elements and app state persisted locally on every change (`STORAGE_KEYS` in `app_constants.ts`). |
 | **Cloud export / shareable link** | `onExportToBackend` uploads the scene; `ShareableLinkDialog` generates a read-only URL. |
 | **`#json=id,key` deep links** | Encoded scene payload in URL hash; decrypted client-side. |
-| **Firebase backend** | Firebase 11.3 provides auth and cloud storage for the hosted app. |
+| **Firebase backend** | Firebase **11.3.1** provides cloud storage (and potentially auth) for the hosted app; `socket.io-client` **4.7.2** handles real-time collaboration transport. |
 | **File export** | Export to `.excalidraw` (JSON), PNG, SVG; async export waits for all embedded images to finish loading via `FileStatusStore`. |
 | **Library (sticker sheet)** | Save reusable element groups to the `Library` class, backed by IndexedDB with a localStorage migration adapter. |
 | **Library from URL** | `parseLibraryTokensFromUrl` loads a community library directly from a link. |
@@ -98,7 +102,8 @@ The overarching goal is to make **collaborative visual thinking as effortless as
 | **Custom tools** | `ActiveTool` supports `{ type: "custom"; customType: string }` for third-party tool extensions. |
 | **Callbacks** | `onChange`, `onPointerUpdate`, `onUserFollow`, `onExportToBackend`, `onLibraryChange`, etc. |
 | **`UIOptions`** | Fine-grained control over which UI panels and buttons are visible to the integrator. |
-| **AI / Text-to-Diagram (TTD)** | `AIComponents` and `TTDDialogTrigger` shipped as optional children in the hosted app. |
+| **AI / Text-to-Diagram (TTD)** | `AIComponents` and `TTDDialogTrigger` shipped as optional children in the hosted app. The TTD dialog uses a **CodeMirror 6** code editor for structured input (`TTDDialog/CodeMirrorEditor.tsx`). |
+| **Mermaid diagram import** | `@excalidraw/mermaid-to-excalidraw` (v2.1.1) converts Mermaid syntax into Excalidraw elements, integrated into the TTD flow. |
 | **Command palette** | Extensible command palette with app-specific and custom entries. |
 
 ### 3.5 Onboarding & Discoverability
@@ -158,7 +163,7 @@ The overarching goal is to make **collaborative visual thinking as effortless as
 | **TypeScript strict mode** | `"strict": true` in root `tsconfig.json`; checked by `yarn test:typecheck`. |
 | **Zero ESLint warnings** | `eslint --max-warnings=0` in `yarn test:code`. |
 | **Prettier formatting** | Enforced for `css`, `scss`, `json`, `md`, `html`, `yml`; checked by `yarn test:other`. |
-| **Husky pre-commit hooks** | `lint-staged` runs on every commit via `husky`. |
+| **Husky pre-commit hooks** | `husky install` wires Git hooks, but the checked-in `.husky/pre-commit` has `lint-staged` **commented out** — it does not run automatically on commit in the default setup. Rely on `yarn test:all` before pushing. |
 | **Test coverage thresholds** | Lines, branches, functions, statements thresholds defined in `vitest.config.mts`. |
 
 ### 4.5 Localization
@@ -167,6 +172,13 @@ The overarching goal is to make **collaborative visual thinking as effortless as
 |---|---|
 | **i18n** | `i18next-browser-languagedetector` for runtime language detection. |
 | **Crowdin workflow** | `crowdin.yml` manages translation file sync; `scripts/build-locales-coverage.js` tracks coverage. |
+
+### 4.6 Observability
+
+| Constraint | Details |
+|---|---|
+| **Error reporting** | `@sentry/browser` 9.0.1 in the hosted app; Docker builds disable Sentry (`VITE_APP_DISABLE_SENTRY=true`). |
+| **Dev server port** | `VITE_APP_PORT` from `.env.development` (currently **3001**); fallback **3000** in `excalidraw-app/vite.config.mts`. |
 
 ---
 
@@ -204,3 +216,12 @@ The overarching goal is to make **collaborative visual thinking as effortless as
 | Technical context | `docs/memory/techContext.md` |
 | Product context | `docs/memory/productContext.md` |
 | Decision log | `docs/memory/decisionLog.md` |
+
+---
+
+## 8. Revision History
+
+| Date | Changes |
+|---|---|
+| **2026-03-29** | Initial reverse-engineered PRD. |
+| **2026-03-29** | Corrections: CodeMirror 6 usage clarified (TTD dialog, not canvas text); lint-staged status corrected (commented out in pre-commit hook). Additions: dark/light theme, element conversion, search, follow mode, Mermaid import, Sentry observability, dev server port detail. Firebase version pinned to 11.3.1. |
