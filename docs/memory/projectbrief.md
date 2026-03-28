@@ -73,3 +73,11 @@ utils  (standalone — no internal dependents; published as @excalidraw/utils)
 ```
 
 In short: a well-structured TypeScript/React monorepo where shared geometry and element-model packages feed into the main embeddable editor, which is then consumed by the full web app and example integrations.
+
+---
+
+## Details
+
+For detailed architecture → see `docs/technical/architecture.md`.
+
+For domain glossary → see `docs/product/domain-glossary.md`.

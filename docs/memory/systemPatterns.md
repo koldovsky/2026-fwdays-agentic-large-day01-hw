@@ -171,3 +171,11 @@ User interaction
   → App.updateScene (imperative API)
   → re-render cycle
 ```
+
+---
+
+## Details
+
+For detailed architecture → see `docs/technical/architecture.md`.
+
+For domain glossary → see `docs/product/domain-glossary.md`.

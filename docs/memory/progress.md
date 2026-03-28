@@ -1,4 +1,4 @@
-﻿# Project progress
+# Project progress
 
 This file describes **what exists in the codebase today** (implementation status), not a roadmap. **Verified against** file layout and key entry points as of the Memory Bank authoring pass.
 
@@ -79,3 +79,11 @@ After a significant feature merge:
 1. Scan `excalidraw-app/` for new folders or top-level components.
 2. Check root `package.json` for new workspaces or scripts.
 3. Update the tables above in one pass to avoid drift.
+
+---
+
+## Details
+
+For detailed architecture → see `docs/technical/architecture.md`.
+
+For domain glossary → see `docs/product/domain-glossary.md`.

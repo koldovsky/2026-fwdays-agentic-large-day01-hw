@@ -115,3 +115,11 @@ Run from **repository root** unless noted.
 ### Docker (direct)
 
 - `docker build -t excalidraw .` — as used in `build-docker.yml` (build context: repo root).
+
+---
+
+## Details
+
+For detailed architecture → see `docs/technical/architecture.md`.
+
+For domain glossary → see `docs/product/domain-glossary.md`.

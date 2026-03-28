@@ -58,3 +58,11 @@ Replace this bullet list when a real sprint goal exists:
 
 - [ ] Confirm any local diffs vs upstream Excalidraw you care to preserve.
 - [ ] Keep `progress.md` aligned with shipped behavior after meaningful merges.
+
+---
+
+## Details
+
+For detailed architecture → see `docs/technical/architecture.md`.
+
+For domain glossary → see `docs/product/domain-glossary.md`.

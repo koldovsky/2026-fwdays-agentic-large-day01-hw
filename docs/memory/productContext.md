@@ -71,3 +71,11 @@ This repository is the **Excalidraw monorepo**: an open-source, hand-drawn virtu
 - **Architecture detail:** `systemPatterns.md`, `projectbrief.md`
 - **Current sprint focus:** `activeContext.md`
 - **Decisions:** `decisionLog.md`
+
+---
+
+## Details
+
+For detailed architecture → see `docs/technical/architecture.md`.
+
+For domain glossary → see `docs/product/domain-glossary.md`.

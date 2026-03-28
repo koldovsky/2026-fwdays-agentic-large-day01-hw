@@ -70,3 +70,11 @@
 ## Changelog for this file
 
 - **2026-03-28** — Replaced prior content (long `App` lifecycle dump) with decision-style entries; lifecycle detail remains in `systemPatterns.md`.
+
+---
+
+## Details
+
+For detailed architecture → see `docs/technical/architecture.md`.
+
+For domain glossary → see `docs/product/domain-glossary.md`.
