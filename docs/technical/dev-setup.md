@@ -8,7 +8,24 @@ To tune the repo for **AI-assisted editing** (Cursor, Claude Code, OpenAI Codex)
 
 ---
 
+## Quick start (TL;DR)
+
+```bash
+corepack enable && corepack prepare yarn@1.22.22 --activate
+git clone git@github.com:YOUR_USER/excalidraw.git && cd excalidraw
+git remote add upstream https://github.com/excalidraw/excalidraw.git
+yarn install
+yarn start            # dev server on http://localhost:3001
+yarn test:all         # full quality check before pushing
+```
+
+See the sections below for details, environment variables, and PR workflow.
+
+---
+
 ## 1. Before you start
+
+**Browser:** any modern evergreen browser (Chrome, Firefox, Edge, Safari). The app uses Canvas API, IndexedDB, and Web Workers.
 
 ### Required tooling
 
@@ -18,7 +35,7 @@ To tune the repo for **AI-assisted editing** (Cursor, Claude Code, OpenAI Codex)
 | **Node.js** | **>= 18.0.0** (`engines` in root `package.json`). **Node 20.x** is recommended so your environment matches [`.github/workflows/lint.yml`](../../.github/workflows/lint.yml) and [`test-coverage-pr.yml`](../../.github/workflows/test-coverage-pr.yml). |
 | **Yarn (classic 1.x)** | The repo pins **`yarn@1.22.22`** via `packageManager` in root `package.json`. Do **not** use Yarn Berry (2+) for this monorepo unless the project explicitly migrates. |
 
-#### Installing Yarn 1.22.22 with Corepack (Node 16.10+)
+#### Installing Yarn 1.22.22 with Corepack
 
 Corepack ships with Node and can install the pinned Yarn version:
 
@@ -107,9 +124,19 @@ This runs `yarn --cwd ./excalidraw-app start` (Vite dev server). The listen port
 
 | Command | Purpose |
 |---------|---------|
-| `yarn build:preview` | Production build of the app, then `vite preview` (default preview port **5000** per script chain in `excalidraw-app`). |
+| `yarn build:preview` | Production build of the app, then `vite preview` (port **5000**, hardcoded in `excalidraw-app/package.json`). |
 | `yarn start:example` | Builds packages, then starts `examples/with-script-in-browser`. |
 | `yarn start:production` | Build and serve static output (app serves on **5001** per `excalidraw-app/package.json`). |
+
+### Building workspace packages
+
+If you modify code in `packages/*`, rebuild them in dependency order:
+
+```bash
+yarn build:packages   # common → math → element → excalidraw
+```
+
+`@excalidraw/utils` is **not** part of `build:packages`; build it separately with `yarn build:utils` if needed.
 
 ---
 
@@ -129,7 +156,7 @@ This runs, in order: `yarn test:typecheck`, `yarn test:code`, `yarn test:other`,
 
 - **Lint** ([`.github/workflows/lint.yml`](../../.github/workflows/lint.yml)): `yarn test:other` (Prettier check), `yarn test:code` (ESLint), `yarn test:typecheck` (`tsc`).
 - **Test coverage** ([`.github/workflows/test-coverage-pr.yml`](../../.github/workflows/test-coverage-pr.yml)): `yarn test:coverage` (Vitest with coverage; a report is posted on the PR).
-- **Semantic PR title** ([`.github/workflows/semantic-pr-title.yml`](../../.github/workflows/semantic-pr-title.yml)): validates the **PR title** format (see [First pull request](#8-first-pull-request)).
+- **Semantic PR title** ([`.github/workflows/semantic-pr-title.yml`](../../.github/workflows/semantic-pr-title.yml)): validates the **PR title** format (see [First pull request](#9-first-pull-request)).
 - **Bundle size** ([`.github/workflows/size-limit.yml`](../../.github/workflows/size-limit.yml)): runs on PRs targeting `master`.
 
 Pushes to `master` also run **tests** without coverage ([`.github/workflows/test.yml`](../../.github/workflows/test.yml): `yarn test:app`).
@@ -141,6 +168,14 @@ yarn fix
 ```
 
 Runs Prettier write on supported files, then ESLint with `--fix`. Re-run `yarn test:all` afterward to ensure everything still passes.
+
+### Other useful test commands
+
+| Command | Purpose |
+|---------|---------|
+| `yarn test:coverage` | Vitest with coverage report (same as CI runs on PRs). |
+| `yarn test:ui` | Open Vitest browser UI with coverage enabled. |
+| `yarn test:update` | Update test snapshots (no watch mode). |
 
 ### Clean reinstall
 
@@ -183,7 +218,7 @@ By default this writes **`repomix-output.xml`** in the current directory. Useful
 
 **Ignore rules:** Repomix respects **`.gitignore`** and **`.repomixignore`**. This repo ships [`.repomixignore`](../../.repomixignore) (build outputs, `node_modules`, lockfiles, env files, large/generated paths, and `repomix*.txt`). Keep it aligned with what you do **not** want in a bundle. To customize further, run `npx repomix --init` to create **`repomix.config.json`** (see `npx repomix --help`).
 
-Treat generated bundles as **local artifacts**: add patterns such as `repomix-output.*` to **`.gitignore`** if you regenerate often and do not want to commit them.
+Treat generated bundles as **local artifacts**. The repo's `.gitignore` does **not** exclude Repomix output by default — add `repomix-output.*` to `.gitignore` if you regenerate often and do not want to accidentally commit them.
 
 #### `.cursorignore` (Cursor)
 
@@ -227,16 +262,41 @@ Other AI coding tools may expose **ignore files**, **include globs**, or **proje
 
 ### Docker
 
-The repo includes a multi-stage `Dockerfile` and [`docker-compose.yml`](../../docker-compose.yml) (build context: repo root; host port **3000** mapped to container **80** in compose). Use these when you want a containerized static build rather than a local Node workflow.
+The repo includes a multi-stage `Dockerfile` (Node 18 build stage → nginx:1.27-alpine serving stage) and [`docker-compose.yml`](../../docker-compose.yml). Use these when you want a containerized static build rather than a local Node workflow.
+
+```bash
+# Build and run with Docker Compose (serves on http://localhost:3000)
+docker compose up --build
+
+# Or build and run the image directly
+docker build -t excalidraw .
+docker run -p 3000:80 excalidraw
+```
+
+Host port **3000** is mapped to container port **80** in compose.
 
 ### Documentation links
 
 - [architecture.md](./architecture.md) — monorepo layout, packages, and data flow.
 - [domain-glossary.md](../product/domain-glossary.md) — project vocabulary.
+- [techContext.md](../memory/techContext.md) — full commands reference and stack details.
 
 ---
 
-## 8. First pull request
+## 8. Troubleshooting
+
+| Symptom | Likely cause | Fix |
+|---------|-------------|-----|
+| `yarn --version` prints 2+ / 3+ / 4+ | Yarn Berry installed globally, overriding Corepack | Run `corepack enable && corepack prepare yarn@1.22.22 --activate` from the repo root. |
+| `The engine "node" is incompatible` | Node version below 18 | Install Node **20.x** (recommended) via [nvm](https://github.com/nvm-sh/nvm), [fnm](https://github.com/Schniz/fnm), or the official installer. |
+| `EADDRINUSE :::3001` | Port 3001 already in use | Stop the other process, or set a different `VITE_APP_PORT` in `.env.development.local`. |
+| Prettier / ESLint failures after clean checkout | CRLF line endings (Windows) | Configure Git: `git config core.autocrlf input`. Re-clone or run `yarn fix`. |
+| `corepack` not found | Corepack disabled or older Node build | Run `npm install -g corepack` or upgrade Node. |
+| Stale build artifacts after pulling | Cached `dist`/`build` from a previous version | Run `yarn rm:build && yarn build:packages` (or `yarn clean-install` for a full reset). |
+
+---
+
+## 9. First pull request
 
 ### Branch and push
 
