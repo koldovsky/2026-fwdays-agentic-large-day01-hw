@@ -151,7 +151,7 @@ sequenceDiagram
 
 ### 4.5. Від React до пікселів (скорочено)
 
-```
+```text
 App.render()
   → StaticCanvas + InteractiveCanvas (+ NewElementCanvas)
     → useLayoutEffect / callbacks

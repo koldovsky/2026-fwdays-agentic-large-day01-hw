@@ -56,7 +56,7 @@
 
 ## Важливо для розробників
 
-- Зміни в `packages/excalidraw` після правок часто потребують **`yarn build:excalidraw`** (або повного `build:packages`) перед запуском додатку, якщо споживаються зібрані артефакти.
+- Зміни в `packages/excalidraw` після правок часто потребують **`yarn build:excalidraw`** (або повного `build:packages`) перед запуском додатка, якщо споживаються зібрані артефакти.
 - Для embed у Next.js — клієнтський рендер і dynamic import без SSR (див. `packages/excalidraw/README.md`).
 
 ## Де дивитися версії

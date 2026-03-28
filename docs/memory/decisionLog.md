@@ -6,7 +6,7 @@
 
 - **Контекст:** Excalidraw складається з додатку, кількох пакетів (`common`, `element`, `excalidraw`, `math`, `utils`) та прикладів.
 - **Рішення:** один репозиторій, `workspaces` у кореневому `package.json`, спільні dev-залежності та скрипти збірки/тестів з кореня.
-- **Наслідки:** зміни в `packages/*` потребують збірки пакетів перед запуском додатку; команди типу `yarn build:packages`, `yarn --cwd ./excalidraw-app start`.
+- **Наслідки:** зміни в `packages/*` потребують збірки пакетів перед запуском додатка; команди типу `yarn build:packages`, `yarn --cwd ./excalidraw-app start`.
 
 ## R-002 — TypeScript як основна мова редактора
 
