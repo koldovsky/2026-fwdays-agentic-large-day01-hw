@@ -70,7 +70,8 @@ Under `.github/workflows/`: `test.yml`, `lint.yml`, `test-coverage-pr.yml`, `siz
 
 External issue tracker state, release calendar, or commercial SLA—treat roadmap as **unknown** from repo alone.
 
-## Related Memory Bank
+## Related documentation
 
-- `docs/memory/techContext.md` — commands and env notes  
-- `docs/memory/activeContext.md` — what to prioritize when changing the repo
+- Memory Bank: [`techContext.md`](techContext.md), [`activeContext.md`](activeContext.md)  
+- Technical: [`../technical/dev-setup.md`](../technical/dev-setup.md), [`../technical/architecture.md`](../technical/architecture.md)  
+- Product: [`../product/PRD.md`](../product/PRD.md), [`../product/domain-glossary.md`](../product/domain-glossary.md)

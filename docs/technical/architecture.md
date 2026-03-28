@@ -173,6 +173,7 @@ Consumers resolve `development` vs. `production` **conditional exports** for `@e
 ## Related documentation
 
 - [`docs/technical/dev-setup.md`](dev-setup.md) — install, run, test, build commands.
+- [`docs/product/domain-glossary.md`](../product/domain-glossary.md) — Element, Scene, AppState, Tool, Action (code-aligned terms).
 - [`docs/memory/systemPatterns.md`](../memory/systemPatterns.md) — concise pattern notes (diagrams overlap intentionally).
 - [`docs/memory/techContext.md`](../memory/techContext.md) — toolchain versions and command tables.
 - [`docs/memory/decisionLog.md`](../memory/decisionLog.md) — decision-style summary of workspace, Vite, esbuild, CI splits.

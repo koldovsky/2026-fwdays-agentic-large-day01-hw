@@ -81,3 +81,8 @@ This pattern keeps keyboard shortcuts, menus, and programmatic operations on a *
 
 - **`Excalidraw` props** (`types`): callbacks such as `onChange`, `onExport`, `initialData`, UI slots (`renderTopLeftUI`, etc.), theme and mode flags — see `packages/excalidraw/types` / `index.tsx` usage.
 - **Examples** under `examples/` show alternate hosts (Vite, Next.js) consuming the same package patterns.
+
+## Related documentation
+
+- [`../technical/architecture.md`](../technical/architecture.md) — expanded topology and boundaries (overlaps this file by design).
+- [`../product/domain-glossary.md`](../product/domain-glossary.md) — definitions for Scene, AppState, Action, Tool, Element.

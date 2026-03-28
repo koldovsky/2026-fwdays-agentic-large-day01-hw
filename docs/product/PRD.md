@@ -69,4 +69,5 @@ No production **secret** or **URL** values are stated here; they are deployment-
 - [`domain-glossary.md`](domain-glossary.md) — Element, Scene, AppState, Tool, Action (code-aligned terms).  
 - [`../memory/productContext.md`](../memory/productContext.md) — Audiences, jobs-to-be-done, flows.  
 - [`../memory/projectbrief.md`](../memory/projectbrief.md) — Repo purpose and what ships where.  
-- [`../technical/architecture.md`](../technical/architecture.md) — Runtime and package boundaries.
+- [`../technical/architecture.md`](../technical/architecture.md) — Runtime and package boundaries.  
+- [`../technical/dev-setup.md`](../technical/dev-setup.md) — Clone, install, run, and test locally.

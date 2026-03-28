@@ -1,6 +1,6 @@
 # Product / UX context
 
-Audiences and flows inferred from **`excalidraw-app`** (hosted product) and **`packages/excalidraw`** (embeddable editor). Repo identity and goals: `docs/memory/projectbrief.md`. Stack/commands: `docs/memory/techContext.md`. Core domain terms (Element, Scene, AppState, Tool, Action): [`docs/product/domain-glossary.md`](../product/domain-glossary.md).
+Audiences and flows inferred from **`excalidraw-app`** (hosted product) and **`packages/excalidraw`** (embeddable editor). Repo identity and goals: [`projectbrief.md`](projectbrief.md). Stack/commands: [`techContext.md`](techContext.md). Core domain terms: [`../product/domain-glossary.md`](../product/domain-glossary.md). Reverse-engineered requirements: [`../product/PRD.md`](../product/PRD.md). Runtime and package topology: [`../technical/architecture.md`](../technical/architecture.md).
 
 ## Audiences
 

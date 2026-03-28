@@ -81,3 +81,26 @@
 - **Context**: Regressions in `@excalidraw/excalidraw` size.
 - **Decision**: `size-limit.yml` runs against `packages/excalidraw` with `build:esm`.
 - **Ref**: `.github/workflows/size-limit.yml`, `packages/excalidraw/package.json`
+
+**13. Root TypeScript project excludes `examples/`**
+
+- **What the code / tooling does**: Root `tsconfig.json` `include` is only `packages` and `excalidraw-app`, with `exclude` listing `examples` (among others). Running `yarn test:typecheck` therefore typechecks the main monorepo program only, **not** the `examples/*` workspaces.
+- **What is documented**: `docs/technical/architecture.md` states that examples are outside this TS project. The Memory Bank files (`projectbrief`, `progress`, `techContext`) mention example folders for integration patterns but **do not** explicitly warn that CI’s root `tsc` gate does not cover example package type errors unless those workspaces run their own checks.
+- **Ref**: `tsconfig.json`, `docs/technical/architecture.md`
+
+**14. Hosted app sets `window.__EXCALIDRAW_SHA__` at bootstrap**
+
+- **What the code does**: `excalidraw-app/index.tsx` assigns `window.__EXCALIDRAW_SHA__ = import.meta.env.VITE_APP_GIT_SHA` before rendering. `Window` is augmented in `excalidraw-app/global.d.ts` and `packages/excalidraw/global.d.ts`.
+- **What is documented**: Not described in `docs/memory/*` or `docs/product/*`. Discoverable only from the entry module and global typings; relationship to deployment (injection of `VITE_APP_GIT_SHA`) is **not** spelled out in Memory Bank docs.
+- **Ref**: `excalidraw-app/index.tsx`, `excalidraw-app/global.d.ts`, `packages/excalidraw/global.d.ts`
+
+**15. `@excalidraw/utils` resolved in-repo without a `package.json` dependency on the editor package**
+
+- **What the code does**: `packages/excalidraw` source imports `@excalidraw/utils`, but `packages/excalidraw/package.json` has **no** `@excalidraw/utils` entry under `dependencies`. Resolution in development and tests relies on `tsconfig.json` paths, Vite/Vitest aliases, and the library build (`scripts/buildPackage.js`) bundling those imports. Published `exports` still expose `./utils/*` typings for downstream consumers.
+- **What is documented**: `docs/technical/architecture.md` and `docs/memory/systemPatterns.md` note alias usage and the build script’s role at a high level. They **do not** contrast “declared npm dependency edges” vs “monorepo-only `@excalidraw/utils` wiring,” which can confuse contributors expecting every import to mirror `dependencies`.
+- **Ref**: `packages/excalidraw/package.json`, `tsconfig.json`, `scripts/buildPackage.js`, `docs/technical/architecture.md`
+
+## Related documentation
+
+- [`../technical/architecture.md`](../technical/architecture.md), [`../technical/dev-setup.md`](../technical/dev-setup.md) — where many logged choices appear in structure and how to run the repo locally.  
+- [`activeContext.md`](activeContext.md) — CI gates and change hotspots.

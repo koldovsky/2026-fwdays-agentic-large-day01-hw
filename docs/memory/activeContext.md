@@ -70,3 +70,8 @@ node scripts/count-todo-fixme.js
 - `docs/memory/techContext.md` — stack, versions, commands.  
 - `docs/memory/systemPatterns.md` — architecture patterns (editor core, actions).  
 - `docs/memory/productContext.md`, `progress.md`, `decisionLog.md` — product, inventory, decisions (this batch).
+
+## Product and technical docs
+
+- Product: [`../product/domain-glossary.md`](../product/domain-glossary.md), [`../product/PRD.md`](../product/PRD.md)  
+- Technical: [`../technical/dev-setup.md`](../technical/dev-setup.md), [`../technical/architecture.md`](../technical/architecture.md)

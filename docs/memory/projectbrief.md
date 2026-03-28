@@ -36,3 +36,9 @@ The folder name (`2026-fwdays-agentic-large-day01-hw`) indicates a course/homewo
 - Root `package.json` — workspace name and orchestration scripts.
 - `packages/excalidraw/README.md` — embed quick start and SSR notes.
 - `excalidraw-app/App.tsx` — product-level composition around `@excalidraw/excalidraw`.
+
+## Related documentation
+
+- [`../product/PRD.md`](../product/PRD.md) — reverse-engineered product requirements (goals, audiences, constraints).
+- [`../technical/architecture.md`](../technical/architecture.md) — runtime layout, package boundaries, and build pipeline.
+- [`../product/domain-glossary.md`](../product/domain-glossary.md) — Element, Scene, AppState, Tool, Action (code-aligned terms).

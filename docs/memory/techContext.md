@@ -78,3 +78,8 @@ From `excalidraw-app/vite.config.mts` imports: `@vitejs/plugin-react`, `vite-plu
 ## CI / tooling (pointer)
 
 - `.github/workflows/` includes jobs such as `size-limit.yml`, `sentry-production.yml` (verify locally as needed).
+
+## Related documentation
+
+- [`../technical/dev-setup.md`](../technical/dev-setup.md) — clone, install, run, test, build, CI parity.
+- [`../technical/architecture.md`](../technical/architecture.md) — workspaces, dependency direction, editor vs. app shell, publishable builds.
