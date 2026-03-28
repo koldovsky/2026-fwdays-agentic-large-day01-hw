@@ -5,36 +5,36 @@
 .env.test.local
 .envrc
 .eslintcache
-.history
-.idea
-.vercel
-.vscode
+.history/
+.idea/
+.vercel/
+.vscode/
 .git/
-.yarn
+.yarn/
 *.log
 *.tgz
 *.min.js
 *.min.css
-build
-dist
-firebase
-logs
-node_modules
+build/
+dist/
+firebase/
+logs/
+node_modules/
 npm-debug.log*
 package-lock.json
 yarn.lock
 yarn-debug.log*
 yarn-error.log*
-packages/excalidraw/types
-coverage
-dev-dist
-html
+packages/excalidraw/types/
+coverage/
+dev-dist/
+html/
 meta*.json
-.claude
+.claude/
 
 # --- Generated / tooling outputs (see scripts/, vitest, Next.js, Vite PWA)
 # WASM → TS bindings (scripts/buildWasm.js)
-packages/excalidraw/fonts/wasm
+packages/excalidraw/fonts/wasm/
 # Locale coverage aggregate (scripts/build-locales-coverage.js)
 packages/excalidraw/locales/percentages.json
 # Vitest snapshots
@@ -44,13 +44,13 @@ packages/excalidraw/locales/percentages.json
 *.tsbuildinfo
 # Next.js build output (any workspace) + example app
 .next/
-examples/with-nextjs/.next
-examples/with-nextjs/out
+examples/with-nextjs/.next/
+examples/with-nextjs/out/
 **/next-env.d.ts
 # Vite cache; NYC (legacy coverage)
-.vite
-.nyc_output
+.vite/
+.nyc_output/
 # vite-plugin-pwa precache (excalidraw-app)
-excalidraw-app/public/workbox
+excalidraw-app/public/workbox/
 # Firebase local cache
-.firebase
+.firebase/

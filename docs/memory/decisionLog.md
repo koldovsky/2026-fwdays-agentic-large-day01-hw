@@ -91,7 +91,7 @@
 **14. Hosted app sets `window.__EXCALIDRAW_SHA__` at bootstrap**
 
 - **What the code does**: `excalidraw-app/index.tsx` assigns `window.__EXCALIDRAW_SHA__ = import.meta.env.VITE_APP_GIT_SHA` before rendering. `Window` is augmented in `excalidraw-app/global.d.ts` and `packages/excalidraw/global.d.ts`.
-- **What is documented**: Not described in `docs/memory/*` or `docs/product/*`. Discoverable only from the entry module and global typings; relationship to deployment (injection of `VITE_APP_GIT_SHA`) is **not** spelled out in Memory Bank docs.
+- **What is documented**: Previously absent from other `docs/memory/*` and `docs/product/*` pages (this log entry records the gap). Behavior remains discoverable from `excalidraw-app/index.tsx` and global typings; deployment must inject `VITE_APP_GIT_SHA` if the window field should be set—still not documented outside this entry.
 - **Ref**: `excalidraw-app/index.tsx`, `excalidraw-app/global.d.ts`, `packages/excalidraw/global.d.ts`
 
 **15. `@excalidraw/utils` resolved in-repo without a `package.json` dependency on the editor package**

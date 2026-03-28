@@ -8,7 +8,7 @@ This document describes how the **excalidraw-monorepo** is structured at runtime
 
 **Out of scope:** product roadmap; production deployment topology; values of secrets or private `VITE_*` endpoints (only names and loading behavior that appear in config/code are mentioned). For a short product-oriented overview, see [`docs/memory/projectbrief.md`](../memory/projectbrief.md).
 
-## System context
+## High-level Architecture
 
 The repository ships two related surfaces:
 
@@ -43,7 +43,7 @@ flowchart LR
   Math --> Common
 ```
 
-## Monorepo topology
+## Package Dependencies
 
 Root `package.json` declares **Yarn classic workspaces** (`packageManager`: `yarn@1.22.22`):
 
@@ -93,7 +93,7 @@ flowchart TB
 
 **Vitest** (`vitest.config.mts` at repo root): duplicates the same `resolve.alias` entries; `test.environment` is **`jsdom`**; `setupFiles`: `./setupTests.ts`; `test.globals` enabled; coverage thresholds configured under `test.coverage`.
 
-## Runtime architecture
+## State Management
 
 ### Host application (`excalidraw-app`)
 
@@ -105,6 +105,12 @@ flowchart TB
 
 - **Public wrapper:** `packages/excalidraw/index.tsx` applies `polyfill()`, loads global SCSS/fonts, wraps the internal class component `App` from `components/App.tsx`, and provides `ExcalidrawAPIProvider` / related hooks so the imperative API can be used outside the immediate React subtree. It uses `EditorJotaiProvider` and `editorJotaiStore` from `editor-jotai` for editor-scoped reactive state (`updateEditorAtom` on `App` delegates to this store).
 - **Core coordinator:** `App` is a large **class component** that owns the interactive editor. In its constructor it constructs `Library`, then `ActionManager` (with `syncActionResult` as the update sink), then `Scene`, an off-DOM `canvas` and **`rough.canvas(this.canvas)`** (RoughJS), `Renderer(this.scene)`, `Store(this)`, `History(this.store)`, `Fonts`, then assigns `History` again (same constructor block), then `actionManager.registerAll(actions)` and registers undo/redo (`createUndoAction` / `createRedoAction` from `actions/actionHistory.tsx`). See `packages/excalidraw/components/App.tsx` around the constructor for the exact sequence.
+
+## Rendering Pipeline
+
+The editor **`App`** class (`packages/excalidraw/components/App.tsx`) keeps an off-DOM **`canvas`**, a **RoughJS** handle from `rough.canvas(this.canvas)` for sketch-style strokes, and a **`Renderer`** driven by **`Scene`**. After input is handled, updates go through **`ActionManager`** → **`Store`** / **`History`** → **`Scene`**, then the renderer redraws the canvas. Frame scheduling follows the browser paint cycle from those mutations (no separate RAF abstraction is documented here beyond standard React reconciliation).
+
+## Data Flow
 
 **Conceptual data path** (simplified):
 
