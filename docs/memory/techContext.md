@@ -14,7 +14,7 @@
 
 - **React** `19.0.0`, **React DOM** `19.0.0` — у `excalidraw-app` (і як peer для `@excalidraw/excalidraw`).
 - **Vite** `5.0.12` у корені; додаток збирається через **`vite`** у `excalidraw-app` (`yarn start` → `vite`).
-- Плагіни (корінь): `@vitejs/plugin-react` `3.1.0`, `vite-plugin-pwa`, `vite-plugin-svgr`, `vite-plugin-checker`, `vite-plugin-ejs`.
+- Плагіни (**`excalidraw-app/vite.config.mts`**): `@vitejs/plugin-react` `3.1.0`, `vite-plugin-pwa`, `vite-plugin-svgr`, `vite-plugin-checker`, `vite-plugin-ejs`, `vite-plugin-sitemap`.
 
 ## Тести та якість
 
