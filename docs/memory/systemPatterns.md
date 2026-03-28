@@ -13,12 +13,17 @@ The package has **no `src/` folder** — all code lives directly under `packages
 | **`data/`** | Serialization (`json.ts`), blob loading, file helpers, library, restore/reconcile |
 | **`renderer/`** | Low-level canvas drawing — static scene, interactive overlays, snaps, animations |
 | **`scene/`** | Viewport/zoom/scroll, `Renderer` wrapper, export helpers |
+| **`context/`** | React context helpers (`ui-appState.ts`, `tunnels.ts`) |
+| **`hooks/`** | Reusable React hooks (`useStableCallback`, `useAppStateValue`, etc.) |
+| **`lasso/`** | Lasso-selection trail (`LassoTrail`) |
+| **`eraser/`** | Eraser trail (`EraserTrail`) |
 | **`charts/`** | Spreadsheet parsing + bar/line/radar chart helpers |
 | **`fonts/`** | Font loading and integration |
 | **`wysiwyg/`** | In-canvas text editing |
 | **`locales/`** | i18n translation JSON per language |
 | **`css/`** | Global editor styles |
 | **`tests/`** | Vitest tests |
+| **`subset/`** | Font subsetting utilities |
 | `types.ts` | `AppState`, props, API type definitions |
 | `appState.ts` | `getDefaultAppState()`, export-cleaning helpers |
 | `editor-jotai.ts` | Jotai store isolation for the editor |
@@ -50,7 +55,8 @@ State is split across three layers:
 
 `App` owns:
 - `this.scene` — a `Scene` instance (from `@excalidraw/element`) holding the ordered element list
-- `this.store` + `this.history` — from `@excalidraw/element/src/store.ts`; drive undo/redo
+- `this.store` — `Store` class from `@excalidraw/element/src/store.ts`; drives undo/redo snapshots
+- `this.history` — `History` class from `packages/excalidraw/history.ts`; records deltas from `Store`
 - `this.actionManager` — runs actions and funnels results back via `syncActionResult`
 - `this.renderer` — bridges `Scene` to throttled canvas repaints
 
@@ -70,11 +76,13 @@ Nested providers expose internal state slices to descendants without prop-drilli
 
 **3. Jotai atoms (scoped UI state)**
 
-`editor-jotai.ts` uses `jotai-scope`'s `createIsolation()` so atoms are scoped to `EditorJotaiProvider`. Used for cross-cutting UI bits that shouldn't bloat `AppState`:
+`editor-jotai.ts` uses `jotai-scope`'s `createIsolation()` to produce a scoped `editorJotaiStore` and the `EditorJotaiProvider` wrapper. Atoms themselves are defined close to where they are used, but all share this scoped store. Notable atoms:
 
-- `isSidebarDockedAtom`, `isLibraryMenuOpenAtom`, `libraryItemsAtom`
-- `activeEyeDropperAtom`, `activeConfirmDialogAtom`
-- `convertElementTypePopupAtom`, search atoms, TTD atoms, `editorLangCodeAtom`
+- `isSidebarDockedAtom` (`components/Sidebar/Sidebar.tsx`)
+- `isLibraryMenuOpenAtom` (`components/LibraryMenu.tsx`), `libraryItemsAtom` (`data/library.ts`)
+- `activeEyeDropperAtom` (`components/EyeDropper.tsx`), `activeConfirmDialogAtom` (`components/ActiveConfirmDialog.tsx`)
+- `convertElementTypePopupAtom` (`components/ConvertElementTypePopup`), `searchItemInFocusAtom` (`components/SearchMenu`)
+- `editorLangCodeAtom` (`i18n.ts`)
 
 `App` bridges Jotai ↔ class via `updateEditorAtom` + `triggerRender()`.
 
