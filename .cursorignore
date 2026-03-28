@@ -1,0 +1,71 @@
+# Generated from .gitignore
+# macOS
+.DS_Store
+
+# Environment variables
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+
+# Cache & IDE
+.eslintcache
+.history
+.idea
+.vscode
+.yarn
+
+# Build artifacts
+*.log
+*.tgz
+build
+dist
+dev-dist
+html
+coverage
+
+# Dependencies
+node_modules
+package-lock.json
+
+# Logs
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Firebase
+firebase
+
+# Generated types
+packages/excalidraw/types
+
+# Metadata
+meta*.json
+
+# Vercel
+.vercel
+
+.claude
+repomix-output.xml
+
+# Generated WASM modules (~1M tokens)
+packages/excalidraw/subset/woff2/woff2-wasm.ts
+packages/excalidraw/subset/harfbuzz/harfbuzz-wasm.ts
+scripts/wasm/
+
+# Font assets (14 MB binary)
+packages/excalidraw/fonts/
+
+# Locales (62 auto-generated translation files)
+packages/excalidraw/locales/
+
+# Test snapshots & fixtures
+**/__snapshots__/
+packages/excalidraw/tests/fixtures/
+
+# Lock files
+yarn.lock
+examples/**/yarn.lock
+
