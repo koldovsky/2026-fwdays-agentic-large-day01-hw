@@ -110,6 +110,21 @@ flowchart TB
 
 The editor **`App`** class (`packages/excalidraw/components/App.tsx`) keeps an off-DOM **`canvas`**, a **RoughJS** handle from `rough.canvas(this.canvas)` for sketch-style strokes, and a **`Renderer`** driven by **`Scene`**. After input is handled, updates go through **`ActionManager`** → **`Store`** / **`History`** → **`Scene`**, then the renderer redraws the canvas. Frame scheduling follows the browser paint cycle from those mutations (no separate RAF abstraction is documented here beyond standard React reconciliation).
 
+### Failure modes & observability
+
+This subsection summarizes **where things can fail** and **what the repo already exposes** for debugging—**not** a product SLO/SLA.
+
+- **RoughJS / canvas init** — If the off-DOM **`canvas`** or **`rough.canvas(...)`** cannot be created (missing APIs, extreme memory pressure), construction in **`App`** (`packages/excalidraw/components/App.tsx`) fails early; the surface is a normal JS exception during mount.
+- **Scene / document consistency** — Mismatches after import, collab, or restore are addressed in **`packages/excalidraw/data/`** (e.g. **`reconcile.ts`**, **`restore.ts`**); the hosted app adds HTTP/Firebase layers in **`excalidraw-app/data/`**.
+- **`ActionManager` / `perform`** — A throwing **`perform`** or bad **`ActionResult`** breaks the usual updater path; harden actions and wrap the embed in host-level error boundaries if you customize actions.
+- **`Store` / `History`** — Invalid incremental updates can leave history unusable; recovery paths in practice are reload, **restore from blob**, or local storage flows wired from **`excalidraw-app`** (see **`LocalData`** / import helpers in **`App.tsx`**).
+
+**Observability present in-tree:** **`excalidraw-app/index.tsx`** loads **Sentry** when not disabled; **`packages/excalidraw/errors.ts`** centralizes some error helpers; **`trackEvent`** on **`Action`** supports analytics where enabled. There is **no** dedicated metrics pipeline or documented render-time histograms in this repository—use browser **Performance** tooling and **`yarn test:app` / `yarn test:all`** for regressions. **Operators** typically watch Sentry noise, failed requests to **`VITE_APP_BACKEND_V2_*`** endpoints, and collab/socket errors in **`excalidraw-app/collab/`**.
+
+**Recovery patterns (conceptual):** retry failed network calls in the app data layer; reload the SPA after unrecoverable editor errors; use **import/restore** flows in **`packages/excalidraw/data/`** when document bytes are trusted. Integrators embedding **`Excalidraw`** should surface **`onChange`** / **`onExport`** snapshots to their own backup pipeline if they need rollback beyond local history.
+
+For automated gates that catch regressions before merge, see **Testing and quality** later in this document and GitHub workflows referenced from **`docs/memory/activeContext.md`**.
+
 ## Data Flow
 
 **Conceptual data path** (simplified):
