@@ -1,0 +1,54 @@
+# Exclude from Cursor indexing: dependencies, build output, locks, caches, secrets.
+# Keep application source (e.g. packages/excalidraw/**, excalidraw-app/**) indexable.
+
+# Dependencies
+node_modules/
+
+# Lockfiles
+*.lock
+package-lock.json
+pnpm-lock.yaml
+
+# Build & generated output
+build/
+dist/
+dev-dist/
+coverage/
+.next/
+html/
+firebase/
+packages/excalidraw/types/
+meta*.json
+
+# Logs & archives
+*.log
+*.tgz
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Caches & tooling
+.eslintcache
+.history
+.nyc_output/
+.yarn/
+.vercel/
+
+# Minified assets & snapshots (noise for AI context)
+*.min.js
+*.min.css
+*.snap
+
+# Environment & secrets
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+
+# IDE / OS / local agents
+.DS_Store
+.idea/
+.vscode/
+.claude
