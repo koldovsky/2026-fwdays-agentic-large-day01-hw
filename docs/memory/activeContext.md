@@ -114,41 +114,7 @@ The `bindModeHandler` in `App.tsx` is a bare `setTimeout` stored as an instance 
 
 ## 7. Configuration & Environment Notes
 
-### Local Development
-
-```bash
-# Install (Node ≥ 18.0.0 required)
-yarn install
-
-# Start dev server (excalidraw-app only)
-yarn start          # → http://localhost:3000
-
-# Build packages first if working on package code
-yarn build:packages && yarn start
-
-# Full test suite
-yarn test:all
-```
-
-### Docker
-
-```bash
-docker-compose up   # → http://localhost:3000  (NODE_ENV=development)
-```
-- Container: `excalidraw` · Port mapping: `3000:80`
-- Source is volume-mounted (`delegated`); `node_modules` are isolated in a named volume (`notused`).
-- `restart: on-failure` — container auto-restarts on crash.
-
-### Environment Variables (excalidraw-app)
-
-The following env vars control feature behaviour. Set in `.env.local` for local dev (never commit):
-
-| Variable | Purpose |
-|---|---|
-| `VITE_APP_FIREBASE_CONFIG` | Firebase project config JSON (collab + cloud persistence) |
-| `VITE_APP_AI_BACKEND` | AI/TTD API endpoint URL |
-| `VITE_APP_WS_SERVER_URL` | WebSocket collaboration server URL |
-| `VITE_APP_DISABLE_SENTRY` | Set to `true` to suppress error reporting locally |
+See the [`docs/technical/dev-setup.md`](../technical/dev-setup.md) for detailed local development environment configuration.
 
 ### Known Environment Caveats
 
