@@ -1,93 +1,93 @@
 # System Patterns
 
-## Архітектура на рівні репозиторію
+## Architecture at repository level
 
-- Монорепо з Yarn workspaces:
-  - `excalidraw-app` — standalone веб-застосунок;
-  - `packages/excalidraw` — публічна React-бібліотека;
-  - `packages/common|element|math|utils` — внутрішні модулі.
-- Патерн: `app` збирається поверх бібліотечних пакетів через alias-и, а не через зібрані dist-артефакти під час розробки.
+- Monorepo with Yarn workspaces:
+  - `excalidraw-app` — standalone web application;
+  - `packages/excalidraw` — public React library;
+  - `packages/common|element|math|utils` — internal modules.
+- Pattern: `app` is built on top of library packages via aliases, not via built dist artifacts during development.
 
-## Патерн модульності та залежностей
+## Modularity and dependency pattern
 
-- Логічна декомпозиція:
-  - `common`: shared constants/утиліти;
-  - `math`: геометричні обчислення;
-  - `element`: домен елементів сцени;
-  - `excalidraw`: UI, редактор, API компонента.
-- Dependency direction переважно з високого рівня до нижчого:
+- Logical decomposition:
+  - `common`: shared constants/utilities;
+  - `math`: geometric calculations;
+  - `element`: scene element domain;
+  - `excalidraw`: UI, editor, component API.
+- Dependency direction is mostly from higher level to lower:
   - `excalidraw` -> `element/common/math`;
   - `element` -> `common/math`;
   - `math` -> `common`.
 
-## Патерн композиції UI в app
+## UI composition pattern in the app
 
-- Точка входу:
-  - `index.tsx` реєструє SW та рендерить `ExcalidrawApp`.
-- Компонент `App.tsx` виконує orchestration:
-  - провайдери (`Provider`, `ExcalidrawAPIProvider`, error boundary);
-  - ініціалізація сцени;
-  - підключення колаборації;
-  - підключення меню/палет/діалогів/AI-компонентів.
-- Патерн "library + host app":
-  - `@excalidraw/excalidraw` надає ядро редактора;
-  - `excalidraw-app` додає продуктову поведінку й інтеграції.
+- Entry point:
+  - `index.tsx` registers SW and renders `ExcalidrawApp`.
+- The `App.tsx` component performs orchestration:
+  - providers (`Provider`, `ExcalidrawAPIProvider`, error boundary);
+  - scene initialization;
+  - collaboration connection;
+  - menu/palette/dialog/AI component integration.
+- "Library + host app" pattern:
+  - `@excalidraw/excalidraw` provides the editor core;
+  - `excalidraw-app` adds product behavior and integrations.
 
-## Патерн стану та персистентності
+## State and persistence pattern
 
-- Локальний стан:
-  - Jotai-атоми для глобальних UI/collab сигналів.
-- Локальне збереження:
-  - сцена й appState у `localStorage`;
-  - файли та library в IndexedDB.
-- Контроль консистентності:
-  - debounce/throttle для save/sync;
-  - version-keys (`version-dataState`, `version-files`) для синхронізації між вкладками;
-  - pause/resume save lock під час колаборації.
+- Local state:
+  - Jotai atoms for global UI/collab signals.
+- Local persistence:
+  - scene and appState in `localStorage`;
+  - files and library in IndexedDB.
+- Consistency control:
+  - debounce/throttle for save/sync;
+  - version keys (`version-dataState`, `version-files`) for tab synchronization;
+  - pause/resume save lock during collaboration.
 
-## Патерн realtime-колаборації
+## Realtime collaboration pattern
 
-- `Collab` (контролер) + `Portal` (transport-adapter) + data-layer (`data/*`).
-- WebSocket канал через `socket.io-client`.
-- Payload-и шифруються (encrypt/decrypt) перед передачею.
-- Sync стратегія:
-  - інкрементальні апдейти елементів;
-  - періодичний full scene sync;
-  - окремий потік для статусів курсора/idle/visible bounds.
-- Медіа/зображення:
-  - файли зберігаються/читаються через Firebase storage;
-  - статуси файлів керуються окремим `FileStatusStore`.
+- `Collab` (controller) + `Portal` (transport-adapter) + data-layer (`data/*`).
+- WebSocket channel via `socket.io-client`.
+- Payloads are encrypted (encrypt/decrypt) before transmission.
+- Sync strategy:
+  - incremental element updates;
+  - periodic full scene sync;
+  - separate stream for cursor/idle/visible bounds statuses.
+- Media/images:
+  - files are stored/read via Firebase storage;
+  - file statuses are managed by a dedicated `FileStatusStore`.
 
-## Патерн імпорту/експорту
+## Import/export pattern
 
 - Share-link backend:
-  - дані сцени стискаються + шифруються;
-  - ключ шифрування залишається у hash-фрагменті URL (`#json=id,key`).
-- Підтримано кілька джерел ініціалізації:
+  - scene data is compressed + encrypted;
+  - encryption key remains in the URL hash fragment (`#json=id,key`).
+- Multiple initialization sources are supported:
   - local state;
   - `#json` backend snapshot;
-  - `#url` зовнішній файл;
+  - `#url` external file;
   - `#room` live collaboration.
 
-## Патерн білду та оточень
+## Build and environment pattern
 
-- Vite для app із alias-резолвом на workspace source.
-- Esbuild-скрипти для пакетів (`buildBase.js`, `buildPackage.js`, `buildUtils.js`) генерують dev/prod ESM.
-- Env-driven integration: різні `.env` для dev/prod endpoint-ів.
-- PWA/runtime caching і manual chunking для locales/CodeMirror/mermaid.
+- Vite for the app with alias resolution to workspace source.
+- Esbuild scripts for packages (`buildBase.js`, `buildPackage.js`, `buildUtils.js`) generate dev/prod ESM.
+- Env-driven integration: separate `.env` for dev/prod endpoints.
+- PWA/runtime caching and manual chunking for locales/CodeMirror/mermaid.
 
-## Ключові технічні рішення
+## Key technical decisions
 
-- **Provider-first integration**: API редактора доступний через контекст і hooks.
-- **Edge-safe persistence**: flush на blur/unload + попередження про незбережені дані.
-- **Bandwidth-aware collab**: передаються syncable елементи, версії трекаються.
-- **Separation of concerns**: UI-оркестрація в app, редакторне ядро в library package.
+- **Provider-first integration**: the editor API is available via context and hooks.
+- **Edge-safe persistence**: flush on blur/unload + warning about unsaved data.
+- **Bandwidth-aware collab**: syncable elements are transmitted, versions are tracked.
+- **Separation of concerns**: UI orchestration in app, editor core in library package.
 
-## Перевірено по source code
+## Verified against source code
 
-- Монорепо, workspaces, dependency контури: `package.json`, `packages/*/package.json`.
-- Експорт React-компонента та API/хуків: `packages/excalidraw/index.tsx`, `packages/excalidraw/README.md`.
-- App orchestration і ініціалізація сцени: `excalidraw-app/App.tsx`, `excalidraw-app/index.tsx`.
-- Колаборація, transport, шифрування, sync: `excalidraw-app/collab/Collab.tsx`, `excalidraw-app/collab/Portal.tsx`, `excalidraw-app/data/index.ts`.
-- Локальна персистентність та tab-sync: `excalidraw-app/data/LocalData.ts`, `excalidraw-app/app_constants.ts`.
+- Monorepo, workspaces, dependency boundaries: `package.json`, `packages/*/package.json`.
+- React component and API/hooks export: `packages/excalidraw/index.tsx`, `packages/excalidraw/README.md`.
+- App orchestration and scene initialization: `excalidraw-app/App.tsx`, `excalidraw-app/index.tsx`.
+- Collaboration, transport, encryption, sync: `excalidraw-app/collab/Collab.tsx`, `excalidraw-app/collab/Portal.tsx`, `excalidraw-app/data/index.ts`.
+- Local persistence and tab sync: `excalidraw-app/data/LocalData.ts`, `excalidraw-app/app_constants.ts`.
 - Build/pwa/chunking/aliases: `excalidraw-app/vite.config.mts`, `scripts/buildPackage.js`.

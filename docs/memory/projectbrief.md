@@ -1,49 +1,49 @@
 # Project Brief
 
-## Що це за проєкт
+## What this project is
 
-- Це монорепозиторій `excalidraw-monorepo` з воркспейсами для:
-  - веб-застосунку `excalidraw-app`;
-  - бібліотеки `@excalidraw/excalidraw`;
-  - внутрішніх пакетів `@excalidraw/common`, `@excalidraw/element`, `@excalidraw/math`, `@excalidraw/utils`;
-  - прикладів інтеграції (`examples/*`).
-- Основний продукт: браузерний whiteboard Excalidraw + окремо embeddable React-компонент для інтеграції в інші застосунки.
+- This is the `excalidraw-monorepo` monorepo with workspaces for:
+  - the `excalidraw-app` web application;
+  - the `@excalidraw/excalidraw` library;
+  - internal packages `@excalidraw/common`, `@excalidraw/element`, `@excalidraw/math`, `@excalidraw/utils`;
+  - integration examples (`examples/*`).
+- The main product: the browser-based Excalidraw whiteboard plus a separate embeddable React component for integration into other applications.
 
-## Основна мета
+## Main goal
 
-- Надати повнофункціональний онлайн-редактор діаграм/скетчів із:
-  - локальним збереженням сцени;
-  - шеринґом через лінк;
-  - live-колаборацією;
-  - експортом і інтеграційними API.
-- Підтримувати дві моделі використання:
-  - як standalone app (`excalidraw-app`);
-  - як npm-бібліотека React-компонента (`@excalidraw/excalidraw`).
+- Provide a full-featured online diagram/sketch editor with:
+  - local scene persistence;
+  - sharing via link;
+  - live collaboration;
+  - export and integration APIs.
+- Support two usage models:
+  - as a standalone app (`excalidraw-app`);
+  - as an npm library of a React component (`@excalidraw/excalidraw`).
 
-## Ключові сценарії користувача
+## Key user scenarios
 
-- Малювання та редагування сцени в браузері.
-- Відкриття/імпорт сцени з URL (`#json=...`, `#url=...`, `#room=...`).
-- Спільне редагування в realtime-кімнатах із шифруванням payload-ів.
-- Експорт сцени (у backend/share-link та в Excalidraw+).
+- Drawing and editing a scene in the browser.
+- Opening/importing a scene from URL (`#json=...`, `#url=...`, `#room=...`).
+- Collaborative editing in realtime rooms with payload encryption.
+- Scene export (to backend/share-link and to Excalidraw+).
 
-## Що важливо для команди
+## What is important for the team
 
-- Монорепо централізує розробку app + reusable packages.
-- Є чіткі npm-скрипти для build/test/lint/typecheck.
-- CI перевіряє тести й якість коду на Node 20.x.
-- Продакшн-доставку можна робити як статичний build (через Docker + nginx).
+- The monorepo centralizes development of the app + reusable packages.
+- There are clear npm scripts for build/test/lint/typecheck.
+- CI validates tests and code quality on Node 20.x.
+- Production delivery can be done as a static build (via Docker + nginx).
 
-## Межі та non-goals (на рівні цього репо)
+## Boundaries and non-goals (at this repository level)
 
-- Сервер WebSocket-колаборації не реалізований у цьому репо (лише клієнтська інтеграція через `VITE_APP_WS_SERVER_URL`).
-- Зовнішні backend-сервіси (json API, Firebase storage, AI backend) підключаються через env-конфіг.
+- The WebSocket collaboration server is not implemented in this repo (only client integration via `VITE_APP_WS_SERVER_URL`).
+- External backend services (json API, Firebase storage, AI backend) are connected via env configuration.
 
-## Перевірено по source code
+## Verified against source code
 
-- Монорепо, воркспейси, скрипти, Node/Yarn: `package.json`.
-- Роль пакета як React component: `packages/excalidraw/README.md`, `packages/excalidraw/package.json`.
-- Точка входу app: `excalidraw-app/index.tsx`.
-- Основний orchestration UI/app-flow: `excalidraw-app/App.tsx`.
-- CI Node 20.x і тестовий pipeline: `.github/workflows/test.yml`, `.github/workflows/lint.yml`.
+- Monorepo, workspaces, scripts, Node/Yarn: `package.json`.
+- Package role as a React component: `packages/excalidraw/README.md`, `packages/excalidraw/package.json`.
+- App entry point: `excalidraw-app/index.tsx`.
+- Main orchestration UI/app-flow: `excalidraw-app/App.tsx`.
+- CI Node 20.x and test pipeline: `.github/workflows/test.yml`, `.github/workflows/lint.yml`.
 - Docker build + nginx runtime: `Dockerfile`, `docker-compose.yml`.
