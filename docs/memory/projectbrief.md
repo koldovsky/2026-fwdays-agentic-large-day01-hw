@@ -31,9 +31,9 @@ The repo ships two main artifacts:
 - **`package.json`** — Yarn workspaces root; defines `start`, `build`, `test:all`, `release` scripts.
 - **`tsconfig.json`** — Monorepo-wide TS config with path aliases mapping `@excalidraw/*` to `packages/*/src`.
 - **`vitest.config.mts`** — Test config with matching path aliases.
-- **`scripts/`** — Release, versioning, locale tools, WASM plugins, and `buildPackage.js` for publishing ESM + types.
+- **`scripts/`** — Release, versioning, locale tools, WASM plugins, `buildPackage.js` for publishing ESM + types, and `buildUtils.js` for the `@excalidraw/utils` package.
 
-### `packages/` — shared libraries (build order: common → math → element → excalidraw)
+### `packages/` — shared libraries (build order: common → math → element → excalidraw; `utils` built separately)
 
 | Package | Purpose |
 |---|---|
@@ -41,6 +41,7 @@ The repo ships two main artifacts:
 | **`math`** | Geometry and curve math for the canvas |
 | **`element`** | Scene element model, transforms, collision detection |
 | **`excalidraw`** | The main React whiteboard: UI, actions, renderer, i18n, tests |
+| **`utils`** | Standalone publishable utilities (`@excalidraw/utils`): URL sanitisation, laser pointer, image encoding, compression; built via `buildUtils.js`, not part of `build:packages` |
 
 ### `excalidraw-app/` — the full web application
 
@@ -67,6 +68,8 @@ common ──┬──→ element ──→ excalidraw (React UI)
                               ↑
                     excalidraw-app (Vite product app)
                     examples (Next.js / Vite demos)
+
+utils  (standalone — no internal dependents; published as @excalidraw/utils)
 ```
 
 In short: a well-structured TypeScript/React monorepo where shared geometry and element-model packages feed into the main embeddable editor, which is then consumed by the full web app and example integrations.
