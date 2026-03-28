@@ -41,8 +41,8 @@
 ### U-001 — `useEffect` у `NewElementCanvas` без масиву залежностей
 
 - **Що очікує читач React-документації:** ефект з порожнім або повним списком залежностей; інакше — попередження про зайві перезапуски.
-- **Що робить код:** у `packages/excalidraw/components/canvases/NewElementCanvas.tsx` викликається `useEffect(() => { ... renderNewElementScene(...) })` **без другого аргументу**, тобто ефект виконується після **кожного** commit-рендеру. Це навмисний спосіб синхронізувати canvas з проміжним `newElement` без окремого animation loop у цьому компоненті.
-- **Висновок:** це не баг з точки зору рендер-пайплайну редактора; інтегратори не побачать цього в README embed.
+- **Що робить код:** у `packages/excalidraw/components/canvases/NewElementCanvas.tsx` викликається `useEffect(() => { ... renderNewElementScene(...) })` **без другого аргументу** (немає масиву залежностей). Після **кожного** commit-рендеру React знову виконує колбек ефекту; усередині нього викликається `renderNewElementScene` з поточними `props` (зокрема `appState.newElement`, `elementsMap`, `renderConfig`).
+- **Документація:** у `packages/excalidraw/README.md` ця деталь рендеру не описана.
 
 ### U-002 — Дефолтна «округлість» кутів залежить від тестового режиму
 
