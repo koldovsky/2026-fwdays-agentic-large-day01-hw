@@ -9,6 +9,8 @@ node_modules/
 .claude/
 .codesandbox/
 .idea/
+.next/
+.nyc_output/
 .npmrc
 
 # Build outputs
@@ -45,6 +47,8 @@ yarn.lock
 package-lock.json
 
 # Source maps (generated, large, not useful for context)
+**/*.min.{js,css}
+**/*.snap
 **/*.map
 
 # Binary assets — fonts and images add no semantic value
