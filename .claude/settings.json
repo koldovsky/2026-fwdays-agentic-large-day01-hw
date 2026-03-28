@@ -1,0 +1,49 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(yarn --version)",
+      "Bash(yarn install:*)",
+      "Bash(yarn start:*)"
+    ],
+    "deny": [
+      "Read(.DS_Store)",
+      "Read(.env.development.local)",
+      "Read(.env.local)",
+      "Read(.env.production.local)",
+      "Read(.env.test.local)",
+      "Read(.envrc)",
+      "Read(.eslintcache)",
+      "Read(.history/**)",
+      "Read(.idea/**)",
+      "Read(.vercel/**)",
+      "Read(.vscode/**)",
+      "Read(.yarn/**)",
+      "Read(**/*.log)",
+      "Read(**/*.tgz)",
+      "Read(build/**)",
+      "Read(dist/**)",
+      "Read(firebase/**)",
+      "Read(logs/**)",
+      "Read(node_modules/**)",
+      "Read(npm-debug.log*)",
+      "Read(package-lock.json)",
+      "Read(yarn-debug.log*)",
+      "Read(yarn-error.log*)",
+      "Read(packages/excalidraw/types/**)",
+      "Read(coverage/**)",
+      "Read(dev-dist/**)",
+      "Read(html/**)",
+      "Read(meta*.json)",
+      "Read(yarn.lock)",
+      "Read(packages/excalidraw/fonts/**)",
+      "Read(packages/excalidraw/locales/**)",
+      "Read(**/__snapshots__/**)",
+      "Read(packages/excalidraw/subset/woff2/woff2-wasm.ts)",
+      "Read(packages/excalidraw/subset/harfbuzz/harfbuzz-wasm.ts)",
+      "Read(scripts/wasm/**)",
+      "Read(packages/excalidraw/tests/fixtures/**)",
+      "Read(examples/**/yarn.lock)",
+      "Read(repomix-output.xml)"
+    ]
+  }
+}
