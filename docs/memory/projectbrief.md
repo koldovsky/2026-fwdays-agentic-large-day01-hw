@@ -206,3 +206,14 @@ Tabular data (e.g., from a spreadsheet) pasted into the canvas is parsed and ren
 ### Business
 - Measurable Excalidraw Plus conversion rate from in-app prompts.
 - Self-hosted Docker image pull count growth.
+
+---
+
+## 9. Related Documentation
+
+| Document | Location | Relationship |
+|---|---|---|
+| **Product Requirements Document** | [`docs/product/PRD.md`](../product/PRD.md) | Full feature specifications, acceptance criteria, and non-functional requirements that expand on §3–§6 of this brief |
+| **Domain Glossary** | [`docs/product/domain-glossary.md`](../product/domain-glossary.md) | Canonical definitions for all domain terms used in this brief |
+| **Technical Architecture** | [`docs/technical/architecture.md`](../technical/architecture.md) | System design, component topology, data flows, and deployment model that realise the technical objectives in §2 |
+| **Developer Setup Guide** | [`docs/technical/dev-setup.md`](../technical/dev-setup.md) | Step-by-step onboarding guide for contributors; covers the environment assumptions stated in §7 |

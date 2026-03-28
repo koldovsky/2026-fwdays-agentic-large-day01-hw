@@ -181,3 +181,12 @@ Excalidraw is a mature, production-grade open-source product actively used at `e
 | **TTD reliability** | AI-generated Mermaid output frequently contains syntax errors; the `mermaidAutoFix` utilities mitigate this but do not cover all cases, leading to occasional failed renders. |
 | **Mobile / touch experience** | The product is desktop-first; touch and pen input are supported via pointer events and the PEP polyfill, but the mobile experience lags behind the desktop UX. |
 | **Monorepo build complexity** | Managing inter-package dependencies, build order (`common → math → element → excalidraw`), and consistent TypeScript types across packages adds overhead for contributors. |
+
+---
+
+## 9. Related Documentation
+
+| Document | Location | Relationship |
+|---|---|---|
+| **Product Requirements Document** | [`docs/product/PRD.md`](../product/PRD.md) | Full feature specifications, user role definitions, and acceptance criteria that expand on the workflows and integration points in §3–§5 |
+| **Domain Glossary** | [`docs/product/domain-glossary.md`](../product/domain-glossary.md) | Complete, authoritative definitions for all domain terms listed in §6; use the glossary as the canonical reference when terminology is ambiguous |

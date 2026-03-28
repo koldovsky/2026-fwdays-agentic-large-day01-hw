@@ -449,3 +449,12 @@ The scene can contain hundreds of elements. Storing them in React state would ca
 | **PWA background sync**                            | Using the Background Sync API to queue Firebase writes when offline and flush on reconnect, reducing data loss risk during intermittent connectivity                                                   |
 | **Sidecar pattern for AI features**                | Containerising the AI/TTD proxy as a sidecar alongside the Docker deployment, enabling self-hosted users to run the full feature set without an external AI API contract                               |
 | **Micro-frontend / module federation**             | If the Excalidraw Plus team needs to inject UI surface into the open-source shell without forking, Webpack/Vite Module Federation could provide a clean boundary                                       |
+
+---
+
+## 8. Related Documentation
+
+| Document | Location | Relationship |
+|---|---|---|
+| **Technical Architecture** | [`docs/technical/architecture.md`](../technical/architecture.md) | Full system design document; the patterns described here are grounded in the architectural decisions and component topology detailed there |
+| **Product Requirements Document** | [`docs/product/PRD.md`](../product/PRD.md) | Product requirements that shaped specific architectural choices — e.g., the offline-first storage pattern, E2E encryption design, and embeddable component API surface |

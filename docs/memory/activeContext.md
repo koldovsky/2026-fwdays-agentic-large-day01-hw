@@ -14,7 +14,7 @@ This file is a living record of the **current project context** for the Excalidr
 - **Debug** by knowing what changed recently and what the known failure modes are.
 - **Align** across teams (frontend, QA, DevOps, product) on the current state of the project.
 
-It complements the static reference docs in `docs/memory/` (see `techContext.md`, `systemPatterns.md`, `decisionLog.md`). Those describe *what the system is*; this document describes *what is happening right now*.
+It complements the static reference docs in `docs/memory/` (see `techContext.md`, `systemPatterns.md`, `decisionLog.md`) and the extended product and technical docs in `docs/product/` and `docs/technical/`. Those describe *what the system is*; this document describes *what is happening right now*.
 
 ---
 
@@ -213,6 +213,17 @@ The following env vars control feature behaviour. Set in `.env.local` for local 
 | A-06 | Set up Sentry alerts for collab error rate and auto-save failures in production | DevOps | 🟡 Low | Open |
 | A-07 | Schedule review of `Scene.getScene()` removal plan with `dwelle` / `mtolmacs` | Tech lead | 🟡 Low | Open |
 | A-08 | Confirm this `activeContext.md` is reviewed and updated each week in team sync | All | 🟡 Low | Open |
+
+---
+
+## 11. Related Documentation
+
+| Document | Location | Relationship |
+|---|---|---|
+| **Product Requirements Document** | [`docs/product/PRD.md`](../product/PRD.md) | Canonical product feature specs and acceptance criteria; reference when assessing impact of active changes on feature contracts |
+| **Domain Glossary** | [`docs/product/domain-glossary.md`](../product/domain-glossary.md) | Authoritative terminology reference; use when documenting issues, decisions, or change descriptions in this file |
+| **Technical Architecture** | [`docs/technical/architecture.md`](../technical/architecture.md) | Full system design; consult when an ongoing change touches data flows, storage layers, collaboration, or the rendering pipeline |
+| **Developer Setup Guide** | [`docs/technical/dev-setup.md`](../technical/dev-setup.md) | Local environment setup and troubleshooting; relevant for the environment config entries in §6 |
 
 ---
 

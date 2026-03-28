@@ -596,3 +596,12 @@ Three issues break `<Excalidraw>` multi-instance correctness:
 - `index.tsx:105` — `UIOptions` memo breaks
 
 **Recommended action**: Audit all module-level caches and singletons against the multi-instance embedding use case.
+
+---
+
+## 6. Related Documentation
+
+| Document | Location | Relationship |
+|---|---|---|
+| **Technical Architecture** | [`docs/technical/architecture.md`](../technical/architecture.md) | Authoritative system design reference; many findings in this log are rooted in architectural trade-offs documented there (storage model, reconciliation algorithm, encryption design) |
+| **Product Requirements Document** | [`docs/product/PRD.md`](../product/PRD.md) | Product-level requirements that constrain how technical debt items may be resolved — e.g., API stability requirements limit how quickly internal refactors can land |
