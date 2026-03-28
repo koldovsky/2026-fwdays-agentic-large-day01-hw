@@ -23,7 +23,7 @@
 ## Hosted app: data and security
 
 - **Scene JSON and app state in localStorage; binary files separate** — `initializeScene` comment and keys: `STORAGE_KEYS.LOCAL_STORAGE_ELEMENTS` / `LOCAL_STORAGE_APP_STATE`; files loaded via `LocalData.fileStorage` or Firebase (`App.tsx` `loadImages`).
-- **Encrypted / versioned backend payloads** — `excalidraw-app/data/index.ts` uses `compressData` / `decompressData`, `encrypt`/`decrypt` helpers from `@excalidraw/excalidraw/data/*`, `BACKEND_V2_GET` / `BACKEND_V2_POST` env URLs.
+- **Encrypted / versioned backend payloads** — `excalidraw-app/data/index.ts` uses `compressData` / `decompressData` (with `encryptionKey` option) from `@excalidraw/excalidraw/data/encode` and `decryptData` / `generateEncryptionKey` from `@excalidraw/excalidraw/data/encryption`; `BACKEND_V2_GET` / `BACKEND_V2_POST` env URLs.
 - **Firebase path separation** — `FIREBASE_STORAGE_PREFIXES.shareLinkFiles` vs `collabFiles` in `app_constants.ts`.
 - **Collaboration room ids** — `ROOM_ID_BYTES` (10) + `crypto.getRandomValues` in `data/index.ts` `generateRoomId`.
 
