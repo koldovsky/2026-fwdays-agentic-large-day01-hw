@@ -127,5 +127,6 @@ Other workflows exist under `.github/workflows/` (coverage PR, size limit, Docke
 
 ## Related documentation
 
+- [`docs/technical/architecture.md`](architecture.md) — system architecture, package boundaries, editor core, and build pipeline.
 - [`docs/memory/techContext.md`](../memory/techContext.md) — versions, aliases, and command reference.
 - [`docs/memory/activeContext.md`](../memory/activeContext.md) — CI expectations and suggested first files when debugging.
