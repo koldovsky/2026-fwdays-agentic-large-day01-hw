@@ -1,0 +1,42 @@
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+.eslintcache
+.history
+.idea
+.vercel
+.vscode
+.yarn
+*.log
+*.tgz
+build
+dist
+firebase
+logs
+node_modules
+npm-debug.log*
+package-lock.json
+yarn-debug.log*
+yarn-error.log*
+packages/excalidraw/types
+coverage
+dev-dist
+html
+meta*.json
+.claude
+
+# --- Auto-generated (do not hand-edit; regenerate via scripts / tooling) ---
+# scripts/buildWasm.js
+packages/excalidraw/fonts/wasm/*.ts
+# scripts/build-locales-coverage.js
+packages/excalidraw/locales/percentages.json
+# cn-font-split loaders (see font package README / tooling)
+packages/excalidraw/fonts/ComicShanns/index.ts
+packages/excalidraw/fonts/Excalifont/index.ts
+packages/excalidraw/fonts/Xiaolai/index.ts
+# Next.js build & example asset copy (yarn copy:assets)
+.next
+examples/with-nextjs/public/fonts
