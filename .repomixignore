@@ -1,3 +1,29 @@
+﻿# Build artifacts
+dist/
+build/
+.next/
+
+# Dependencies
+node_modules/
+
+# Generated / minified
+*.min.js
+*.min.css
+*.snap
+
+# Lock files (великі, не несуть семантики для AI)
+yarn.lock
+package-lock.json
+
+# Coverage & reports
+coverage/
+.nyc_output/
+
+# IDE-specific (не наш контекст)
+.git/
+.vscode/
+
+
 .DS_Store
 .env.development.local
 .env.local
@@ -22,7 +48,6 @@ package-lock.json
 yarn-debug.log*
 yarn-error.log*
 packages/excalidraw/types
-coverage
 dev-dist
 html
 meta*.json
@@ -34,9 +59,7 @@ packages/excalidraw/locales/percentages.json
 **/node_modules/**
 **/.next/**
 **/.turbo/**
+/.github/assets/**
 packages/excalidraw/fonts/**
 packages/excalidraw/subset/**
-.env.development
-.env.production
-.env.test
-/.github/assets/**
+repomix*.txt
