@@ -1,0 +1,37 @@
+# Build artifacts
+dist/
+build/
+.next/
+
+# Dependencies
+node_modules/
+
+# Generated / minified
+*.min.js
+*.min.css
+*.snap
+
+# Lock files (великі, не несуть семантики для AI)
+yarn.lock
+package-lock.json
+
+# Locales (59 translation files, not relevant for coding)
+packages/excalidraw/locales/
+
+# Fonts (binary assets)
+*.woff
+*.woff2
+*.ttf
+
+# Static assets
+public/
+
+# Coverage & reports
+coverage/
+.nyc_output/
+
+# Large generated files
+repomix-output.xml
+
+# IDE-specific (не наш контекст)
+.git/
