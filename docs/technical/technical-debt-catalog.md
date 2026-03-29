@@ -41,7 +41,7 @@ stateDiagram-v2
 ```
 
 **Key implicit transitions:**
-- `CONNECTING → CONNECTED` gated solely on server `"init-room"` message setting `portal.socketInitialized = true` (Collab.tsx line 751).
+- `CONNECTING → CONNECTED` gated solely on server `"init-room"` message setting `portal.socketInitialized = true` (excalidraw-app/collab/Collab.tsx line 751).
 - `restoreElements()` runs **before** reconciliation (line 762) — admitted wrong but required to avoid regenerating `appState.newElement`.
 - `LocalData.pauseSave("collaboration")` has no guaranteed symmetric resume on error paths — pause can persist indefinitely if an exception is thrown mid-startup.
 
