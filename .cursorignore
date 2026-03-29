@@ -21,6 +21,10 @@ npm-debug.log*
 package-lock.json
 yarn-debug.log*
 yarn-error.log*
+# Lock files (великі, не несуть семантики для AI)
+yarn.lock
+package-lock.json
+
 packages/excalidraw/types
 coverage
 dev-dist
