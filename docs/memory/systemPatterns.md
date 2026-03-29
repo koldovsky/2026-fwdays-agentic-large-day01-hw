@@ -3,6 +3,7 @@
 ## Architecture shape
 
 - For a full technical write-up, see `docs/technical/architecture.md`.
+- For hidden coupling and refactor hazards (scene render cycle, `componentDidUpdate` ordering, flagged `TODO`/`FIXME`/`HACK` clusters), see `docs/technical/agent-sharp-edges.md`.
 - Monorepo with clear separation between:
   - product application (`excalidraw-app`)
   - reusable library package (`packages/excalidraw`)
