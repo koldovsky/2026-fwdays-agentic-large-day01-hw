@@ -5,12 +5,16 @@
 .env.test.local
 .envrc
 .eslintcache
+.git/
 .history
 .idea
 .vercel
-.vscode
+.vscode/
 .yarn
 *.log
+*.min.css
+*.min.js
+*.snap
 *.tgz
 build
 dist
@@ -18,10 +22,9 @@ firebase
 logs
 node_modules
 npm-debug.log*
-package-lock.json
 yarn-debug.log*
 yarn-error.log*
-# Lock files (великі, не несуть семантики для AI)
+# Lock files (lock files are large and do not contain semantic information for AI)
 yarn.lock
 package-lock.json
 
