@@ -34,3 +34,5 @@ packages/excalidraw/locales/percentages.json
 **/node_modules/**
 **/.next/**
 **/.turbo/**
+repomix*.txt
+repomix-output.*
