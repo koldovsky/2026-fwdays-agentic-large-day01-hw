@@ -231,7 +231,7 @@ Informal words (e.g. “element” on the canvas) are called out explicitly when
 Abbreviated rows—no substitute for a full entry when the term is central to your work.
 
 | Name | Role | Key location | Do not confuse with |
-|------|------|----------------|---------------------|
+| --- | --- | --- | --- |
 | `ElementsMap` / `SceneElementsMap` | Id-keyed maps of elements; `SceneElementsMap` is the full ordered scene map brand | `packages/element/src/types.ts` | Plain `Record<id, ExcalidrawElement>` without scene invariants |
 | `ExcalidrawFrameLikeElement` | Frame or magic-frame shapes used for grouping/clipping | `packages/element/src/types.ts` | Generic UI “frames” or HTML `<iframe>` embeds only |
 | `RemoteExcalidrawElement` / `ReconciledExcalidrawElement` | Branded ordered elements in collaboration merge | `packages/excalidraw/data/reconcile.ts` | Local-only `OrderedExcalidrawElement` before merge |
@@ -239,4 +239,4 @@ Abbreviated rows—no substitute for a full entry when the term is central to yo
 
 ---
 
-*Glossary aligned with sources under this repository as of the documented architecture in `docs/technical/architecture.md`.*
+_Glossary aligned with sources under this repository as of the documented architecture in `docs/technical/architecture.md`._

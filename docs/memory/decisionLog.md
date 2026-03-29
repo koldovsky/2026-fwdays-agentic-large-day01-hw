@@ -2,7 +2,7 @@
 
 This file records two categories of decisions and observations:
 
-- **Section A — Documentation decisions:** Choices made during the `day-1` documentation effort (since `0958de0`, 2026-03-26).
+- **Section A — Documentation decisions:** Choices made during the `day-1` documentation effort (since `b9f16d4`, 2026-03-26).
 - **Section B — Code behavior: doc vs implementation gaps:** Mismatches between written documentation/comments and actual runtime behavior.
 - **Section C — Code behavior: implicit invariants and refactor hazards:** Under-documented contracts that break when surrounding code is changed.
 
@@ -16,19 +16,19 @@ Sections B and C complement [`architecture.md`](../technical/architecture.md) (h
 
 **Decision:** All reverse-engineered documentation follows a "source-verified only" policy. Every factual assertion cites specific file paths. Anything inferred but not directly proven by code is explicitly labeled as "Inferred."
 
-**Context:** Documentation was generated from `repomix-compressed.txt` (~110K lines, committed in `252c1a1`) and direct source inspection. No external roadmap, issue tracker, or team input was available.
+**Context:** Documentation was generated from `repomix-compressed.txt` (~110K lines, committed in `785c979`) and direct source inspection. No external roadmap, issue tracker, or team input was available.
 
-**Recorded:** 2026-03-29 (`aa9e56e` and subsequent commits).
+**Recorded:** 2026-03-29 (`02477fe` and subsequent commits).
 
 ---
 
 ### 2. `agent-sharp-edges.md` superseded by `decisionLog.md`
 
-**Decision:** The standalone `docs/technical/agent-sharp-edges.md` (created in `910949d`) was deleted in `92fff61`. Its content — implicit invariants and refactor hazards — was folded into this file (Section C), alongside new documentation/implementation gap analysis (Section B).
+**Decision:** The standalone `docs/technical/agent-sharp-edges.md` (created in `a7e3804`) was deleted in `1a1b065`. Its content — implicit invariants and refactor hazards — was folded into this file (Section C), alongside new documentation/implementation gap analysis (Section B).
 
 **Rationale:** A single decision log in the Memory Bank is easier to maintain and discover than a separate technical doc. The Memory Bank is the canonical place for "things that are easy to get wrong."
 
-**Recorded:** 2026-03-29 (`92fff61`).
+**Recorded:** 2026-03-29 (`1a1b065`).
 
 ---
 
@@ -38,7 +38,7 @@ Sections B and C complement [`architecture.md`](../technical/architecture.md) (h
 
 **Rationale:** Different update cadences and audiences. Memory Bank files change with every work session; product and technical docs change with the codebase.
 
-**Recorded:** 2026-03-29 (`aa9e56e`).
+**Recorded:** 2026-03-29 (`02477fe`).
 
 ---
 
@@ -46,9 +46,29 @@ Sections B and C complement [`architecture.md`](../technical/architecture.md) (h
 
 **Decision:** A one-line file at the repo root (`decisionLog.md`) points to `docs/memory/decisionLog.md`.
 
-**Context:** Created in `92fff61` as a convenience pointer. The root location is discoverable; the actual content lives in the Memory Bank.
+**Context:** Created in `1a1b065` as a convenience pointer. The root location is discoverable; the actual content lives in the Memory Bank.
 
-**Recorded:** 2026-03-29 (`92fff61`).
+**Recorded:** 2026-03-29 (`1a1b065`).
+
+---
+
+### 5. Cursor rule: Memory Bank read/update protocol
+
+**Decision:** Add `.cursor/rules/memory-bank.mdc` with `alwaysApply: true` so agents read `docs/memory/*` in a fixed order at task start and update `activeContext.md` / `progress.md` / `decisionLog.md` when project context changes.
+
+**Rationale:** Reduces drift between sessions and keeps homework/repo context consistent without relying on chat history.
+
+**Recorded:** 2026-03-29 (`3c3700f`).
+
+---
+
+### 6. Stable fragment IDs for Memory Bank deep links
+
+**Decision:** When a subsection heading would produce an ambiguous or renderer-dependent URL fragment (for example text containing `/`), insert an explicit HTML anchor immediately before the heading — e.g. `<a id="cicd-pipeline"></a>` before `## CI/CD pipeline` in [`systemPatterns.md`](./systemPatterns.md). Consumers link with `#cicd-pipeline` (e.g. [`techContext.md`](./techContext.md)).
+
+**Rationale:** Heading-based slugs differ across GitHub, VS Code, and other Markdown viewers; a fixed `id` keeps deep links reliable.
+
+**Recorded:** 2026-03-30.
 
 ---
 
@@ -134,7 +154,7 @@ These items are either **under-documented in high-level architecture** or live m
 
 **What happens (actual order):**
 
-1. **`_initialized` gate (first).** If `!this._initialized && !this.state.isLoading`, the code sets `this._initialized = true`, emits `editor:initialize` on `editorLifecycleEvents`, and calls `this.props.onInitialize?.(this.api)`. This is a **one-way implicit state machine** (`false` → `true`, not reset in normal lifecycle). The comment directly above this block in `App.tsx` says it **must** be updated *before* "state change listeners are triggered below" — i.e. before step 2.
+1. **`_initialized` gate (first).** If `!this._initialized && !this.state.isLoading`, the code sets `this._initialized = true`, emits `editor:initialize` on `editorLifecycleEvents`, and calls `this.props.onInitialize?.(this.api)`. This is a **one-way implicit state machine** (`false` → `true`, not reset in normal lifecycle). The comment directly above this block in `App.tsx` says it **must** be updated _before_ "state change listeners are triggered below" — i.e. before step 2.
 
 2. **`this.appStateObserver.flush(prevState)`.** That method (`packages/excalidraw/components/AppStateObserver.ts`) is what **fires `onStateChange` subscribers**: it walks registered listeners and invokes callbacks when `predicate(currentState, prevState)` holds. It runs immediately after the `_initialized` gate and before the rest of the method's branching.
 
@@ -203,7 +223,7 @@ These items are either **under-documented in high-level architecture** or live m
 There is **no** `WORKAROUND` tag in `.ts`/`.tsx` in this repo at the time of writing. **`HACK`** appears in the linear-element mobile handle path in `App.tsx`. **`FIXME`** and **`TODO`** appear across packages; clusters worth manual review before large refactors include:
 
 | Theme | Example locations |
-|---|---|
+| --- | --- |
 | History / deltas / `#7348` | `packages/element/src/delta.ts`, `packages/excalidraw/tests/history.test.tsx`, `packages/excalidraw/actions/actionFinalize.tsx` |
 | Export / tests | `packages/utils/tests/export.test.ts` (SVG and deleted elements) |
 | Flaky or incorrect tests | `packages/excalidraw/wysiwyg/textWysiwyg.test.tsx`, `packages/element/tests/zindex.test.tsx` |
@@ -219,4 +239,4 @@ Use ripgrep for `\b(TODO|FIXME|HACK)\b` when preparing a change that touches tho
 - [`architecture.md`](../technical/architecture.md) — end-to-end editor architecture and file index.
 - [`systemPatterns.md`](./systemPatterns.md) — monorepo and composition patterns at a glance.
 
-_Last updated: 2026-03-29._
+_Last updated: 2026-03-30._

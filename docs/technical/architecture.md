@@ -193,6 +193,7 @@ In `App.componentDidMount`, `this.store.onDurableIncrementEmitter.on((increment)
 ### 2. React tree: canvas wrapper components
 
 - **`StaticCanvas`** (`packages/excalidraw/components/canvases/StaticCanvas.tsx`):
+
   - Receives `canvas` (shared `HTMLCanvasElement` from `App`), `rc` (RoughJS canvas), `elementsMap`, `allElementsMap`, `visibleElements`, `sceneNonce`, `selectionNonce`, `scale` (`window.devicePixelRatio`), `appState`, and `renderConfig` (image cache, grid, theme, embed validation, etc.).
   - On mount, `wrapper.replaceChildren(canvas)` places the canvas in a div; `useEffect` syncs CSS size and buffer dimensions from `appState.width` / `height` and `scale`.
   - Calls `renderStaticScene({...}, isRenderThrottlingEnabled())`. When throttling is enabled, `renderStaticScene` delegates to `renderStaticSceneThrottled` (RAF-throttled); otherwise it calls `_renderStaticScene` directly (`packages/excalidraw/renderer/staticScene.ts`).
@@ -291,7 +292,7 @@ Source-level edges (such as `element` → `utils` and `excalidraw` → `utils`) 
 ## File index (primary touchpoints)
 
 | Concern | Location |
-|--------|----------|
+| --- | --- |
 | Decision log (doc gaps, implicit invariants) | [`docs/memory/decisionLog.md`](../memory/decisionLog.md) |
 | Root workspace config | `package.json` |
 | `App` class, `updateScene`, `syncActionResult`, render | `packages/excalidraw/components/App.tsx` |

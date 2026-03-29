@@ -6,6 +6,7 @@
 - Monorepo model: Yarn workspaces (`excalidraw-app`, `packages/*`, `examples/*`).
 - Node.js requirement: `>=18.0.0` (root and app package engines).
 - Language: TypeScript (root uses `typescript@5.9.3`).
+- Path aliases: `tsconfig.json` maps `@excalidraw/common`, `@excalidraw/element`, `@excalidraw/math`, `@excalidraw/utils`, and `@excalidraw/excalidraw` (plus wildcard subpaths) to local `packages/*/src/` sources. These are mirrored in `vitest.config.mts` and `excalidraw-app/vite.config.mts` so dev server, tests, and IDE resolve identically.
 
 ## Main frameworks and libraries
 
@@ -49,6 +50,15 @@
 - `yarn --cwd ./excalidraw-app start:production` - build + local static serve.
 - `yarn --cwd ./examples/with-nextjs dev` - Next.js integration example.
 - `yarn --cwd ./examples/with-script-in-browser start` - browser script example.
+
+## CI/CD pipeline
+
+CI workflows are defined in `.github/workflows/`. For a full table of triggers and jobs, see [systemPatterns.md — CI/CD pipeline](./systemPatterns.md#cicd-pipeline). Key points for local development:
+
+- **PR gates:** `lint.yml` (typecheck + ESLint + Prettier), `test-coverage-pr.yml` (Vitest coverage), `semantic-pr-title.yml` (semantic PR title enforcement), `size-limit.yml` (bundle size on `packages/excalidraw`).
+- **Push to `master`:** `test.yml` runs `yarn test:app`.
+- **Release branch:** auto-release to npm, Docker build/publish, Sentry sourcemaps.
+- **Locale branch (`l10n_master`):** locale coverage check.
 
 ## Source-verified references
 

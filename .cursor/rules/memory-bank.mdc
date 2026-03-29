@@ -1,0 +1,37 @@
+---
+description: Read the Memory Bank at the start of every task to recover project context
+globs:
+alwaysApply: true
+---
+
+# Memory Bank
+
+This project maintains a Memory Bank in `docs/memory/`. Because AI assistants lose context between sessions, you **must** read these files at the start of every task before making changes.
+
+## Reading order
+
+Read files in this order (each builds on the previous):
+
+1. `docs/memory/projectbrief.md` — what the project is, repo scope, delivery shapes.
+2. `docs/memory/productContext.md` — users, capabilities, journeys, product boundaries.
+3. `docs/memory/systemPatterns.md` — architecture, state management, testing, error handling, code organization, CI/CD.
+4. `docs/memory/techContext.md` — tooling, frameworks, commands, path aliases.
+5. `docs/memory/activeContext.md` — current focus, recent changes, blockers, next steps.
+6. `docs/memory/progress.md` — what's done, what works, what's left.
+7. `docs/memory/decisionLog.md` — documentation decisions, doc/implementation gaps, implicit invariants and refactor hazards.
+
+## Supplementary docs (read when relevant)
+
+- `docs/product/PRD.md` — reverse-engineered product requirements.
+- `docs/product/domain-glossary.md` — canonical terminology and disambiguation.
+- `docs/technical/architecture.md` — editor data flow, component ownership, package dependencies.
+- `docs/technical/dev-setup.md` — environment setup, quality gates, troubleshooting.
+
+## Updating the Memory Bank
+
+When you complete a task that changes project context, update the relevant Memory Bank files:
+
+- **Always update** `activeContext.md` (bump timestamp, describe current focus, decisions, blockers).
+- **Update `progress.md`** when tasks are completed or status changes.
+- **Update `decisionLog.md`** when making non-obvious decisions, discovering doc/code gaps, or encountering implicit invariants.
+- **Update other files** when the underlying facts change (new patterns, new tools, shifted product boundaries).

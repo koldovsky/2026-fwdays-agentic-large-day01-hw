@@ -11,7 +11,7 @@ Excalidraw's goal is to deliver a **fast, approachable, browser-native whiteboar
 The product fulfills two distinct but overlapping goals:
 
 | Goal | Delivery shape | North star |
-|---|---|---|
+| --- | --- | --- |
 | **Consumer whiteboard** | Hosted web app (`excalidraw-app`) | Any user can open a URL, start drawing, share a link, and optionally collaborate in real time — zero install, zero account required |
 | **Whiteboard infrastructure** | npm package (`@excalidraw/excalidraw`) | Any product team can embed a fully-featured canvas in their app with a single React component and a stable API |
 
@@ -26,6 +26,7 @@ Both goals share the same editor core; the hosted app adds the product shell (sh
 **Primary:** Knowledge workers, engineers, designers, and students who need to quickly externalize ideas — architecture diagrams, flowcharts, wireframes, brainstorming maps, meeting notes on a canvas — without adopting a heavyweight diagramming tool.
 
 **Behavioral signals in source:**
+
 - No account/auth gate: the app initializes from `localStorage` and can load a shared scene from a URL hash without login (`excalidraw-app/data/index.ts`, local-first recovery in `excalidraw-app/App.tsx`).
 - `localStorage` quota alerts exist (`localStorageQuotaExceededAtom`) — indicates a "light" persistence model aimed at casual, individual use as the baseline.
 - Share-link flow (`excalidraw-app/share/ShareDialog.tsx`) is prominent and link-centric, consistent with a product used in async communication contexts (Slack, email, issue trackers).
@@ -39,6 +40,7 @@ Both goals share the same editor core; the hosted app adds the product shell (sh
 Product engineers at SaaS companies, documentation platforms, note-taking apps, or internal tools who want to embed a canvas without building one. They interact with Excalidraw as an npm package, not a hosted product.
 
 **What they need (evidenced by API surface):**
+
 - A drop-in `<Excalidraw />` React component with minimal configuration.
 - Imperative control: `ExcalidrawImperativeAPI` (`updateScene`, `getSceneElements`, `getAppState`, `updateLibrary`, `addFiles`, `onChange`, `onIncrement`, `registerAction`).
 - Theming hooks: `theme` prop, `UIOptions`, `renderTopRightUI` / `renderTopLeftUI` slot props.
@@ -59,15 +61,16 @@ Engineers who contribute to the hosted app or library and need the repository to
 
 **Supported element types** (from `ToolType` in `packages/excalidraw/types.ts`):
 
-| Category | Elements |
-|---|---|
-| Geometry | Rectangle, diamond, ellipse |
-| Lines | Arrow (with endpoint binding), line, freedraw |
-| Content | Text, image, embeddable (iframe) |
-| Organization | Frame, magic frame |
-| Interaction | Selection, lasso, eraser, hand/pan, laser pointer |
+| Category     | Elements                                          |
+| ------------ | ------------------------------------------------- |
+| Geometry     | Rectangle, diamond, ellipse                       |
+| Lines        | Arrow (with endpoint binding), line, freedraw     |
+| Content      | Text, image, embeddable (iframe)                  |
+| Organization | Frame, magic frame                                |
+| Interaction  | Selection, lasso, eraser, hand/pan, laser pointer |
 
 **Canvas behaviors:**
+
 - Zoom and scroll with viewport culling: `Renderer.getRenderableElements` performs viewport-based culling so only visible elements are drawn (`packages/excalidraw/scene/Renderer.ts`).
 - Hand-drawn aesthetic rendered via RoughJS (`roughjs` dependency, used in `_renderStaticScene`).
 - Grid mode, zen mode, and view-only mode are toggleable from `AppState`.
@@ -79,6 +82,7 @@ Engineers who contribute to the hosted app or library and need the repository to
 **Requirement:** Multiple users can join a shared session, see each other's cursors and edits live, and receive an offline warning if connectivity drops.
 
 **Implementation signals:**
+
 - Room-based sessions coordinated by `Collab` class (`excalidraw-app/collab/Collab.tsx`) with socket-based transport via `Portal` (`excalidraw-app/collab/Portal.tsx`).
 - Element reconciliation on merge: `reconcileElements` applies version/versionNonce rules to decide which changes win, handling concurrent edits without a CRDT library (`packages/excalidraw/data/reconcile.ts`).
 - Presence rendering: collaborator cursors/pointers and laser positions are drawn on `InteractiveCanvas` via `AppState.collaborators` (`packages/excalidraw/renderer/interactiveScene.ts`).
@@ -90,6 +94,7 @@ Engineers who contribute to the hosted app or library and need the repository to
 **Requirement:** Users can generate a shareable URL that encodes the full scene and optionally upload it to a backend for recipients to open.
 
 **Implementation signals:**
+
 - `exportToBackend` in `excalidraw-app/data/index.ts` handles scene upload; the result is a URL with a hash fragment.
 - `ShareDialog` (`excalidraw-app/share/ShareDialog.tsx`) provides copy-link, system-share, and link-revocation flows.
 - Scene data is encrypted client-side before upload; the decryption key travels in the URL hash (never reaches the server).
@@ -101,7 +106,7 @@ Engineers who contribute to the hosted app or library and need the repository to
 **Export formats evidenced in code:**
 
 | Format | Entry point |
-|---|---|
+| --- | --- |
 | PNG / SVG bitmap | `exportToCanvas` in `packages/excalidraw/scene/export.ts` reuses `renderStaticScene` |
 | Clipboard (copy as image) | Built into editor actions |
 | `.excalidraw` JSON file | Serialization via `packages/excalidraw/data/*` |
@@ -114,6 +119,7 @@ The export renderer uses the same `renderStaticScene` function as the on-screen 
 **Requirement:** Users can save reusable groups of elements to a personal library, import community libraries, and insert saved shapes into any drawing.
 
 **Implementation signals:**
+
 - `Library` class manages import, merge, and persistence of `LibraryItem` templates keyed by ID (`packages/excalidraw/data/library.ts`).
 - Library menu UI: `packages/excalidraw/components/LibraryMenu*.tsx`.
 - `ExcalidrawImperativeAPI.updateLibrary` exposes library management to embedders.
@@ -124,6 +130,7 @@ The export renderer uses the same `renderStaticScene` function as the on-screen 
 **Requirement:** Users can install Excalidraw as a native-like app, open `.excalidraw` files from the OS, and use the app on intermittent connections.
 
 **Implementation signals:**
+
 - PWA manifest is generated via `vite-plugin-pwa` in `excalidraw-app/vite.config.mts` with `file_handlers` for `.excalidraw` and `share_target` for OS-level sharing.
 - Service worker registration at app startup (`excalidraw-app/index.tsx`) with runtime caching for fonts, locale chunks, and JS bundles.
 - Local-first initialization: the app restores state from `localStorage` on load before any network calls.
@@ -133,6 +140,7 @@ The export renderer uses the same `renderStaticScene` function as the on-screen 
 **Requirement:** The editor UI is fully translatable and can be rendered in any supported locale.
 
 **Implementation signals:**
+
 - Extensive locale files under `packages/excalidraw/locales/*.json` covering dozens of languages.
 - `langCode` prop on the `Excalidraw` component selects the active locale; hosts and the app can pass it dynamically.
 - Build chunking splits locale files so only the active language is loaded at runtime.
@@ -144,7 +152,7 @@ The export renderer uses the same `renderStaticScene` function as the on-screen 
 **Integration contract evidenced by `packages/excalidraw/types.ts` and `README.md`:**
 
 | Surface | Details |
-|---|---|
+| --- | --- |
 | Component | `<Excalidraw />` — mounts `App` with providers |
 | Initial data | `initialData` prop (elements, appState, files, library) |
 | Reactive callbacks | `onChange`, `onPointerUpdate`, `onScrollChange` |
@@ -199,11 +207,11 @@ Many interactive controls use `aria-label` attributes, and test helpers query by
 
 ### 4.10 Node.js and toolchain versions
 
-| Tool | Required version |
-|---|---|
-| Node.js | `>=18.0.0` (CI runs `20.x`) |
-| Yarn | Classic `1.22.22` (`packageManager` in root `package.json`) |
-| Docker | Optional; needed only for `yarn build:app:docker` |
+| Tool    | Required version                                            |
+| ------- | ----------------------------------------------------------- |
+| Node.js | `>=18.0.0` (CI runs `20.x`)                                 |
+| Yarn    | Classic `1.22.22` (`packageManager` in root `package.json`) |
+| Docker  | Optional; needed only for `yarn build:app:docker`           |
 
 Mismatched toolchain versions are the most common cause of `yarn install` failures and unexpected build behavior (see `docs/technical/dev-setup.md`).
 
@@ -216,7 +224,7 @@ Local collaboration features require environment variables (`VITE_APP_FIREBASE_C
 ## 5. Out of Scope (product boundaries, source-grounded)
 
 | Area | Why it is out of scope |
-|---|---|
+| --- | --- |
 | Account/auth system | No auth layer exists in the codebase; sharing is link-based and anonymous |
 | Server-side canvas rendering | Canvas rendering is client-only by design; no SSR path exists |
 | Multiplayer as a turnkey npm feature | Real-time room sync lives in `excalidraw-app`, not the npm package |
@@ -228,7 +236,7 @@ Local collaboration features require environment variables (`VITE_APP_FIREBASE_C
 ## 6. Source references
 
 | Topic | Primary sources |
-|---|---|
+| --- | --- |
 | Monorepo layout and workspaces | `package.json`, `docs/memory/projectbrief.md` |
 | Editor component architecture | `packages/excalidraw/components/App.tsx`, `docs/technical/architecture.md` |
 | Element types and tool list | `packages/excalidraw/types.ts` (`ToolType`, `ExcalidrawElement`) |

@@ -4,6 +4,7 @@
 
 - A Yarn workspace monorepo named `excalidraw-monorepo` that contains the Excalidraw web app, reusable packages, and integration examples.
 - Core product domain: a browser-based whiteboard/diagramming tool with a hand-drawn sketch style. The hosted web app supports collaborative drawing (shared sessions and synced edits); the same editor ships as an embeddable React package for third-party apps.
+- Tech stack: TypeScript, React 19, Vite, Jotai, Vitest; Firebase + sockets for collaboration in the hosted app.
 - Delivery shapes:
   - hosted app (`excalidraw-app`)
   - embeddable library (`@excalidraw/excalidraw`)
@@ -33,8 +34,8 @@
 
 ## Details
 
-- For detailed architecture → see `docs/technical/architecture.md`.
-- For domain glossary → see `docs/product/domain-glossary.md`.
+- For detailed architecture → see [`architecture.md`](../technical/architecture.md).
+- For domain glossary → see [`domain-glossary.md`](../product/domain-glossary.md).
 
 ## Source-verified references
 

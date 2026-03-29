@@ -1,4 +1,5 @@
 # Developer setup
+
 Set up this monorepo from a fresh machine to a PR-ready workflow without guessing versions or commands.
 
 ## Prerequisites
@@ -142,7 +143,7 @@ If a hook/check fails:
 ## Troubleshooting
 
 | Symptom | Likely cause | Fix |
-|---|---|---|
+| --- | --- | --- |
 | `yarn install` fails with engine/version errors | Wrong Node/Yarn version | Use Node 20 and Yarn Classic `1.22.22`, then rerun `yarn install` |
 | App starts on unexpected port or not on `3000` | `VITE_APP_PORT` in shell or repo-root `.env*` (Vite `envDir` is the monorepo root) | Unset/change `VITE_APP_PORT`, or open the printed Vite URL |
 | Collaboration/Firebase features fail locally | Missing env configuration (e.g. `VITE_APP_FIREBASE_CONFIG`, backend/collab URLs referenced in `excalidraw-app/data/firebase.ts`, `excalidraw-app/data/index.ts`, `excalidraw-app/collab/Collab.tsx`) | Ask maintainers for required env values; do not commit secrets |
