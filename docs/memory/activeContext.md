@@ -52,12 +52,9 @@
 
 ---
 
-## Next steps (placeholder)
-
-Replace this bullet list when a real sprint goal exists:
-
-- [ ] Confirm any local diffs vs upstream Excalidraw you care to preserve.
-- [ ] Keep `progress.md` aligned with shipped behavior after meaningful merges.
+## Next steps
+- [ ] Перевірити та зафіксувати відмінності цього форку від upstream Excalidraw, які потрібно зберігати.
+- [ ] Після кожного суттєвого merge оновлювати `docs/memory/progress.md` відповідно до фактичної поведінки.
 
 ---
 
