@@ -93,7 +93,7 @@ Entries are listed alphabetically.
 | **Definition** | A temporary, shared drawing session identified by a unique room ID. All participants connect via WebSocket, see each other's cursors in real time, and receive live updates to the shared scene. |
 | **Context** | Room IDs are randomly generated when a user clicks "Live collaboration". The room is considered active as long as at least one participant remains connected. Room state is backed up to Firebase Firestore in encrypted form. There is no server-side authentication — possession of the room link is sufficient to join. |
 | **Examples** | A team design review where four engineers open the same share URL and co-edit a system architecture diagram. |
-| **Related Terms** | [End-to-End Encryption](#end-to-end-encryption), [Portal](#portal), [Reconciliation](#reconciliation), [Room Link](#room-link), [Scene](#scene) |
+| **Related Terms** | [End-to-End Encryption](#end-to-end-encryption-e2ee), [Portal](#portal), [Reconciliation](#reconciliation), [Room Link](#room-link), [Scene](#scene) |
 
 ---
 
@@ -192,7 +192,7 @@ Entries are listed alphabetically.
 | **Definition** | A content-addressable identifier (hash) for a binary file asset such as an image. Scene elements reference binary files by `FileId`; the actual file data is stored separately. |
 | **Context** | When an image is pasted or dropped onto the canvas, its content is hashed to produce a `FileId`. The element stores only the `FileId`; the file data lives in IndexedDB (local) or Firebase Storage (cloud, encrypted). Peers in a collaboration room fetch and decrypt files on demand using the `FileId`. |
 | **Examples** | An element of type `"image"` has `fileId: "sha256-abc123..."`. The matching binary is fetched from IndexedDB or Firebase Storage when the element is rendered. |
-| **Related Terms** | [Element](#element), [End-to-End Encryption](#end-to-end-encryption), [Scene](#scene) |
+| **Related Terms** | [Element](#element), [End-to-End Encryption](#end-to-end-encryption-e2ee), [Scene](#scene) |
 
 ---
 
@@ -313,7 +313,7 @@ Entries are listed alphabetically.
 | **Definition** | The URL shared with collaborators to join a specific collaboration room. The URL fragment (the `#` portion) contains both the room ID and the AES-GCM encryption key. |
 | **Context** | Generated when a user starts a live collaboration session. Because the key is in the URL fragment, it is never sent to any server. Anyone with the complete URL can join the room and decrypt its content; the key cannot be recovered if the URL is lost. |
 | **Examples** | `https://excalidraw.com/#room=abc123,base64EncodedKey` |
-| **Related Terms** | [Collaboration Room](#collaboration-room), [End-to-End Encryption](#end-to-end-encryption), [Share Link](#share-link) |
+| **Related Terms** | [Collaboration Room](#collaboration-room), [End-to-End Encryption](#end-to-end-encryption-e2ee), [Share Link](#share-link) |
 
 ---
 
@@ -357,7 +357,7 @@ Entries are listed alphabetically.
 | **Definition** | A read-only or view URL for a diagram that has been saved to Firebase Firestore and Firebase Storage. The encryption key is embedded in the URL fragment, enabling anyone with the link to view the diagram without a collaboration connection. |
 | **Context** | Distinct from a room link — a share link points to a static snapshot persisted in Firebase, not an active collaboration session. The receiving client fetches and decrypts the scene and binary files from Firebase on load. |
 | **Examples** | A designer posts a share link in a Slack message. Team members open it to view (but not edit) the latest version of the diagram. |
-| **Related Terms** | [Collaboration Room](#collaboration-room), [End-to-End Encryption](#end-to-end-encryption), [Room Link](#room-link) |
+| **Related Terms** | [Collaboration Room](#collaboration-room), [End-to-End Encryption](#end-to-end-encryption-e2ee), [Room Link](#room-link) |
 
 ---
 
