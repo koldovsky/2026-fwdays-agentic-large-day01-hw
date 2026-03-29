@@ -27,7 +27,7 @@ Excalidraw's error handling strategy combines a React Error Boundary for unhandl
 **File:** `excalidraw-app/sentry.ts`
 
 - Enabled only in production and staging builds (disabled via `VITE_APP_DISABLE_SENTRY=true` in Docker).
-- `beforeSend()` hook sanitises URLs by stripping the fragment (which contains the encryption key) before sending to Sentry.
+- `beforeSend()` hook sanitises `event.request.url` by stripping the fragment (which contains the encryption key) before sending to Sentry. **Limitation:** only `event.request.url` is sanitised; other URL-like fields on the event (e.g. breadcrumb URLs) are not modified.
 - Known benign errors are suppressed via `ignoreErrors`:
   - Safari runtime quirks
   - IndexedDB close events
