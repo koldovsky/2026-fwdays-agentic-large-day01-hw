@@ -2,7 +2,7 @@
 
 This document describes how the repository is structured and how the editor moves data from React state through the scene model to canvas drawing. Every statement is grounded in the TypeScript sources under this workspace unless noted as coming from a `package.json` manifest.
 
-For **non-obvious invariants** that are easy to break during refactors or agent-assisted edits (empty `setState`, `componentDidUpdate` ordering, `TODO`/`FIXME`/`HACK` hotspots), see [`agent-sharp-edges.md`](./agent-sharp-edges.md).
+For **undocumented behavior, doc/implementation gaps, and refactor hazards** (empty `setState`, `componentDidUpdate` ordering, `TODO`/`FIXME`/`HACK` hotspots), see [`decisionLog.md`](../memory/decisionLog.md).
 
 ---
 
@@ -124,7 +124,7 @@ In `App.render`, the code calls `this.renderer.getRenderableElements({...})` wit
 
 ### 6. After React commits: Store commit and host notification
 
-At the **start** of `App.componentDidUpdate` (`packages/excalidraw/components/App.tsx`), a one-way **`_initialized` flag** may flip on the first update where `!isLoading`, emitting `editor:initialize` and calling `onInitialize` **before** `this.appStateObserver.flush(prevState)`—which notifies subscribers registered via `api.onStateChange` (`AppStateObserver.flush` in `packages/excalidraw/components/AppStateObserver.ts`). See [`agent-sharp-edges.md`](./agent-sharp-edges.md) for why that order matters.
+At the **start** of `App.componentDidUpdate` (`packages/excalidraw/components/App.tsx`), a one-way **`_initialized` flag** may flip on the first update where `!isLoading`, emitting `editor:initialize` and calling `onInitialize` **before** `this.appStateObserver.flush(prevState)`—which notifies subscribers registered via `api.onStateChange` (`AppStateObserver.flush` in `packages/excalidraw/components/AppStateObserver.ts`). See [`decisionLog.md`](../memory/decisionLog.md) §B for why that order matters.
 
 `App.componentDidUpdate` **ends** with `this.store.commit(elementsMap, this.state)` where `elementsMap` is `this.scene.getElementsMapIncludingDeleted()`. When not loading, it also invokes `this.props.onChange` and `this.onChangeEmitter` with the current elements and state.
 
@@ -292,7 +292,7 @@ Source-level edges (such as `element` → `utils` and `excalidraw` → `utils`) 
 
 | Concern | Location |
 |--------|----------|
-| Agent-oriented sharp edges, implicit invariants | [`docs/technical/agent-sharp-edges.md`](./agent-sharp-edges.md) |
+| Decision log (doc gaps, implicit invariants) | [`docs/memory/decisionLog.md`](../memory/decisionLog.md) |
 | Root workspace config | `package.json` |
 | `App` class, `updateScene`, `syncActionResult`, render | `packages/excalidraw/components/App.tsx` |
 | Canvas React wrappers | `packages/excalidraw/components/canvases/StaticCanvas.tsx`, `InteractiveCanvas.tsx`, `NewElementCanvas.tsx` |

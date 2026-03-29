@@ -14,7 +14,7 @@
 
 ## Blockers & risks
 
-- **Technical:** `yarn test:all` currently fails the Prettier gate (`yarn test:other`): `docs/product/domain-glossary.md`, `docs/technical/agent-sharp-edges.md`, and `docs/technical/architecture.md` differ from Prettier output (verified locally on 2026-03-29).
+- **Technical:** `yarn test:all` currently fails the Prettier gate (`yarn test:other`): `docs/product/domain-glossary.md` and `docs/technical/architecture.md` differ from Prettier output (verified locally on 2026-03-29). Include `docs/memory/decisionLog.md` if you format memory docs.
 
 ## Next steps
 

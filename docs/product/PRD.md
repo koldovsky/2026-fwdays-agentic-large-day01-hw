@@ -163,7 +163,7 @@ The editor renders to `HTMLCanvasElement` via `useEffect` in `StaticCanvas` and 
 
 ### 4.2 React peer dependency and class component core
 
-The editor's main component (`App` in `packages/excalidraw/components/App.tsx`) is a React class component. `Store.commit` is called in `componentDidUpdate`; the `_initialized` flag flips during `componentDidUpdate` in a specific order relative to `AppStateObserver.flush`. Changes to the render/update cycle carry hidden coupling risks documented in `docs/technical/agent-sharp-edges.md`.
+The editor's main component (`App` in `packages/excalidraw/components/App.tsx`) is a React class component. `Store.commit` is called in `componentDidUpdate`; the `_initialized` flag flips during `componentDidUpdate` in a specific order relative to `AppStateObserver.flush`. Changes to the render/update cycle carry hidden coupling risks documented in `docs/memory/decisionLog.md`.
 
 React and React DOM are peer dependencies of `@excalidraw/excalidraw`; the host app supplies them.
 
@@ -241,4 +241,4 @@ Local collaboration features require environment variables (`VITE_APP_FIREBASE_C
 | Localization | `packages/excalidraw/locales/*.json` |
 | Product context and user journeys | `docs/memory/productContext.md` |
 | Domain terms | `docs/product/domain-glossary.md` |
-| Technical sharp edges | `docs/technical/agent-sharp-edges.md` |
+| Decision log (memory bank) | `docs/memory/decisionLog.md` |

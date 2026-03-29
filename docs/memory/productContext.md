@@ -77,7 +77,7 @@ Capabilities are **outcome-oriented**; implementation detail stays at package/di
 - **Internationalization:** Broad locale coverage under `packages/excalidraw/locales/`; changing copy should respect existing translation keys and patterns.
 - **Accessibility signals:** Many controls use `aria-label` and test helpers query by label (`packages/excalidraw/components/main-menu/DefaultItems.tsx`, tests under `packages/excalidraw/tests/`); regressions in labeling or focus order affect real users and automation.
 - **Performance:** Large diagrams and locale chunks are ongoing concerns reflected in build chunking patterns (see [`systemPatterns.md`](./systemPatterns.md), [`architecture.md`](../technical/architecture.md)); avoid UX regressions that block the main thread during typical edit flows.
-- **Reliability:** Collaboration and restore paths carry versioning and reconciliation constraints; see `docs/technical/agent-sharp-edges.md` before altering sync-related behavior.
+- **Reliability:** Collaboration and restore paths carry versioning and reconciliation constraints; see [`decisionLog.md`](./decisionLog.md) before altering sync-related behavior.
 - **PWA / offline:** Service worker and runtime caching target installed-app and flaky-network use; collab explicitly warns when offline—do not assume seamless offline multiplayer without checking `excalidraw-app/collab` behavior.
 
 ## See also
@@ -85,7 +85,7 @@ Capabilities are **outcome-oriented**; implementation detail stays at package/di
 - [`projectbrief.md`](./projectbrief.md) — monorepo scope and delivery shapes at a glance.
 - [`../product/domain-glossary.md`](../product/domain-glossary.md) — precise terms (`Excalidraw`, `App`, `Collab`, `ExcalidrawElement`, etc.).
 - [`../technical/architecture.md`](../technical/architecture.md) — editor data flow and component ownership.
-- [`../technical/agent-sharp-edges.md`](../technical/agent-sharp-edges.md) — risky areas when changing editor or collab behavior.
+- [`decisionLog.md`](./decisionLog.md) — undocumented behavior and risky areas when changing editor or collab behavior.
 - [`systemPatterns.md`](./systemPatterns.md) — collaboration/persistence patterns (cross-link only; no duplicate deep dive here).
 - [`techContext.md`](./techContext.md) — tooling and commands.
 
