@@ -74,14 +74,17 @@ State diagrams for all four machines are in the [technical debt catalog](../tech
 ## 5. High-Risk Clusters
 
 ### Cluster A — Elbow Arrow Overflow (5 files)
+
 Root cause: unbounded coordinate generation in normalization algorithm. Independent guards in `newElement.ts`, `elbowArrow.ts`, `shape.ts`, `restore.ts`, `utils/src/shape.ts`.
 **Action**: Fix root cause in `updateElbowArrowPoints`/`generateElbowArrowShape`, then remove all five guards.
 
 ### Cluster B — Delta/Store Integrity — Issue #7348 (6 locations)
+
 Covers: empty undo entries, missing semantic validation, missing arrow rebind context, invisible elements in store, silent deletion during restore.
 **Action**: Fix as a coordinated set; partial fixes shift the bug.
 
 ### Cluster C — Multi-Instance Isolation (3 locations)
+
 Covers: module-level selection cache (`selection.ts:138`), Jotai library store not per-instance (`library.ts:253`), `UIOptions` memo break (`index.tsx:105`).
 **Action**: Audit all module-level singletons against multi-instance embedding.
 
