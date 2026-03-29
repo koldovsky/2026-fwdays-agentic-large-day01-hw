@@ -1,6 +1,6 @@
 # Developer setup and first pull request
 
-This guide takes you from a fresh clone to a pull request against the upstream Excalidraw repository. It assumes you contribute via a **GitHub fork** and open PRs into **`excalidraw/excalidraw`** on the default branch (**`master`**, as used by this repo’s CI). If upstream renames the default branch, use that name instead.
+This guide takes you from a fresh clone to a pull request against the **upstream repository** (the canonical GitHub project you contribute into). It assumes you contribute via a **GitHub fork** and open PRs into upstream’s **default branch**—use the project’s default branch name (confirm on the upstream repo’s branch menu on GitHub or with `git remote show upstream` after you add that remote). Which branches trigger CI is defined in [`.github/workflows/`](../../.github/workflows/) (for example [`size-limit.yml`](../../.github/workflows/size-limit.yml) and [`test.yml`](../../.github/workflows/test.yml)).
 
 For system design and package layout, see [architecture.md](./architecture.md). For domain terminology, see [domain-glossary.md](../product/domain-glossary.md).
 
@@ -12,8 +12,8 @@ To tune the repo for **AI-assisted editing** (Cursor, Claude Code, OpenAI Codex)
 
 ```bash
 corepack enable && corepack prepare yarn@1.22.22 --activate
-git clone git@github.com:YOUR_USER/excalidraw.git && cd excalidraw
-git remote add upstream https://github.com/excalidraw/excalidraw.git
+git clone git@github.com:YOUR_USER/<your-fork>.git && cd <your-fork>
+git remote add upstream https://github.com/<UPSTREAM_OWNER>/<UPSTREAM_REPO>.git
 yarn install
 yarn start            # dev server on http://localhost:3001
 yarn test:all         # full quality check before pushing
@@ -51,33 +51,33 @@ On **Windows** (PowerShell), run the same commands from the repository root or a
 
 ## 2. Fork, clone, and remotes
 
-1. **Fork** [excalidraw/excalidraw](https://github.com/excalidraw/excalidraw) on GitHub (your own copy under your account).
+1. **Fork** the **upstream repository** on GitHub (your own copy under your account). Use the fork button on the canonical repo your course or team points you to.
 
-2. **Clone your fork** (replace `YOUR_USER`):
+2. **Clone your fork** (replace `YOUR_USER` and the repo name with your fork):
 
    ```bash
-   git clone git@github.com:YOUR_USER/excalidraw.git
-   cd excalidraw
+   git clone git@github.com:YOUR_USER/<your-fork>.git
+   cd <your-fork>
    ```
 
-   HTTPS works as well: `https://github.com/YOUR_USER/excalidraw.git`.
+   HTTPS works as well: `https://github.com/YOUR_USER/<your-fork>.git`.
 
 3. **Add `upstream`** (the canonical repository):
 
    ```bash
-   git remote add upstream https://github.com/excalidraw/excalidraw.git
-   # or: git@github.com:excalidraw/excalidraw.git
+   git remote add upstream https://github.com/<UPSTREAM_OWNER>/<UPSTREAM_REPO>.git
+   # or: git@github.com:<UPSTREAM_OWNER>/<UPSTREAM_REPO>.git
    ```
 
-4. **Stay up to date** before you create a branch:
+4. **Stay up to date** before you create a branch (replace `<default-branch>` with the upstream **default branch**—use the project’s default branch name):
 
    ```bash
    git fetch upstream
-   git checkout master
-   git merge upstream/master
+   git checkout <default-branch>
+   git merge upstream/<default-branch>
    ```
 
-   You may prefer `git rebase upstream/master` if your team uses a rebase workflow; either way, minimize drift from `master` before opening a PR.
+   You may prefer `git rebase upstream/<default-branch>` if your team uses a rebase workflow; either way, minimize drift from that default branch before opening a PR.
 
 ---
 
@@ -157,9 +157,8 @@ This runs, in order: `yarn test:typecheck`, `yarn test:code`, `yarn test:other`,
 - **Lint** ([`.github/workflows/lint.yml`](../../.github/workflows/lint.yml)): `yarn test:other` (Prettier check), `yarn test:code` (ESLint), `yarn test:typecheck` (`tsc`).
 - **Test coverage** ([`.github/workflows/test-coverage-pr.yml`](../../.github/workflows/test-coverage-pr.yml)): `yarn test:coverage` (Vitest with coverage; a report is posted on the PR).
 - **Semantic PR title** ([`.github/workflows/semantic-pr-title.yml`](../../.github/workflows/semantic-pr-title.yml)): validates the **PR title** format (see [First pull request](#9-first-pull-request)).
-- **Bundle size** ([`.github/workflows/size-limit.yml`](../../.github/workflows/size-limit.yml)): runs on PRs targeting `master`.
-
-Pushes to `master` also run **tests** without coverage ([`.github/workflows/test.yml`](../../.github/workflows/test.yml): `yarn test:app`).
+- **Bundle size** ([`.github/workflows/size-limit.yml`](../../.github/workflows/size-limit.yml)): runs on pull requests whose **base branch** matches `on.pull_request.branches` in that workflow file.
+- **Tests on push** ([`.github/workflows/test.yml`](../../.github/workflows/test.yml)): pushes to the branch(es) in `on.push.branches` run `yarn test:app` without the coverage job.
 
 ### Auto-fix formatting and lint
 
@@ -300,7 +299,7 @@ Host port **3000** is mapped to container port **80** in compose.
 
 ### Branch and push
 
-Create a branch from an updated `master`:
+Create a branch from an updated **default branch** (sync with `upstream` first; see [Fork, clone, and remotes](#2-fork-clone-and-remotes)):
 
 ```bash
 git checkout -b feat/short-description
@@ -315,8 +314,8 @@ git push -u origin feat/short-description
 
 ### Open the PR on GitHub
 
-- **Base repository:** `excalidraw/excalidraw`
-- **Base branch:** `master` (unless upstream’s default branch has another name)
+- **Base repository:** the **upstream** repository (the `UPSTREAM_OWNER/UPSTREAM_REPO` you configured on the `upstream` remote)
+- **Base branch:** upstream’s **default branch** (use the project’s default branch name)
 - **Head repository:** your fork
 - **Compare:** your feature branch
 
