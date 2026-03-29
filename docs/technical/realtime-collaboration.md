@@ -30,7 +30,7 @@ Client A                    Relay Server                 Client B
 ## Sync Strategies
 
 ### Delta sync
-`Portal` maintains `broadcastedElementVersions` (`Map<id, version>`). A `SCENE_UPDATE` payload includes only elements whose version exceeds the last-broadcast version, minimising bandwidth.
+`Portal.broadcastScene()` filters the element list on two criteria before building a `SCENE_UPDATE` payload: it checks `isSyncableElement(element)` to exclude non-syncable element types, and it consults `broadcastedElementVersions` (`Map<id, version>`) to skip any element whose version does not exceed the last-broadcast version. Only elements that pass both filters are included in the payload, minimising bandwidth.
 
 ### Full-scene sync
 A periodic full broadcast fires every `SYNC_FULL_SCENE_INTERVAL_MS = 20 000 ms`. This acts as a safety net for dropped deltas and catches up newly joined peers.
