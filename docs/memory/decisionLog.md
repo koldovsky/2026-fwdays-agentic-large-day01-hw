@@ -1,197 +1,127 @@
 # Decision log
 
-**Key decisions** inferred from **implemented behavior** in this repo (not historical meeting notes). For layered architecture of the editor, see **`systemPatterns.md`**.
+**Key decisions** from **implemented behavior** in this repo (not meeting notes). Layered editor architecture → **`systemPatterns.md`**.
 
 ---
 
 ## Platform and tooling
 
-- **Yarn 1 workspaces** — Single install and cross-package scripts; root `package.json` `packageManager` / `workspaces`.
-- **Vite for the app and examples; esbuild for library packages** — Root scripts delegate to `yarn --cwd ./excalidraw-app` and `packages/*/build:esm`-style builds.
-- **Vitest + jsdom** for tests — Root `devDependencies` and `vitest.config` usage across `packages/excalidraw/tests`.
+- **Yarn 1 workspaces** — Root `packageManager` / `workspaces`; single install, cross-package scripts.
+- **Vite** (app + examples); **esbuild** (library `build:esm`-style). Root scripts delegate via `yarn --cwd ./excalidraw-app`, `packages/*`.
+- **Vitest + jsdom** — Root `devDependencies`; `vitest.config` in `packages/excalidraw/tests`.
 
 ---
 
 ## Editor architecture (summary)
 
-- **Class-based `App` as controller** — `packages/excalidraw/components/App.tsx`: `AppState` in React state, elements on `Scene`, undo via `Store`/`History`, `syncActionResult` as the main bridge (detailed in `systemPatterns.md`).
-- **Jotai scoped per editor** — `EditorJotaiProvider` + `createIsolation()` so atom state does not leak between embeds (`packages/excalidraw/editor-jotai.ts`, `index.tsx`).
-- **Throttled rendering** — `window.EXCALIDRAW_THROTTLE_RENDER = true` set in `excalidraw-app/App.tsx` before mounting.
+- **Class `App` as controller** — `AppState` in React, elements on `Scene`, undo via `Store`/`History`; `syncActionResult` is the main bridge (`packages/excalidraw/components/App.tsx`; detail in `systemPatterns.md`).
+- **Jotai per editor** — `EditorJotaiProvider` + `createIsolation()` (`editor-jotai.ts`, `index.tsx`).
+- **Throttled rendering** — `window.EXCALIDRAW_THROTTLE_RENDER = true` in `excalidraw-app/App.tsx` before mount.
 
 ---
 
 ## Hosted app: data and security
 
-- **Scene JSON and app state in localStorage; binary files separate** — `initializeScene` comment and keys: `STORAGE_KEYS.LOCAL_STORAGE_ELEMENTS` / `LOCAL_STORAGE_APP_STATE`; files loaded via `LocalData.fileStorage` or Firebase (`App.tsx` `loadImages`).
-- **Encrypted / versioned backend payloads** — `excalidraw-app/data/index.ts` uses `compressData` / `decompressData` (with `encryptionKey` option) from `@excalidraw/excalidraw/data/encode` and `decryptData` / `generateEncryptionKey` from `@excalidraw/excalidraw/data/encryption`; `BACKEND_V2_GET` / `BACKEND_V2_POST` env URLs.
-- **Firebase path separation** — `FIREBASE_STORAGE_PREFIXES.shareLinkFiles` vs `collabFiles` in `app_constants.ts`.
-- **Collaboration room ids** — `ROOM_ID_BYTES` (10) + `crypto.getRandomValues` in `data/index.ts` `generateRoomId`.
+- **localStorage** — Scene JSON + app state (`STORAGE_KEYS.LOCAL_STORAGE_*`); binary files via `LocalData.fileStorage` or Firebase (`loadImages` in `App.tsx`).
+- **Backend payloads** — `compressData` / `decompressData` (+ optional `encryptionKey`), `decryptData` / `generateEncryptionKey` (`excalidraw-app/data/index.ts`); `BACKEND_V2_GET` / `BACKEND_V2_POST`.
+- **Firebase** — `shareLinkFiles` vs `collabFiles` (`app_constants.ts`).
+- **Room ids** — `ROOM_ID_BYTES` (10) + `crypto.getRandomValues` (`generateRoomId`).
 
 ---
 
 ## Sync and performance constants
 
-- **Debounced local save** — `SAVE_TO_LOCAL_STORAGE_TIMEOUT = 300` ms (`app_constants.ts`).
-- **Full scene sync interval** — `SYNC_FULL_SCENE_INTERVAL_MS = 20000` ms.
-- **Cursor sync** — `CURSOR_SYNC_TIMEOUT = 33` ms (~30 fps).
-- **Deleted element retention for sync** — `DELETED_ELEMENT_TIMEOUT` 24h before elements drop out of sync filter (`isSyncableElement` in `data/index.ts`).
-- **Upload size cap** — `FILE_UPLOAD_MAX_BYTES` 4 MiB, aligned with editor limits (`app_constants.ts`).
+(`app_constants.ts` / `data/index.ts` unless noted)
+
+- `SAVE_TO_LOCAL_STORAGE_TIMEOUT` 300 ms · `SYNC_FULL_SCENE_INTERVAL_MS` 20_000 ms · `CURSOR_SYNC_TIMEOUT` ~33 ms · `DELETED_ELEMENT_TIMEOUT` 24h (sync filter) · `FILE_UPLOAD_MAX_BYTES` 4 MiB.
 
 ---
 
 ## UX / product behavior
 
-- **Overwrite confirm** when opening shareable/backend scene over non-empty local canvas — `openConfirmModal(shareableLinkConfirmDialog)` branches in `initializeScene` (`App.tsx`); collab links skip override of local storage (same function).
-- **Hash change re-initializes scene** — Listener stops collab when leaving collab URL, sets loading, re-runs `initializeScene` (`App.tsx` `useEffect`).
-- **Collaboration disabled in iframe** — `isCollabDisabled = isRunningInIframe()` prevents collab UI/API wiring (`ExcalidrawWrapper` in `App.tsx`).
-- **Same-origin self-embed blocked** — `isSelfEmbedding` shows static “I'm not a pretzel!” UI (`App.tsx`).
-- **Export waits for pending images** — Custom `onExport` async generator polls `FileStatusStore` (`App.tsx`).
-- **Hosted app scroll detection** — `detectScroll={false}` on `<Excalidraw />` (app controls layout/scroll; `App.tsx`).
+- **Overwrite confirm** — Shareable/backend over non-empty canvas (`openConfirmModal` / `initializeScene`); collab links skip local override.
+- **Hash change** — Stops collab, loading, re-`initializeScene` (`App.tsx` `useEffect`).
+- **Collab off in iframe** — `isCollabDisabled = isRunningInIframe()` (`ExcalidrawWrapper`).
+- **Same-origin self-embed** — `isSelfEmbedding` → static “pretzel” UI.
+- **Export** — Async `onExport` waits on `FileStatusStore`.
+- **Hosted scroll** — `detectScroll={false}` on `<Excalidraw />`.
 
 ---
 
 ## Observability and ops
 
-- **Sentry in production builds** — Docker build sets `VITE_APP_DISABLE_SENTRY=true` for `build:app:docker` (`excalidraw-app/package.json`); default app build enables tracking flag.
-- **Vercel** — `vercel.json` sets `outputDirectory` to `excalidraw-app/build`, security headers, selected redirects.
+- **Sentry** — Docker `build:app:docker` sets `VITE_APP_DISABLE_SENTRY=true` (`excalidraw-app/package.json`); default build enables tracking.
+- **Vercel** — `vercel.json`: `outputDirectory` → `excalidraw-app/build`, headers, redirects.
 
 ---
 
 ## Documentation split
 
-- **`systemPatterns.md`** — Deep dive: directories, contexts, Jotai atoms, renderer flow.
-- **`projectbrief.md`** — High-level monorepo overview and stack table.
-- **`productContext.md`** — UX goals and user scenarios.
-- **`progress.md`** — What is implemented and where.
-- **`activeContext.md`** — Current focus for maintainers/agents.
+| File | Role |
+|------|------|
+| `systemPatterns.md` | Directories, contexts, Jotai, renderer flow |
+| `projectbrief.md` | Monorepo + stack |
+| `productContext.md` | UX goals, scenarios |
+| `progress.md` | What exists where |
+| `activeContext.md` | Current focus |
 
 ---
 
-## Undocumented Behavior
+## Undocumented behavior
 
-Behavior that exists in code but is **not described in any documentation**. An AI assistant unaware of these patterns may suggest changes that silently break critical flows.
-
----
+In code but **not** in other docs — agents may “optimize” and break flows.
 
 ### UB-1. Element change → full canvas re-render
 
-- **File**: `packages/excalidraw/components/App.tsx`, `packages/element/src/Scene.ts`
-- **What the code does**: On `componentDidMount`, `App` subscribes to scene updates via `this.scene.onUpdate(this.triggerRender)`. Any call to `Scene.mutateElement()` (if the version changed) or `Scene.replaceAllElements()` invokes `triggerUpdate()`, which bumps a random `sceneNonce` and fires all registered callbacks. The `triggerRender` callback calls `this.setState({})`, which triggers a full React re-render of `App` including both `StaticCanvas` and `InteractiveCanvas`. The new `sceneNonce` is passed as a prop so canvas components always re-paint.
-- **What is documented**: Nothing. The render cycle is entirely implicit.
-- **Risk**: An AI may try to "optimize" renders by memoizing canvas props or debouncing `setState({})`, breaking the real-time rendering pipeline. Any element mutation that skips `Scene.mutateElement` will silently fail to update the canvas.
+**Where:** `packages/excalidraw/components/App.tsx`, `packages/element/src/Scene.ts`. **Behavior:** Mount subscribes `scene.onUpdate(triggerRender)`; `mutateElement` / `replaceAllElements` → `triggerUpdate` → `sceneNonce` + `setState({})` → full `App` + both canvases repaint. **Doc:** none. **Risk:** Memo/debounce `setState` or bypassing `Scene.mutateElement` breaks updates.
 
----
+### UB-2. `syncActionResult` repaints on no-op
 
-### UB-2. `syncActionResult` forces a scene refresh even when nothing changed
+**Where:** `packages/excalidraw/components/App.tsx` (~2735–2816). **Behavior:** Even when `!didUpdate`, calls `scene.triggerUpdate()` so toolbar / transient-only actions still refresh. **Doc:** none. **Risk:** Removing it looks like dead code; UI stops updating for some actions.
 
-- **File**: `packages/excalidraw/components/App.tsx` (lines ~2735–2816)
-- **What the code does**: After processing an action result, if neither `elements` nor `appState` updated (`!didUpdate`), the method still calls `this.scene.triggerUpdate()`. This guarantees a canvas repaint even for "no-op" actions.
-- **What is documented**: Nowhere. The fallback `triggerUpdate()` is a silent safety net.
-- **Risk**: Removing the trailing `triggerUpdate()` as "dead code" would cause certain actions (e.g., toolbar clicks that only affect transient state) to stop refreshing the UI.
+### UB-3. `componentDidUpdate` state machine
 
----
+**Where:** `packages/excalidraw/components/App.tsx` (~3424–3507). **Behavior:** Guards: eraser+selection → selection tool; exit view mode → re-register listeners + deselect; link dialog → deselect + clear hovers; linear editor orphan → deferred `actionFinalize`; deleted text while editing → clear `editingTextElement`. **Doc:** none. **Risk:** FC rewrite or reorder breaks tool/mode transitions.
 
-### UB-3. `componentDidUpdate` cascading state machine
+### UB-4. `Store.commit` + `EVENTUALLY`
 
-- **File**: `packages/excalidraw/components/App.tsx` (lines ~3424–3507)
-- **What the code does**: `componentDidUpdate` contains an implicit state machine with multiple conditional `setState` calls that enforce invariants: eraser + selection → force selection tool; leaving view mode → re-register all event listeners + deselect; opening/closing element link dialog → deselect + clear `hoveredElementIds`; linear editor losing its element → deferred `actionFinalize` via `setTimeout`; deleted text element being edited → clear `editingTextElement`.
-- **What is documented**: None of these transitions are documented. They exist only as imperative guards in `componentDidUpdate`.
-- **Risk**: Rewriting `App` as a functional component, or reordering these guards, will break tool/mode transitions in ways that only manifest at runtime with specific interaction sequences.
+**Where:** `packages/element/src/store.ts` (~376–384). **Behavior:** Only `IMMEDIATELY` / `NEVER` advance `snapshot`; `EVENTUALLY` does not (avoids re-recording same logical change each render). **Doc:** inline only. **Risk:** “Fixing” snapshot for `EVENTUALLY` duplicates undo / corrupts history.
 
----
+### UB-5. Raw `mutateElement` vs `Scene.mutateElement`
 
-### UB-4. `Store.commit` — `EVENTUALLY` does not advance the snapshot
+**Where:** `packages/element/src/mutateElement.ts`, `packages/element/src/Scene.ts`. **Behavior:** Raw mutates in place, no scene/React notify; `Scene.mutateElement` calls `triggerUpdate()` when version changes + `informMutation`. Some paths use raw then `replaceAllElements` + `scheduleCapture()` (e.g. eraser ~11376). **Doc:** JSDoc on raw only. **Risk:** Swapping paths → wrong history or no UI update.
 
-- **File**: `packages/element/src/store.ts` (lines ~376–384)
-- **What the code does**: The `Store.commit()` method processes three capture modes: `IMMEDIATELY`, `NEVER`, and `EVENTUALLY`. Only `IMMEDIATELY` and `NEVER` update `this.snapshot` to the next state. `EVENTUALLY` intentionally leaves the snapshot unchanged so the same logical change is not re-recorded on every render cycle. It emits an ephemeral increment but does not persist the baseline.
-- **What is documented**: The code has no external documentation; only inline comments explain the intent.
-- **Risk**: An AI may assume all three modes advance the snapshot symmetrically, or "fix" the missing snapshot update for `EVENTUALLY`, creating duplicate undo entries and corrupting history.
+### UB-6. Elbow-arrow `mutateElement`
 
----
+**Where:** `packages/element/src/mutateElement.ts` (~53–72). **Behavior:** Updates to `points` / `fixedSegments` (or empty normalize) force `angle: 0` and `updateElbowArrowPoints()` — geometry can fully rewrite. **Doc:** code only. **Risk:** Unexpected reset when rotating / editing points.
 
-### UB-5. Raw `mutateElement` vs `Scene.mutateElement` — two different contracts
+### UB-7. Binding two-way + cascade
 
-- **File**: `packages/element/src/mutateElement.ts`, `packages/element/src/Scene.ts`
-- **What the code does**: The standalone `mutateElement()` function mutates an element in place (bumps version, clears `ShapeCache`, handles elbow-arrow routing) but **does not trigger React updates or scene notifications**. `Scene.mutateElement()` wraps it and only calls `triggerUpdate()` if the element is in the scene, its version changed, and `informMutation` is true. Some callers (e.g., the eraser in `App.tsx` line ~11376) intentionally use raw `mutateElement` to avoid history/multiplayer side effects, then manually call `replaceAllElements` and `store.scheduleCapture()`.
-- **What is documented**: Only a JSDoc warning on the raw function. The dual-path contract is not documented anywhere.
-- **Risk**: Replacing raw `mutateElement` calls with `Scene.mutateElement` (or vice versa) will either create unwanted history entries or fail to update the UI.
+**Where:** `packages/element/src/binding.ts`. **Behavior:** `bindBindingElement` / `unbindBindingElement` mutate arrow + target `boundElements`; `updateBoundElements` on move; drag past threshold auto-unbinds; label resize hooks. **Doc:** none. **Risk:** Orphan bindings / wrong arrows if cleanup or updates skipped.
 
----
+### UB-8. `updateDOMRect` before `initializeScene`
 
-### UB-6. Elbow-arrow mutation silently rewrites geometry and forces `angle: 0`
+**Where:** `packages/excalidraw/components/App.tsx` (~12701–12738). **Behavior:** `initializeScene` passed into `updateDOMRect` so rect is in state first; sync if unchanged, else after `setState`. **Doc:** none. **Risk:** Direct `initializeScene` → wrong dimensions / broken first paint.
 
-- **File**: `packages/element/src/mutateElement.ts` (lines ~53–72)
-- **What the code does**: When `mutateElement` is called on an elbow arrow with updates to `points` or `fixedSegments` (or even with an empty update object for normalization), it forces `angle: 0` and runs `updateElbowArrowPoints()`, which can completely rewrite the arrow's geometry, position, and routing.
-- **What is documented**: Not documented outside the code itself.
-- **Risk**: An AI rotating an elbow arrow or updating its points may not expect the angle to be forcibly reset and the entire path to be recalculated.
+### UB-9. `onChange` gated by `isLoading`
 
----
+**Where:** `packages/excalidraw/components/App.tsx` (~3511–3518). **Behavior:** `componentDidUpdate` only fires `onChange` when `!isLoading` (avoids unfocused tab emitting empty scene → clobbering localStorage). **Doc:** comment only. **Risk:** Removing guard → data loss on startup.
 
-### UB-7. Binding is two-way bookkeeping with cascading mutations
+### UB-10. Import-time side effects
 
-- **File**: `packages/element/src/binding.ts`
-- **What the code does**: `bindBindingElement` mutates **both** the arrow (`startBinding`/`endBinding`) **and** the target shape (`boundElements` array). `unbindBindingElement` does the reverse, with a special case when both ends bind the same element. `updateBoundElements` re-routes arrow points when a bound shape moves and may also trigger `handleBindTextResize` for bound labels. Dragging an arrow past a threshold auto-unbinds ends whose bound shapes are not co-selected.
-- **What is documented**: None of this cascading behavior is documented.
-- **Risk**: Deleting an element without cleaning up its `boundElements` references, or moving a shape without calling `updateBoundElements`, will leave orphaned bindings and mispositioned arrows.
+**Where:** `packages/excalidraw/index.tsx`, `excalidraw-app/App.tsx`, `excalidraw-app/index.tsx`. **Behavior:** `polyfill()` on prototypes; `EXCALIDRAW_THROTTLE_RENDER`; dev `window.h`; `Sentry.init`; early `beforeinstallprompt` listener. **Doc:** throttle noted above; rest not. **Risk:** Lazy/reordered imports → missing polyfills, throttle, or PWA prompt.
 
----
+### UB-11. Frame insert + z-order
 
-### UB-8. Initialization order: `updateDOMRect` gates `initializeScene`
+**Where:** `packages/element/src/Scene.ts` (~381–398). **Behavior:** Element with `frameId` inserts at **frame index**, not array end. **Doc:** none. **Risk:** Appending children breaks stacking vs frame.
 
-- **File**: `packages/excalidraw/components/App.tsx` (lines ~12701–12738)
-- **What the code does**: In `componentDidMount`, `initializeScene` is passed as a callback to `updateDOMRect`. The scene is not initialized until the container's `getBoundingClientRect()` dimensions are applied to state. If dimensions have not changed, the callback runs synchronously; otherwise it waits for `setState` to complete.
-- **What is documented**: Not documented.
-- **Risk**: Calling `initializeScene` directly (bypassing `updateDOMRect`) will initialize the scene with incorrect width/height/offsets, producing a broken first paint.
+### UB-12. Drag frame drags children
 
----
+**Where:** `packages/element/src/dragElements.ts` (~69–85). **Behavior:** `dragSelectedElements` adds non-selected children sharing `frameId` with selected frame. **Doc:** inline comment. **Risk:** Custom drag without this leaves children behind.
 
-### UB-9. `onChange` is suppressed while `isLoading` is true
+### UB-13. `addEventListeners` + view mode
 
-- **File**: `packages/excalidraw/components/App.tsx` (lines ~3511–3518)
-- **What the code does**: In `componentDidUpdate`, the `onChange` callback (which notifies the host application) is gated by `!this.state.isLoading`. This prevents an unfocused tab during init from emitting empty elements, which would overwrite valid localStorage data.
-- **What is documented**: Only an inline comment. Not in any external doc.
-- **Risk**: An AI may try to call `onChange` during initialization or remove the guard, causing data loss when the app starts in an unfocused tab.
-
----
-
-### UB-10. Module-level side effects at import time
-
-- **File**: `packages/excalidraw/index.tsx`, `excalidraw-app/App.tsx`, `excalidraw-app/index.tsx`
-- **What the code does**: Several modules execute side effects when imported:
-  - `polyfill()` mutates `Array.prototype` / `Element.prototype` globally.
-  - `window.EXCALIDRAW_THROTTLE_RENDER = true` is set before the React tree mounts.
-  - `createTestHook()` defines `window.h` getters/setters in dev/test.
-  - `Sentry.init()` runs at import in `excalidraw-app/index.tsx`.
-  - `window.addEventListener('beforeinstallprompt', ...)` is registered at module load with a comment that it "may need to subscribe early to catch the event."
-- **What is documented**: `window.EXCALIDRAW_THROTTLE_RENDER` is mentioned in `decisionLog.md` above; the rest is undocumented.
-- **Risk**: Lazy-loading or reordering module imports can cause polyfills to be missing, throttle rendering to not work, or the PWA install prompt to be lost.
-
----
-
-### UB-11. Frame insertion affects z-order positioning
-
-- **File**: `packages/element/src/Scene.ts` (lines ~381–398)
-- **What the code does**: When inserting an element that has a `frameId`, the element is inserted at the **frame's index** in the z-order array, not at the end. This ensures frame children are visually stacked near their parent frame.
-- **What is documented**: Not documented.
-- **Risk**: An AI adding elements to a frame by appending to the array end will break z-ordering; elements will render above/below their frame incorrectly.
-
----
-
-### UB-12. Dragging a frame implicitly drags all its children
-
-- **File**: `packages/element/src/dragElements.ts` (lines ~69–85)
-- **What the code does**: `dragSelectedElements` scans all non-deleted elements and adds any element whose `frameId` matches a selected frame to the update set, even if those children are not explicitly selected. A comment warns this is a safeguard for a bug where frame + children can be co-selected.
-- **What is documented**: Not documented beyond the inline comment.
-- **Risk**: An AI implementing custom drag logic without this frame-child gathering will leave frame children behind when the frame moves.
-
----
-
-### UB-13. `addEventListeners` short-circuits in view mode
-
-- **File**: `packages/excalidraw/components/App.tsx` (lines ~3229–3306)
-- **What the code does**: `addEventListeners()` first removes all listeners, then registers a subset. If `viewModeEnabled` is true, it **returns early** — edit-only listeners (paste, cut, resize, drag/drop, etc.) are never registered. Toggling view mode in `componentDidUpdate` re-calls `addEventListeners()`.
-- **What is documented**: Not documented.
-- **Risk**: An AI adding a new event listener to `addEventListeners` after the view-mode return guard will find it never fires in view mode — a subtle, hard-to-debug omission.
+**Where:** `packages/excalidraw/components/App.tsx` (~3229–3306). **Behavior:** Removes all, re-adds subset; if `viewModeEnabled`, **returns early** — no paste/cut/resize/dnd, etc. **Doc:** none. **Risk:** Listeners registered after the early return never run in view mode.
 
 ---
 
