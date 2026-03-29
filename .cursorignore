@@ -1,0 +1,70 @@
+# Dependencies
+node_modules/
+
+# Editor/tool
+.git/
+.vscode/
+.history/
+.vercel/
+.claude/
+.codesandbox/
+.idea/
+.next/
+.nyc_output/
+.npmrc
+
+# Build outputs
+build/
+dist/
+dev-dist/
+packages/*/dist/
+packages/*/build/
+examples/*/build/
+examples/*/dist/
+
+# Generated types
+packages/excalidraw/types/
+
+# Test coverage
+coverage/
+
+# Logs
+*.log
+logs/
+yarn-debug.log*
+yarn-error.log*
+npm-debug.log*
+
+# Environment files
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+.envrc
+
+# Lockfiles
+yarn.lock
+package-lock.json
+
+# Source maps (generated, large, not useful for context)
+**/*.min.{js,css}
+**/*.snap
+**/*.map
+
+# Binary assets — fonts and images add no semantic value
+**/*.{woff2,woff,ttf,gif,png,jpg,jpeg,ico,webp,wasm,tgz}
+
+# Localization and code review automation configs
+crowdin.yml
+.coderabbit.yaml
+
+# Misc
+.DS_Store
+.eslintcache
+.yarn/
+meta*.json
+html/
+firebase/
+firebase-project/
+LICENSE
+**/CHANGELOG.md
