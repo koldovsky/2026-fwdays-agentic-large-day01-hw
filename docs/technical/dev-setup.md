@@ -244,16 +244,15 @@ Commit `.claudeignore` only if your team agrees on a shared policy; otherwise ke
 
 #### OpenAI Codex
 
-[OpenAI Codex](https://developers.openai.com/codex) (CLI, IDE extension, or app) does not use the same single ignore file as Cursor, but you can get equivalent control with the layers below. Official docs emphasize **`AGENTS.md`** and **`.codex/`** configuration rather than a long ignore list alone.
+[OpenAI Codex](https://developers.openai.com/codex) (CLI, IDE extension, or app) does not use a **`.cursorignore`-style** ignore file that OpenAI documents. Official docs describe **[`AGENTS.md`](https://developers.openai.com/codex/guides/agents-md)**, user **`~/.codex/config.toml`**, and trusted project **`.codex/config.toml`** ([Config basics](https://developers.openai.com/codex/config-basic)). The Codex CLI respects **`.gitignore`** when excluding files from workspace scanning; **`.codexignore`** is not an officially documented feature.
 
 | Mechanism | Role |
 |-----------|------|
 | **`AGENTS.md`** | Repo-root (or nested) instructions: build/test commands (`yarn test:all`, `yarn start`), conventions, and **where to focus** in this monorepo. Primary lever for steering Codex. See [Custom instructions with AGENTS.md](https://developers.openai.com/codex/guides/agents-md). Use Codex **`/init`** in the project if you want a generated scaffold to edit. |
 | **`.codex/config.toml`** | Optional **project-scoped** settings (only loaded when the project is [trusted](https://developers.openai.com/codex/config-basic)); personal defaults live in **`~/.codex/config.toml`**. See [Config basics](https://developers.openai.com/codex/config-basic) and the [configuration reference](https://developers.openai.com/codex/config-reference). |
-| **`.gitignore`** | Git-ignored paths are excluded from some Codex flows (for example Handoff). Keep secrets and build artifacts gitignored as usual. |
-| **`.codexignore`** | The Codex CLI ecosystem has been moving toward a **repo-root** **`.codexignore`** file with **gitignore-style** patterns (exclude `node_modules`, build outputs, env files, etc.). Behavior can vary by **CLI version**—confirm with `codex --help`, your release notes, or the [Codex changelog](https://developers.openai.com/codex/changelog). When your build supports it, align patterns with [`.cursorignore`](../../.cursorignore) / [`.repomixignore`](../../.repomixignore) (same idea as bootstrapping `.claudeignore` from `.cursorignore`). |
+| **`.gitignore`** | Codex respects **`.gitignore`** for excluding files from scanning; **`.codexignore`** is not an official feature. Keep secrets and build artifacts gitignored as usual (and aligned with [`.cursorignore`](../../.cursorignore) / [`.repomixignore`](../../.repomixignore) where the same paths should not be committed). |
 
-**Practical setup for this repo:** add or extend **`AGENTS.md`** with `yarn test:all`, `yarn start`, and links to [architecture.md](./architecture.md). Optionally add **`.codexignore`** (copy from `.cursorignore` on Unix/macOS or `Copy-Item .cursorignore .codexignore` in PowerShell) if your Codex version honors it.
+**Practical setup for this repo:** add or extend **`AGENTS.md`** with `yarn test:all`, `yarn start`, and links to [architecture.md](./architecture.md). Optionally add **`.codex/config.toml`** under a trusted project if you need Codex settings scoped to this repo ([Config basics](https://developers.openai.com/codex/config-basic)).
 
 #### Other assistants
 
