@@ -27,7 +27,7 @@ A remote element is **discarded** (local wins) if any of the following hold:
 
 1. The element is currently being edited locally (editing / resizing / new element in progress).
 2. The local `version` is strictly newer than the remote `version`.
-3. Versions are equal **and** the local `versionNonce` is lower (deterministic winner — lower nonce wins).
+3. Versions are equal **and** the local `versionNonce` is lower or equal to the remote's (`local.versionNonce <= remote.versionNonce`) (deterministic winner — lower or equal nonce wins).
 
 Otherwise the remote element wins and replaces the local copy.
 
