@@ -219,7 +219,7 @@ Timer is reset on every pointer move (debounce pattern, undocumented). Concurren
 
 ---
 
-### 4.2 `positionElementsOnGrid` Is Self-Admitted Vibe-Coded
+### 4.2 `positionElementsOnGrid` Is Admitted Vibe-Coded
 
 - **File**: `packages/element/src/positionElementsOnGrid.ts` (line 6)
 - **Comment**: `// TODO rewrite (mostly vibe-coded)`
