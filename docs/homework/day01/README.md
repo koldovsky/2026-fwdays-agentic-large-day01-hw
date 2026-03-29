@@ -1,4 +1,4 @@
-## Day 1: Workshop Assignment
+# Day 1: Workshop Assignment
 
 **Учасник:** Ihor Kruzhylko (igor-kruzhylko)
 
