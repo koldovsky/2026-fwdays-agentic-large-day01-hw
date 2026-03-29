@@ -407,6 +407,29 @@ Three issues break `<Excalidraw>` multi-instance correctness:
 
 ---
 
+## 7. Performance Bottlenecks
+
+| Issue | Detail |
+|---|---|
+| **Large-canvas rendering** | Scene rendering can degrade noticeably for very large diagrams (hundreds of elements). The canvas rendering pipeline and virtual viewport clipping are actively being optimised, but there is no current hard limit on element count. Target is P95 render time < 16 ms for ≤ 500 elements. |
+| **Main-thread blocking** | All heavy computation (reconciliation, AES-GCM encryption, Mermaid-to-Excalidraw conversion) runs on the main browser thread. Web Worker offloading is planned but not yet implemented. |
+| **Mobile / touch UX** | The product is desktop-first. Touch and pen input are supported via Pointer Events and the PEP polyfill, but the mobile experience lags behind desktop in ergonomics and performance. |
+
+---
+
+## 8. Tech Debt & Deprecated Components
+
+| Item | Detail |
+|---|---|
+| **Firebase vendor coupling** | Cloud persistence is tightly coupled to Firebase Firestore and Storage. An abstraction layer exists (`excalidraw-app/data/firebase.ts`) but migrating to an alternative backend (S3, Supabase, self-hosted) would require significant effort. |
+| **Build-time feature flags** | Feature flags are `VITE_APP_ENABLE_*` environment variables baked in at build time. Changing a flag requires a full rebuild and redeployment. Runtime feature flag management is not implemented. |
+| **LWW conflict reconciliation** | The Last-Write-Wins algorithm with nonce tiebreaking is not a full CRDT. Occasional brief inconsistencies during concurrent edits are possible. The 20-second full-scene sync mitigates but does not eliminate this. |
+| **No e2e test coverage** | There are no Playwright or Cypress end-to-end tests. Coverage is provided by Vitest integration tests with React Testing Library (which renders the full component in jsdom). Real-browser testing is not automated. |
+| **TTD reliability** | AI-generated Mermaid output frequently contains syntax errors. The `mermaidAutoFix` utility repairs common issues but does not cover all failure modes, leading to occasional failed renders. |
+| **Monorepo build complexity** | The `common → math → element → excalidraw` dependency chain requires strict build ordering. Changes to lower-level packages require rebuilding all dependents. This adds overhead for contributors. |
+
+---
+
 ## Related Documentation
 
 | Document | Location | Relationship |

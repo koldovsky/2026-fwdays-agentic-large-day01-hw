@@ -75,166 +75,31 @@ The production deployment model is a **static single-page application** — no s
 
 ### 2.4 Messaging & Eventing
 
-| Concern                     | Technology                          | Notes                                                                                                         |
-|-----------------------------|-------------------------------------|---------------------------------------------------------------------------------------------------------------|
-| **Real-time collaboration** | Socket.IO client 4.7.2              | Client-only; connects to an externally managed WebSocket relay server configured via `VITE_APP_WS_SERVER_URL` |
-| **Cross-tab sync**          | BroadcastChannel API                | 50 ms debounce (`SYNC_BROWSER_TABS_TIMEOUT`); backed by `VersionedSnapshotStore`                              |
-| **Internal event bus**      | Custom `Emitter<T>` + `AppEventBus` | Typed, in-process only; no external message broker                                                            |
-| **Collaboration protocol**  | Custom delta-diff over Socket.IO    | `SCENE_UPDATE` (incremental), full-scene sync every 20 s (`SYNC_FULL_SCENE_INTERVAL_MS`)                      |
-| **Cursor sync**             | Socket.IO volatile events           | ~30 fps, `CURSOR_SYNC_TIMEOUT = 33 ms`                                                                        |
-
-There is no Kafka, RabbitMQ, or cloud pub/sub service. All messaging is either in-browser or over the Socket.IO WebSocket connection.
+> Full details in [architecture.md §5 — Communication Patterns](../technical/architecture.md#5-communication-patterns): Socket.IO real-time relay, BroadcastChannel cross-tab sync, custom `Emitter<T>` event bus, delta-diff collaboration protocol, and volatile cursor events.
 
 ---
 
 ### 2.5 Storage
 
-| Layer                       | Technology                         | Data Stored                                                 | Trigger                              |
-|-----------------------------|------------------------------------|-------------------------------------------------------------|--------------------------------------|
-| **L1 — localStorage**       | Browser localStorage (~5–10 MB)    | Serialised scene elements + filtered AppState               | 300 ms debounce on every change      |
-| **L2 — IndexedDB**          | Browser IndexedDB (large capacity) | Binary file assets (images), shape library, AI chat history | On file import / library change      |
-| **L3 — Firebase Firestore** | Google Cloud Firestore (encrypted) | Collaboration room scene JSON                               | On join/mutation in a collab session |
-| **L4 — Firebase Storage**   | Google Cloud Storage (encrypted)   | Binary files for collab rooms and share links               | Throttled upload on file add         |
-
-- On startup, the app hydrates from the highest available layer (Firebase for active collab sessions; localStorage for solo sessions).
-- There is no Redis, Memcached, or server-side cache. Caching is entirely client-side (PWA service worker for static assets, localStorage for scene data, IndexedDB for file assets).
-- File uploads are capped at **4 MiB** per file (`FILE_UPLOAD_MAX_BYTES`).
+> Full details in [architecture.md §6 — Data Storage](../technical/architecture.md#6-data-storage): four-layer model (localStorage → IndexedDB → Firebase Firestore → Firebase Storage), hydration order, 4 MiB file cap, and service worker cache.
 
 ---
 
 ### 2.6 Authentication & Security
 
-| Mechanism                 | Detail                                                                                                                                                                          |
-|---------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **End-to-end encryption** | AES-GCM, 256-bit keys generated client-side via `window.crypto.subtle` (Web Crypto API)                                                                                         |
-| **Key distribution**      | Keys are embedded in the **URL fragment** (`#roomId,key`) — never transmitted to any server                                                                                     |
-| **Collaboration access**  | Possession of the room link URL = access. No authentication layer.                                                                                                              |
-| **Excalidraw Plus auth**  | Detected via the presence of an `excplus-auth` cookie set by the Plus backend (external system)                                                                                 |
-| **Secrets management**    | All secrets (`VITE_APP_FIREBASE_CONFIG`, etc.) are supplied via environment variables, injected by Vercel or Docker `--env-file` at build time. Nothing is committed to source. |
-
-There is **no built-in user authentication, RBAC, or session management** in this repository. User identity is ephemeral and locally stored (display name only). Account management is delegated entirely to the Excalidraw Plus backend.
-
----
-
-## 3. Development Environment
-
-### 3.1 Local Setup
-
-**Prerequisites:**
-- Node.js ≥ 18.0.0
-- Yarn 1.22.22 (specified in `packageManager` field)
-
-**Install and start:**
-```bash
-yarn install
-yarn start          # starts Vite dev server for excalidraw-app
-```
-
-**Docker Compose (self-hosted simulation):**
-```bash
-docker compose up   # builds the Docker image and serves on http://localhost:3000
-```
-The Compose file mounts the local directory into the container for development.
-
-**Environment variables:** Copy `env.development` (or create a `.env.local`) with the required `VITE_APP_*` variables. A minimal setup (no Firebase, no AI) works for local canvas editing; collaboration and share-link features require a configured Firebase project.
-
-### 3.2 Monorepo Package Build Order
-
-Packages must be built in dependency order before running `excalidraw-app`:
-```
-common → math → element → excalidraw → excalidraw-app
-```
-Use `yarn build:packages` to build all sub-packages before starting the app.
-
-### 3.3 Recommended IDE
-
-**VS Code** is the de facto standard (`.vscode` config is present in the repo). Recommended extensions:
-- ESLint
-- Prettier – Code formatter
-- TypeScript and JavaScript Language Features
-
-### 3.4 CLI Tools
-
-| Tool                        | Purpose                                           |
-|-----------------------------|---------------------------------------------------|
-| `yarn`                      | Package management and workspace task runner      |
-| `vite`                      | Dev server and production bundler                 |
-| `tsc`                       | TypeScript type-checking (`yarn test:typecheck`)  |
-| `eslint`                    | Linting (`yarn test:code`)                        |
-| `prettier`                  | Code formatting (`yarn test:other`)               |
-| `vitest`                    | Unit and integration testing (`yarn test`)        |
-| `docker` / `docker compose` | Local container builds and self-hosted simulation |
-| `gh`                        | GitHub CLI for PR/release workflows               |
+> Full details in [architecture.md §7 — Security](../technical/architecture.md#7-security): AES-GCM 256-bit E2EE, URL-fragment key distribution, no RBAC or server-side auth, `excplus-auth` cookie detection, and build-time secrets injection.
 
 ---
 
 ## 4. CI/CD Pipeline
 
-All pipelines run on **GitHub Actions**.
-
-### 4.1 Workflows
-
-| Workflow File                | Trigger           | Purpose                                                                                                                             |
-|------------------------------|-------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| `test.yml`                   | Push to `master`  | Install deps → run Vitest test suite                                                                                                |
-| `lint.yml`                   | Pull request      | Install deps → Prettier check → ESLint → TypeScript typecheck                                                                       |
-| `build-docker.yml`           | Push to `release` | Build Docker image (smoke test)                                                                                                     |
-| `publish-docker.yml`         | Push to `release` | Build multi-arch Docker image (`linux/amd64`, `linux/arm64`, `linux/arm/v7`) and push to DockerHub (`excalidraw/excalidraw:latest`) |
-| `autorelease-excalidraw.yml` | Tag-based         | npm package publish to registry                                                                                                     |
-| `size-limit.yml`             | Pull request      | Check npm bundle size budget (prevents accidental bloat)                                                                            |
-| `sentry-production.yml`      | Push to `main`    | Upload source maps to Sentry for production release tracking                                                                        |
-| `test-coverage-pr.yml`       | Pull request      | Coverage report on PRs                                                                                                              |
-| `locales-coverage.yml`       | Schedule          | Track Crowdin translation completeness                                                                                              |
-| `semantic-pr-title.yml`      | Pull request      | Enforce Conventional Commits format on PR titles                                                                                    |
-| `cancel.yml`                 | Push              | Cancel stale runs on the same branch                                                                                                |
-
-### 4.2 Stages (per PR)
-
-```
-1. Cancel stale runs
-2. Lint (Prettier + ESLint + TypeScript)
-3. Tests (Vitest)
-4. Coverage report
-5. Bundle size check
-```
-
-### 4.3 Deployment Strategy
-
-| Target | Strategy |
-|---|---|
-| **excalidraw.com (Vercel)** | Automatic deployment on push to `main`; Vercel handles atomic swap (no downtime). Effectively a **blue/green** model managed by the Vercel platform — not custom-managed in this repo. |
-| **Docker image (DockerHub)** | Push to the `release` branch triggers a multi-arch build and publishes `excalidraw/excalidraw:latest`. Rolling updates for self-hosted deployments are the operator's responsibility. |
-| **npm package** | Tag-triggered publish via `autorelease-excalidraw.yml`; semantic versioning enforced. |
-
-There are no canary releases, feature flags managed at the pipeline level, or custom blue/green infrastructure defined in this repository. Feature flags are build-time Vite env variables (`VITE_APP_ENABLE_*`).
+> Full details in [architecture.md §9.3 — CI/CD Pipeline](../technical/architecture.md#93-cicd-pipeline): all GitHub Actions workflows (test, lint, Docker build/publish, npm release, bundle size, Sentry source maps, Crowdin), per-PR stages, and deployment strategy for Vercel, DockerHub, and the npm registry.
 
 ---
 
 ## 5. Observability
 
-### 5.1 Logging
-
-There is no centralised log aggregation (no ELK, Loki, or Datadog Logs). Logging strategy:
-
-| Level                 | Mechanism                                                                                                                                                     |
-|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Development**       | `console.error` / `console.warn` in browser DevTools                                                                                                          |
-| **Production errors** | Captured by Sentry (see below); URL fragments (which contain encryption keys) are stripped from all Sentry payloads via `beforeSend()` to prevent key leakage |
-
-### 5.2 Monitoring & Alerting
-
-| Tool       | Usage                        | Notes                                                                                                                                                                               |
-|------------|------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Sentry** | Client-side error monitoring | `@sentry/browser` 9.0.1; enabled only in production builds; disabled for Docker (`VITE_APP_DISABLE_SENTRY=true`); release tagged with `VITE_APP_GIT_SHA` for source-map correlation |
-| **Matomo** | Usage analytics (opt-in)     | Enabled via `VITE_APP_ENABLE_TRACKING=true` on Vercel; not active in self-hosted/Docker builds                                                                                      |
-
-There is no Prometheus, Grafana, or PagerDuty integration. No structured metrics pipeline exists for client-side performance (canvas render time, collaboration latency).
-
-### 5.3 Tracing
-
-There is **no distributed tracing** (no OpenTelemetry, Jaeger, or Zipkin). The application is entirely client-side; "distributed" tracing across the Socket.IO relay or Firebase is not implemented. Sentry performance traces are available ad hoc in the Sentry dashboard for production sessions.
-
-> **Note:** Introducing OpenTelemetry client-side spans (canvas render latency, TTD pipeline duration, collab sync latency) is listed as a future consideration.
+> Full details in [architecture.md §8 — Observability](../technical/architecture.md#8-observability): Sentry error monitoring (`@sentry/browser`, key-safe `beforeSend()`), Matomo opt-in analytics, browser-console-only logging, and the absence of distributed tracing (OpenTelemetry planned as a future consideration).
 
 ---
 
@@ -259,94 +124,19 @@ All runtime configuration is **baked in at build time** via Vite environment var
 
 ### 6.2 Secrets Management
 
-| Environment              | Secrets injection mechanism                                                                 |
-|--------------------------|---------------------------------------------------------------------------------------------|
-| **Vercel**               | Vercel project environment variables (set in Vercel dashboard; injected at build time)      |
-| **Docker / self-hosted** | `--env-file` passed to `docker run`, or environment block in `docker-compose.yml`           |
-| **CI (GitHub Actions)**  | GitHub repository secrets (`DOCKER_USERNAME`, `DOCKER_PASSWORD`, `SENTRY_AUTH_TOKEN`, etc.) |
-
-There is no HashiCorp Vault, AWS Secrets Manager, or equivalent secrets management service. The AES-GCM encryption keys used for collaboration are **never stored** anywhere — they exist only in user URL fragments.
+> Full details in [architecture.md §7.5 — Secrets Management](../technical/architecture.md#75-secrets-management): injection via Vercel dashboard, Docker `--env-file`, and GitHub Actions secrets; no Vault or cloud secrets service; collaboration AES-GCM keys are never stored anywhere.
 
 ---
 
 ## 7. Networking
 
-### 7.1 API Endpoints
-
-The application itself does not expose any API endpoints (it is a static SPA). It consumes the following external endpoints:
-
-| Endpoint                                          | Protocol               | Direction                          | Purpose                                                   |
-|---------------------------------------------------|------------------------|------------------------------------|-----------------------------------------------------------|
-| Firebase Firestore REST/gRPC                      | HTTPS                  | Outbound                           | Read/write encrypted scene data for rooms and share links |
-| Firebase Storage                                  | HTTPS                  | Outbound                           | Upload/download encrypted binary files                    |
-| Socket.IO relay server (`VITE_APP_WS_SERVER_URL`) | WSS (WebSocket Secure) | Outbound                           | Real-time scene deltas and cursor updates                 |
-| AI API (`VITE_APP_AI_BACKEND`)                    | HTTPS (streaming)      | Outbound                           | Text-to-Diagram and Diagram-to-Code requests              |
-| Excalidraw Plus backend                           | HTTPS                  | Outbound (redirect / cookie check) | Account detection and Plus feature redirect               |
-
-### 7.2 Ingress & Load Balancing
-
-| Environment            | Ingress                                                                                                                                         |
-|------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| **excalidraw.com**     | Vercel edge network — global CDN, automatic TLS, no operator-managed load balancer                                                              |
-| **Docker self-hosted** | Nginx 1.27-alpine serves static files on port 80; the operator is responsible for any reverse proxy, TLS termination, or load balancer in front |
-
-### 7.3 DNS
-
-DNS for `excalidraw.com` is managed via Vercel DNS. Subdomains:
-- `vscode.excalidraw.com` — redirected to the VS Code marketplace extension (configured in `vercel.json`).
-- `for-webex.excalidraw.com` — external Webex integration.
-
-### 7.4 Service Mesh
-
-No service mesh (Istio, Linkerd, etc.) is applicable. The client application makes direct HTTPS/WSS calls to external services.
-
-### 7.5 HTTP Security Headers (Vercel)
-
-Configured in `vercel.json`:
-
-| Header                   | Value                      |
-|--------------------------|----------------------------|
-| `X-Content-Type-Options` | `nosniff`                  |
-| `Referrer-Policy`        | `origin`                   |
-| `Feature-Policy`         | `*`                        |
-| `Cache-Control` (fonts)  | `public, max-age=31536000` |
+> Outbound endpoints (Firebase, Socket.IO, AI API, Plus backend) are documented in [architecture.md §5 — Communication Patterns](../technical/architecture.md#5-communication-patterns). Ingress, DNS, service mesh (none), and Vercel HTTP security headers are documented in [architecture.md §9.1–9.2 — Deployment & Infrastructure](../technical/architecture.md#9-deployment--infrastructure).
 
 ---
 
 ## 8. Security & Compliance
 
-### 8.1 Data Encryption
-
-| Data Type                               | Encryption                    | Details                                                                                                        |
-|-----------------------------------------|-------------------------------|----------------------------------------------------------------------------------------------------------------|
-| Collaboration scene data                | AES-GCM 256-bit               | Encrypted client-side before any network transmission; only ciphertext reaches Firebase or the Socket.IO relay |
-| Share-link scene data                   | AES-GCM 256-bit               | Same mechanism; key in URL fragment                                                                            |
-| Binary file assets (images)             | AES-GCM 256-bit               | Encrypted before upload to Firebase Storage                                                                    |
-| Local storage (localStorage, IndexedDB) | None (browser security model) | Data at rest in browser storage is unencrypted; protected only by the browser's origin sandbox                 |
-| Transport                               | TLS (HTTPS / WSS)             | All external communication is over encrypted transport                                                         |
-
-### 8.2 Role-Based Access Control (RBAC)
-
-There is **no RBAC** in this repository. Access to a collaboration room is controlled solely by possession of the room URL (which embeds the AES-GCM key in the fragment). This is an intentional design decision aligned with the zero-friction, no-account product philosophy.
-
-### 8.3 Personally Identifiable Information (PII)
-
-- No PII is required. Display names used in collaboration are ephemeral and locally stored only.
-- No user accounts, email addresses, or personal data are collected or stored in this codebase.
-- The Sentry `beforeSend()` hook strips URL fragments (which contain encryption keys) before any error report is transmitted.
-
-### 8.4 Audit Logs
-
-There are no audit logs generated by the client application. The Socket.IO relay server and Firebase project may log connection metadata (IP, timestamp) at the infrastructure level — this is outside the scope of this repository.
-
-### 8.5 Compliance
-
-| Requirement                  | Status                                                                                                                                       |
-|------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| **MIT License**              | All source code and dependencies must be MIT-compatible                                                                                      |
-| **GDPR**                     | No PII collected or processed. Analytics (Matomo) are opt-in and disabled in Docker builds. No cookie consent required for the core product. |
-| **SOC 2**                    | Not formally certified. Firebase (Google Cloud) holds SOC 2 certification for the storage backend.                                           |
-| **Self-hosted / air-gapped** | Fully supported via Docker; all analytics and error reporting disabled by default in Docker builds                                           |
+> Full details in [architecture.md §7 — Security](../technical/architecture.md#7-security): AES-GCM 256-bit E2EE per data type, no RBAC (URL possession = access), no PII collected, no client-side audit logs, MIT/GDPR/SOC 2 compliance posture, and input sanitisation. See also [encryption.md](../technical/encryption.md) for implementation specifics.
 
 ---
 
@@ -372,30 +162,15 @@ There are no audit logs generated by the client application. The Socket.IO relay
 
 ### 10.1 Performance Bottlenecks
 
-| Issue                      | Detail                                                                                                                                                                                                                                                                                      |
-|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Large-canvas rendering** | Scene rendering can degrade noticeably for very large diagrams (hundreds of elements). The canvas rendering pipeline and virtual viewport clipping are actively being optimised, but there is no current hard limit on element count. Target is P95 render time < 16 ms for ≤ 500 elements. |
-| **Main-thread blocking**   | All heavy computation (reconciliation, AES-GCM encryption, Mermaid-to-Excalidraw conversion) runs on the main browser thread. Web Worker offloading is planned but not yet implemented.                                                                                                     |
-| **Mobile / touch UX**      | The product is desktop-first. Touch and pen input are supported via Pointer Events and the PEP polyfill, but the mobile experience lags behind desktop in ergonomics and performance.                                                                                                       |
+> Full details in [technical-debt-catalog.md §7 — Performance Bottlenecks](../technical/technical-debt-catalog.md#7-performance-bottlenecks): large-canvas render degradation, main-thread blocking for encryption/reconciliation/TTD, and mobile UX lag.
 
 ### 10.2 Tech Debt & Deprecated Components
 
-| Item                            | Detail                                                                                                                                                                                                                                        |
-|---------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Firebase vendor coupling**    | Cloud persistence is tightly coupled to Firebase Firestore and Storage. An abstraction layer exists (`excalidraw-app/data/firebase.ts`) but migrating to an alternative backend (S3, Supabase, self-hosted) would require significant effort. |
-| **Build-time feature flags**    | Feature flags are `VITE_APP_ENABLE_*` environment variables baked in at build time. Changing a flag requires a full rebuild and redeployment. Runtime feature flag management is not implemented.                                             |
-| **LWW conflict reconciliation** | The Last-Write-Wins algorithm with nonce tiebreaking is not a full CRDT. Occasional brief inconsistencies during concurrent edits are possible. The 20-second full-scene sync mitigates but does not eliminate this.                          |
-| **No e2e test coverage**        | There are no Playwright or Cypress end-to-end tests. Coverage is provided by Vitest integration tests with React Testing Library (which renders the full component in jsdom). Real-browser testing is not automated.                          |
-| **TTD reliability**             | AI-generated Mermaid output frequently contains syntax errors. The `mermaidAutoFix` utility repairs common issues but does not cover all failure modes, leading to occasional failed renders.                                                 |
-| **Monorepo build complexity**   | The `common → math → element → excalidraw` dependency chain requires strict build ordering. Changes to lower-level packages require rebuilding all dependents. This adds overhead for contributors.                                           |
+> Full details in [technical-debt-catalog.md §8 — Tech Debt & Deprecated Components](../technical/technical-debt-catalog.md#8-tech-debt--deprecated-components): Firebase vendor coupling, build-time feature flags, LWW reconciliation gaps, missing e2e tests, TTD reliability, and monorepo build complexity.
 
 ### 10.3 Scaling Challenges
 
-| Concern                            | Detail                                                                                                                                                                                                   |
-|------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Collaboration room scalability** | The Socket.IO relay server (external) is the bottleneck for large collaboration sessions. The client broadcasts full scenes every 20 seconds as a safety net, which increases relay load with room size. |
-| **Encryption key loss**            | Loss of the share link URL (which embeds the AES key in the URL fragment) means permanent, unrecoverable data loss for that encrypted payload stored in Firebase. This is a known, accepted trade-off.   |
-| **npm package API stability**      | As the package matures, maintaining a stable public API surface while refactoring internals is an ongoing tension. Breaking changes require careful semantic versioning and consumer migration guidance. |
+> Full details in [architecture.md §10 — Scalability & Availability](../technical/architecture.md#10-scalability--availability): Socket.IO relay as collaboration bottleneck, permanent key-loss risk from URL-fragment key model, and npm API stability tension.
 
 ---
 
