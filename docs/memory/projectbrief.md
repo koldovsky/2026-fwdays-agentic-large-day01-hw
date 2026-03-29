@@ -1,4 +1,4 @@
-## Project Overview
+# Project Overview
 
 This is the **Excalidraw monorepo** — the open-source, hand-drawn-style virtual whiteboard for sketching diagrams and collaborating in real time. Your local clone appears to be a homework/course fork (based on the folder name `2026-fwdays-agentic-large-day01-hw`).
 
@@ -61,7 +61,7 @@ A **Vite-powered** React app that wraps `@excalidraw/excalidraw` with Firebase a
 
 ### Dependency graph
 
-```
+```text
 common ──┬──→ element ──→ excalidraw (React UI)
          ├──→ math ────→ excalidraw
          └────────────→ excalidraw
