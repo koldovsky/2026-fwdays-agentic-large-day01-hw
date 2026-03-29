@@ -126,7 +126,7 @@ Pure element-domain logic: creation, mutation, bounds, collision, binding, fract
 
 ### 3.1 Local Drawing
 
-```
+```text
 User Interaction → ActionManager → Element Store (StoreSnapshot + StoreDelta) → Jotai atom update
   → React re-render → Renderer.updateScene() → StaticCanvas + InteractiveCanvas via requestAnimationFrame
   → Debounced 300 ms write to localStorage (appState) + IndexedDB (elements, images)
@@ -134,7 +134,7 @@ User Interaction → ActionManager → Element Store (StoreSnapshot + StoreDelta
 
 ### 3.2 Collaborative Drawing
 
-```
+```text
 Local change → CollabModule.syncScene() → GZIP-compressed (pako) + AES-GCM encrypted
   → Portal.broadcastScene() → Socket.io server → peers decrypt + reconcileElements() → App.updateScene()
   → Full scene persisted to Firestore every 20 s (SYNC_FULL_SCENE_INTERVAL_MS)
@@ -142,7 +142,7 @@ Local change → CollabModule.syncScene() → GZIP-compressed (pako) + AES-GCM e
 
 ### 3.3 Binary File (Image) Flow
 
-```
+```text
 User pastes image → Blob resized (pica) → stored in IndexedDB immediately
   → FileManager queues uploadBytes() to Firebase Storage → FileStatusStore: pending → saved
 ```
@@ -366,7 +366,7 @@ graph TD
 
 ### Render Flow
 
-```
+```text
 elements change → Renderer.updateScene() → throttleRAF → renderFrame()
   ├── renderStaticScene → renderElement() per element → roughjs paths + canvas draw calls
   └── renderInteractiveScene → selection boxes, handles, snapping indicators, cursors
