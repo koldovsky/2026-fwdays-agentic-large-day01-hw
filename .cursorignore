@@ -21,6 +21,9 @@ next-env.d.ts
 # Lock files
 yarn.lock
 package-lock.json
+pnpm-lock.yaml
+bun.lockb
+.pnp.js
 
 # Logs
 *.log

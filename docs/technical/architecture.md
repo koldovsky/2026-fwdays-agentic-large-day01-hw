@@ -80,16 +80,16 @@ flowchart TB
 
 ### 2. Updates initiated by actions or API
 
-- **`ActionManager`** is constructed in `App`’s constructor with an **`updater`** callback set to **`syncActionResult`** (`packages/excalidraw/components/App.tsx`). Actions call `perform(elements, appState, value, app)` and return an **`ActionResult`** (see `packages/excalidraw/actions/types.ts`); the manager forwards that to `syncActionResult`.
-- **`syncActionResult`** (`App.tsx`): calls `this.store.scheduleAction(actionResult.captureUpdate)`; if the result includes **`elements`**, applies `this.scene.replaceAllElements(actionResult.elements)`; merges **`appState`** into React state via `setState`; may add files; if nothing structural changed, still calls `this.scene.triggerUpdate()` so subscribers re-render.
+- **`ActionManager`** (`packages/excalidraw/actions/manager.tsx`) is constructed in `App`’s constructor with an **`updater`** callback wired to **`syncActionResult`**. Entry points such as **`executeAction`**, **`handleKeyDown`**, and panel **`updateData`** (inside **`renderAction`**) each call **`action.perform(elements, appState, value, app)`** and pass the returned **`ActionResult`** (see `packages/excalidraw/actions/types.ts`) through the manager’s **`updater`** wrapper into **`syncActionResult`** (`packages/excalidraw/components/App.tsx`).
+- **`syncActionResult`**: first calls **`this.store.scheduleAction(actionResult.captureUpdate)`** (`packages/element/src/store.ts` **`scheduleAction`** — queues a “macro” capture for the next commit). If **`actionResult.elements`** is present, applies **`this.scene.replaceAllElements(actionResult.elements)`** (`packages/element/src/Scene.ts`). Merges **`appState`** via **`setState`** when provided; may add files; if nothing in that path forced an update, calls **`this.scene.triggerUpdate()`** so scene subscribers still redraw.
 
 ### 3. Updates via `updateScene`
 
-- **`updateScene`** (`App.tsx`) accepts optional **`elements`**, **`appState`**, **`collaborators`**, and **`captureUpdate`** (typed as `CaptureUpdateAction` values from `packages/element/src/store.ts`: `IMMEDIATELY`, `NEVER`, `EVENTUALLY`). When `captureUpdate` is set, it **`store.scheduleMicroAction`** with the incoming element/appState deltas before applying scene state.
+- **`updateScene`** (`App.tsx`) accepts optional **`elements`**, **`appState`**, **`collaborators`**, and **`captureUpdate`** (values from `packages/element/src/store.ts` **`CaptureUpdateAction`**: `IMMEDIATELY`, `NEVER`, `EVENTUALLY`). When **`captureUpdate`** is set, it calls **`this.store.scheduleMicroAction`** with the incoming **`elements`** / **`appState`** so the store can compute a delta from the current snapshot (see **`StoreSnapshot.maybeClone`** in `packages/element/src/store.ts`); the same method then applies **`setState`**, **`this.scene.replaceAllElements`**, or collaborator updates as needed. Action-driven flows enqueue a macro capture via **`syncActionResult`** → **`scheduleAction`**; many other scene/API paths use **`scheduleMicroAction`** from **`updateScene`**.
 
 ### 4. Commit, history, and external notification
 
-- After React updates, **`componentDidUpdate`** runs `this.store.commit(this.scene.getElementsMapIncludingDeleted(), this.state)` (`App.tsx`), which finalizes scheduled store work and emits increments.
+- After React applies updates, **`componentDidUpdate`** (`App.tsx`) runs **`this.store.commit(this.scene.getElementsMapIncludingDeleted(), this.state)`** (`packages/element/src/store.ts` **`commit`**), which flushes queued micro-actions, processes the scheduled macro capture, and emits increments.
 - **`Store.onDurableIncrementEmitter`** feeds **`History.record`** (`App.tsx` `componentDidMount`).
 - When not loading, **`onChange`** and **`onChangeEmitter`** receive `(elements, appState, files)` (`App.tsx`).
 

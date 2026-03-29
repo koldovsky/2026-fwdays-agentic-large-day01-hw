@@ -29,7 +29,7 @@ The participant progresses through numbered steps, each graded automatically by 
 
 ## Memory Bank Status (Step 4)
 
-Three required files exist in `docs/memory/` but are **untracked** (not yet committed to git):
+Four required files exist in `docs/memory/` but are **untracked** (not yet committed to git):
 
 - `projectbrief.md` — project overview, goals, repo structure, key scripts
 - `techContext.md` — full tech stack with versions, CI/CD, browser targets
@@ -97,10 +97,10 @@ yarn test:all          # typecheck + lint + prettier + vitest
 
 # Commit the docs/memory/ files
 git add docs/memory/
-git commit -m "Day 1: <name> — Memory Bank (Step 4)"
+git commit -m "Day 1: Oleksiy Onufriychuk — Memory Bank (Step 4)"
 
-# Then create PR with title format:
-# "Day 1: <participant-name> — Workshop Assignment"
+# Then create PR with title (substitute your name as needed):
+# "Day 1: Oleksiy Onufriychuk — Workshop Assignment"
 ```
 
 > Source: root `package.json` scripts, `.coderabbit.yaml` pre_merge_checks
@@ -113,7 +113,7 @@ Reviews are triggered on **all branches** (`base_branches: ".*"`), including dra
 
 - Path filters scope reviews to: `docs/**`, `.cursorignore`, `.cursorrules`, `.cursor/**`, `AGENTS.md`
 - Source code changes (`.ts`, `.tsx`) are **not reviewed** for grading
-- PR title must follow: `Day 1: <participant-name> — Workshop Assignment`
+- PR title must follow the workshop pattern, e.g. `Day 1: Oleksiy Onufriychuk — Workshop Assignment`
 - Language: Ukrainian (`uk-UA`), assertive mentor tone
 
 > Source: `.coderabbit.yaml` lines 6–29, 38–50, 195–197
