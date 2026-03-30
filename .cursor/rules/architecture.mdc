@@ -1,0 +1,25 @@
+---
+description: "Architecture constraints for Excalidraw"
+globs: packages/excalidraw/**
+alwaysApply: false
+---
+
+# Excalidraw Architecture
+
+## State Management
+
+- Custom state via **ActionManager** — **not** Redux, Zustand, or MobX for the core editor.
+- **Jotai** is allowed only through **`editor-jotai`** / **`app-jotai`** (never `import "jotai"` — ESLint blocks it).
+- Editor commands: **`actionManager.executeAction(...)`** → `Action.perform` → `syncActionResult` (`packages/excalidraw/actions/manager.tsx`). There is no `dispatch()` API.
+- Shell / UI state type: **`AppState`** (`packages/excalidraw/types.ts`). The ordered element list is owned by **`Scene`** (`packages/element/src/Scene.ts`).
+
+## Rendering
+
+- **Canvas 2D** (Rough.js) — **not** React DOM for drawing.
+- Pipeline: **`Scene`** → **`Renderer`** → **`renderStaticScene`** / **`renderInteractiveScene`** → canvas (`packages/excalidraw/renderer/`, `components/canvases/`).
+- Do **not** use **react-konva**, **fabric.js**, or **pixi.js** for the editor canvas.
+
+## Dependencies
+
+- No new npm packages without explicit approval.
+- Check **`packages/utils/`** before adding external helpers.
