@@ -2,7 +2,7 @@
 
 ## Last updated
 
-2026-03-30 — branch `day-1/brainboost721`, HEAD `34efb2b` (Memory Bank protocol: `memory-bank.mdc` anti-churn + no circular reads; `decisionLog.md` §8; B/C split to `docs/technical/`).
+2026-03-30 — branch `day-1/brainboost721`, HEAD `06d3176` (`systemPatterns.md` layering: `packages/utils` deps aligned with `packages/utils/package.json`).
 
 ## Overall status
 
@@ -21,7 +21,7 @@ The `day-1/brainboost721` line is a **documentation-only** effort (fork/homework
 | File | Created in | Description |
 | --- | --- | --- |
 | `projectbrief.md` | `02477fe` (polish `649e956`) | Monorepo scope, delivery shapes, repo layout |
-| `systemPatterns.md` | `02477fe` (expanded `649e956`, `34efb2b`) | Architecture shape, layering, state, testing, errors, CI/CD |
+| `systemPatterns.md` | `02477fe` (expanded `649e956`, `34efb2b`; layering fix `06d3176`) | Architecture shape, layering, state, testing, errors, CI/CD |
 | `techContext.md` | `02477fe` (polish `649e956`) | Tooling, frameworks, build/delivery, key commands |
 | `productContext.md` | `7ed9b19` | Users, capabilities, journeys, product boundaries |
 | `activeContext.md` | `21d1500` (updates `39daee4`, `649e956`, `34efb2b`) | Current focus, recent decisions, blockers, next steps |
@@ -77,6 +77,7 @@ These capabilities are inherited from the upstream Excalidraw codebase and have 
 - **Prettier gate failure** (fixed): `yarn test:other` previously failed because doc files diverged from Prettier output. Resolved by running `yarn fix:other`; `yarn test:other` now passes clean.
 - **Stale commit hashes in Memory Bank** (2026-03-30): `activeContext.md` / `progress.md` / `decisionLog.md` previously cited short SHAs that do not exist on this clone; references reconciled to `git log` (`649e956`, `34efb2b`).
 - **Memory Bank / rule self-referential churn** (addressed 2026-03-30): `.cursor/rules/memory-bank.mdc` documents explicit stop conditions for meta-edits; `docs/memory/decisionLog.md` Section A §8 records the decision.
+- **Incorrect `packages/utils` layering claim** (fixed 2026-03-30, `06d3176`): `systemPatterns.md` had said `packages/utils` depends on `common`; `packages/utils/package.json` has no `@excalidraw/common` dependency — doc now lists external packages only.
 
 ## What's left
 
@@ -101,3 +102,4 @@ These capabilities are inherited from the upstream Excalidraw codebase and have 
 | `39daee4` | 2026-03-29 | update memory bank — `activeContext.md`, `progress.md`, `decisionLog.md` |
 | `649e956` | 2026-03-29 | add cursor rule, fix memory bank docs |
 | `34efb2b` | 2026-03-30 | fix memory bank docs — B/C split to technical docs, rule anti-churn, links and wording |
+| `06d3176` | 2026-03-30 | correct `packages/utils` dependency description in `systemPatterns.md` |

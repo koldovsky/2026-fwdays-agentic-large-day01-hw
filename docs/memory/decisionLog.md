@@ -92,6 +92,18 @@ Sections B and C complement [`architecture.md`](../technical/architecture.md) (h
 
 ---
 
+### 9. Layering bullets must match `packages/*/package.json`
+
+**Decision:** The "Layering pattern" bullets in [`systemPatterns.md`](./systemPatterns.md) describe internal and external dependencies. They must be checked against each package’s `package.json` — not inferred from import usage alone.
+
+**Context:** `packages/utils` was documented as depending on `common`; `packages/utils/package.json` declares no `@excalidraw/common` (only external npm deps such as `@braintree/sanitize-url`, `@excalidraw/laser-pointer`, `browser-fs-access`, `roughjs`, `pako`, `perfect-freehand`, PNG chunk packages). The Memory Bank line was corrected to match.
+
+**Follow-up:** [`architecture.md`](../technical/architecture.md) “Dependency graph (packages only, from declared `dependencies`)” still draws `utils --> common`; remove that edge when editing that diagram so it matches `packages/utils/package.json`.
+
+**Recorded:** 2026-03-30 (`06d3176`).
+
+---
+
 ## B. Code behavior: documentation vs implementation gaps
 
 > Full details with code references: [`code-behavior-gaps.md`](../technical/code-behavior-gaps.md)
@@ -130,4 +142,4 @@ Sections B and C complement [`architecture.md`](../technical/architecture.md) (h
 - [`implicit-invariants.md`](../technical/implicit-invariants.md) — full Section C entries.
 - [`systemPatterns.md`](./systemPatterns.md) — monorepo and composition patterns at a glance.
 
-_Last updated: 2026-03-30 — Section A §§6–8 and B/C technical split landed in `34efb2b`; Cursor rule origin `649e956`._
+_Last updated: 2026-03-30 — Section A §9 (`06d3176`, `packages/utils` layering); §§6–8 and B/C split `34efb2b`; Cursor rule `649e956`._

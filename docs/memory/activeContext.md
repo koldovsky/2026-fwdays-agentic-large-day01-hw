@@ -2,9 +2,7 @@
 
 ## Last updated
 
-2026-03-30 — branch `day-1/brainboost721`, HEAD `34efb2b`. Commit `649e956` added `.cursor/rules/memory-bank.mdc` and broad Memory Bank / product / technical polish. Commit `34efb2b` extended the rule (**no circular read dependency** for the Memory Bank list, **anti-churn** meta-edits; `decisionLog.md` Section A item 8), standardized “service worker” wording, fixed architecture links in `docs/memory/systemPatterns.md`, added stable `#cicd-pipeline` anchor, rephrased `syncActionResult` steps in `docs/technical/architecture.md`, split Section B/C bodies into `docs/technical/code-behavior-gaps.md` and `docs/technical/implicit-invariants.md`, and aligned `systemPatterns.md` shared-module paths with `packages/element`, `packages/math`, `packages/utils` (verified against `packages/*/package.json`).
-
-**Same-day Memory Bank sync:** Replaced erroneous commit citations (`304a8a4`, `8ee3c72`, `3c3700f`) with SHAs from `git log` (`649e956`, `34efb2b`). Documented removal of root `decisionLog.md` in `649e956` (Section A §4, `progress.md` known issues).
+2026-03-30 — branch `day-1/brainboost721`, HEAD `06d3176`. Commit `06d3176` corrects `systemPatterns.md` layering: `packages/utils` no longer claims a dependency on `@excalidraw/common`; wording matches `packages/utils/package.json` (external utilities only).
 
 ## Current focus
 
@@ -31,10 +29,11 @@ Use `git show <hash>` in a clone of this repo to inspect messages and diffs (`da
 | `39daee4` | 2026-03-29 | `docs/memory/activeContext.md`, `docs/memory/decisionLog.md`, `docs/memory/progress.md` |
 | `649e956` | 2026-03-29 | `.cursor/rules/memory-bank.mdc` (always-apply rule); Memory Bank / product / technical doc polish |
 | `34efb2b` | 2026-03-30 | Rule: no circular reads, anti-churn; service worker wording; `systemPatterns.md` links + `#cicd-pipeline`; `architecture.md` `syncActionResult`; `code-behavior-gaps.md`, `implicit-invariants.md` (B/C split); `decisionLog.md` index trim + cross-links |
+| `06d3176` | 2026-03-30 | `systemPatterns.md`: fix `packages/utils` layering line (remove false `common` dep; list external deps per `packages/utils/package.json`) |
 
 ## Repository state
 
-- Branch `day-1/brainboost721`. HEAD `34efb2b`. Local branch may be **ahead/behind** `origin/day-1/brainboost721` — pull/rebase before assuming parity with remote.
+- Branch `day-1/brainboost721`. HEAD `06d3176`. Local branch may be **ahead/behind** `origin/day-1/brainboost721` — pull/rebase before assuming parity with remote.
 
 ## Decisions made during this documentation effort
 

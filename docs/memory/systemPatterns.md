@@ -16,7 +16,7 @@
 - `packages/common`: shared constants/utilities and cross-cutting helpers (depends on `tinycolor2` only).
 - `packages/math`: 2D math utilities (depends on `@excalidraw/common`).
 - `packages/element`: element-level operations, geometry, bindings, `Scene`, `Store` (depends on `common` + `math`).
-- `packages/utils`: export, shape, and bounding-box utilities (depends on `common`, plus `roughjs`, `pako`, `perfect-freehand`, etc.).
+- `packages/utils`: export, shape, and bounding-box utilities (depends on several external packages: `@braintree/sanitize-url`, `@excalidraw/laser-pointer`, `browser-fs-access`, `roughjs`, `pako`, `perfect-freehand`, and PNG chunk helpers).
 - `packages/excalidraw`: composition layer exposing the `Excalidraw` React component and wiring editor runtime (depends on `common`, `element`, `math`; peer-depends on `react`, `react-dom`).
 - `excalidraw-app`: host app that adds product concerns (collaboration, sharing, persistence, app UI).
 - Build order is enforced: `common` → `math` → `element` → `excalidraw` (`yarn build:packages`).
@@ -101,7 +101,7 @@ Flat domain modules under `src/`: `Scene.ts`, `store.ts`, `binding.ts`, `resizeE
 - `packages/excalidraw/index.tsx` exports:
   - primary `Excalidraw` component
   - hooks, helper functions, and typed subpath exports
-  - grouped exports from internal `@excalidraw/`\* packages
+  - grouped exports from internal `@excalidraw/*` packages
 - Package exports map in `packages/excalidraw/package.json` controls runtime and type entrypoints.
 
 <a id="cicd-pipeline"></a>
