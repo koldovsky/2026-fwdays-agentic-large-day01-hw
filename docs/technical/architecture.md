@@ -2,7 +2,7 @@
 
 This document describes how the repository is structured and how the editor moves data from React state through the scene model to canvas drawing. Every statement is grounded in the TypeScript sources under this workspace unless noted as coming from a `package.json` manifest.
 
-For **undocumented behavior, doc/implementation gaps, and refactor hazards** (empty `setState`, `componentDidUpdate` ordering, `TODO`/`FIXME`/`HACK` hotspots), see [`decisionLog.md`](../memory/decisionLog.md).
+For **undocumented behavior, doc/implementation gaps, and refactor hazards** (empty `setState`, `componentDidUpdate` ordering, `TODO`/`FIXME`/`HACK` hotspots), see [`decisionLog.md`](../memory/decisionLog.md) (index), [`code-behavior-gaps.md`](./code-behavior-gaps.md), and [`implicit-invariants.md`](./implicit-invariants.md).
 
 ---
 
@@ -98,10 +98,10 @@ The `ActionManager` constructor receives:
 In order of effect (`packages/excalidraw/components/App.tsx`):
 
 1. `this.store.scheduleAction(actionResult.captureUpdate)` records how the update should be treated for the `Store` (immediate durable increment vs ephemeral, per `CaptureUpdateAction` in `packages/element/src/store.ts`).
-2. If `actionResult.elements` is set, `this.scene.replaceAllElements(actionResult.elements)` replaces the scene’s element list.
-3. If `actionResult.files` is set, `addMissingFiles` and `addNewImagesToImageCache` run.
+2. When `actionResult.elements` is set, `this.scene.replaceAllElements(actionResult.elements)` replaces the scene’s element list.
+3. For `actionResult.files`, `addMissingFiles` and `addNewImagesToImageCache` run.
 4. If `actionResult.appState` (or related branches) applies, `this.setState` merges into React state (with special handling for `editingTextElement`, controlled props like `viewModeEnabled`, etc.).
-5. If nothing changed the scene or state, `this.scene.triggerUpdate()` still notifies subscribers.
+5. Should no scene or state changes occur, `this.scene.triggerUpdate()` still notifies subscribers.
 
 ### 3. `updateScene` coordinates Store scheduling and Scene replacement
 
@@ -124,7 +124,7 @@ In `App.render`, the code calls `this.renderer.getRenderableElements({...})` wit
 
 ### 6. After React commits: Store commit and host notification
 
-At the **start** of `App.componentDidUpdate` (`packages/excalidraw/components/App.tsx`), a one-way **`_initialized` flag** may flip on the first update where `!isLoading`, emitting `editor:initialize` and calling `onInitialize` **before** `this.appStateObserver.flush(prevState)`—which notifies subscribers registered via `api.onStateChange` (`AppStateObserver.flush` in `packages/excalidraw/components/AppStateObserver.ts`). See [`decisionLog.md`](../memory/decisionLog.md) §B for why that order matters.
+At the **start** of `App.componentDidUpdate` (`packages/excalidraw/components/App.tsx`), a one-way **`_initialized` flag** may flip on the first update where `!isLoading`, emitting `editor:initialize` and calling `onInitialize` **before** `this.appStateObserver.flush(prevState)`—which notifies subscribers registered via `api.onStateChange` (`AppStateObserver.flush` in `packages/excalidraw/components/AppStateObserver.ts`). See [`implicit-invariants.md`](./implicit-invariants.md) (§ `componentDidUpdate` ordering) for why that order matters.
 
 `App.componentDidUpdate` **ends** with `this.store.commit(elementsMap, this.state)` where `elementsMap` is `this.scene.getElementsMapIncludingDeleted()`. When not loading, it also invokes `this.props.onChange` and `this.onChangeEmitter` with the current elements and state.
 

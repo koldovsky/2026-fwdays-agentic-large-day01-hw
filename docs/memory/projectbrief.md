@@ -22,7 +22,7 @@
 - `packages/common/`, `packages/element/`, `packages/math/`, `packages/utils/`: shared internal building blocks.
 - `examples/`: integration demos (`with-nextjs`, `with-script-in-browser`).
 - `firebase-project/`: Firebase rules/config for collaboration storage infrastructure.
-- `public/`: static assets and service-worker related resources.
+- `public/`: static assets and resources related to the service worker.
 
 ## Functional capabilities visible in source
 

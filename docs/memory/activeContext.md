@@ -2,41 +2,47 @@
 
 ## Last updated
 
-2026-03-30 — branch `day-1/brainboost721`, HEAD at `3c3700f`.
+2026-03-30 — branch `day-1/brainboost721`, HEAD `34efb2b`. Commit `649e956` added `.cursor/rules/memory-bank.mdc` and broad Memory Bank / product / technical polish. Commit `34efb2b` extended the rule (**no circular read dependency** for the Memory Bank list, **anti-churn** meta-edits; `decisionLog.md` Section A item 8), standardized “service worker” wording, fixed architecture links in `docs/memory/systemPatterns.md`, added stable `#cicd-pipeline` anchor, rephrased `syncActionResult` steps in `docs/technical/architecture.md`, split Section B/C bodies into `docs/technical/code-behavior-gaps.md` and `docs/technical/implicit-invariants.md`, and aligned `systemPatterns.md` shared-module paths with `packages/element`, `packages/math`, `packages/utils` (verified against `packages/*/package.json`).
+
+**Same-day Memory Bank sync:** Replaced erroneous commit citations (`304a8a4`, `8ee3c72`, `3c3700f`) with SHAs from `git log` (`649e956`, `34efb2b`). Documented removal of root `decisionLog.md` in `649e956` (Section A §4, `progress.md` known issues).
 
 ## Current focus
 
 - Building a **comprehensive documentation suite** for the Excalidraw monorepo, reverse-engineered entirely from source code.
 - No application or library code has been modified — every commit since `b9f16d4` is documentation or tooling configuration.
 - The Memory Bank (`docs/memory/`) is the central knowledge base; product docs and technical docs live alongside it in [`docs/product/`](../product/) and [`docs/technical/`](../technical/).
-- **Cross-link polish:** `systemPatterns.md` includes an explicit `<a id="cicd-pipeline"></a>` before the CI/CD workflow table so `techContext.md` can use `./systemPatterns.md#cicd-pipeline` without depending on heading slug rules. `projectbrief.md` and `systemPatterns.md` now link to architecture and glossary via relative markdown URLs.
+- **Cross-link polish:** `docs/memory/systemPatterns.md` includes `<a id="cicd-pipeline"></a>` before the CI/CD workflow table so `docs/memory/techContext.md` can use `./systemPatterns.md#cicd-pipeline` without depending on heading slug rules. `docs/memory/projectbrief.md` and `docs/memory/systemPatterns.md` link to architecture and glossary via relative markdown URLs.
+- **Architecture prose polish:** `docs/technical/architecture.md` step list under `syncActionResult` now varies sentence openings while preserving references to `actionResult.appState`, `this.setState`, `editingTextElement`, `viewModeEnabled`, and `this.scene.triggerUpdate`.
 
 ## Recent changes (since `b9f16d4`)
 
-| Commit | Date | What changed |
+Use `git show <hash>` in a clone of this repo to inspect messages and diffs (`day-1/brainboost721` history). Short hashes are enough for everyday use; Git resolves them unambiguously here.
+
+| Commit | Date (author) | What changed |
 | --- | --- | --- |
-| `b9f16d4` | 2026-03-26 | Added `.cursorignore`, `.repomixignore`, updated `.gitignore` — tooling setup for repo packing |
-| `785c979` | 2026-03-26 | Added `repomix-compressed.txt` (~110K lines) — compressed codebase export used as source material |
-| `02477fe` | 2026-03-29 | Created initial Memory Bank: `projectbrief.md`, `systemPatterns.md`, `techContext.md`; plus `domain-glossary.md` and `architecture.md` |
-| `a7e3804` | 2026-03-29 | Added `agent-sharp-edges.md` (technical doc for risky code areas); minor updates to `systemPatterns.md` and `architecture.md` |
-| `7ed9b19` | 2026-03-29 | Added `productContext.md` to Memory Bank |
-| `21d1500` | 2026-03-29 | Added `dev-setup.md` (technical doc) and `activeContext.md` (initial skeleton) |
-| `ea876ca` | 2026-03-29 | Added `PRD.md` — reverse-engineered product requirements |
-| `1a1b065` | 2026-03-29 | Added `decisionLog.md` to Memory Bank; removed `agent-sharp-edges.md` (content folded into `decisionLog.md`); cross-link updates across multiple docs |
-| `39daee4` | 2026-03-29 | Expanded `activeContext.md` and `decisionLog.md`; added `progress.md` (Memory Bank completion) |
-| `3c3700f` | 2026-03-29 | Added `.cursor/rules/memory-bank.mdc` (always-apply Cursor rule); doc polish across Memory Bank, product, and technical docs |
+| `b9f16d4` | 2026-03-26 | `.cursorignore`, `.repomixignore`, `.gitignore` — tooling for repo packing |
+| `785c979` | 2026-03-26 | `repomix-compressed.txt` (~110K lines) — compressed export used as source material |
+| `02477fe` | 2026-03-29 | Initial Memory Bank: `docs/memory/projectbrief.md`, `docs/memory/systemPatterns.md`, `docs/memory/techContext.md`; `docs/product/domain-glossary.md`, `docs/technical/architecture.md` |
+| `a7e3804` | 2026-03-29 | `docs/technical/agent-sharp-edges.md`; edits to `docs/memory/systemPatterns.md`, `docs/technical/architecture.md` |
+| `7ed9b19` | 2026-03-29 | `docs/memory/productContext.md` |
+| `21d1500` | 2026-03-29 | `docs/technical/dev-setup.md`, `docs/memory/activeContext.md` (skeleton) |
+| `ea876ca` | 2026-03-29 | `docs/product/PRD.md` |
+| `1a1b065` | 2026-03-29 | `docs/memory/decisionLog.md`; removed `docs/technical/agent-sharp-edges.md` (folded into decision log); cross-links |
+| `39daee4` | 2026-03-29 | `docs/memory/activeContext.md`, `docs/memory/decisionLog.md`, `docs/memory/progress.md` |
+| `649e956` | 2026-03-29 | `.cursor/rules/memory-bank.mdc` (always-apply rule); Memory Bank / product / technical doc polish |
+| `34efb2b` | 2026-03-30 | Rule: no circular reads, anti-churn; service worker wording; `systemPatterns.md` links + `#cicd-pipeline`; `architecture.md` `syncActionResult`; `code-behavior-gaps.md`, `implicit-invariants.md` (B/C split); `decisionLog.md` index trim + cross-links |
 
 ## Repository state
 
-- Working tree clean at last check; Memory Bank rollout and Cursor rule are **committed** (not pending).
+- Branch `day-1/brainboost721`. HEAD `34efb2b`. Local branch may be **ahead/behind** `origin/day-1/brainboost721` — pull/rebase before assuming parity with remote.
 
 ## Decisions made during this documentation effort
 
 - **Source-verified only:** Every assertion in Memory Bank files cites specific files/paths. Inferences are explicitly labeled.
-- **`agent-sharp-edges.md` → `decisionLog.md`:** The standalone "agent sharp edges" doc was superseded by `decisionLog.md`, which covers both documentation/implementation gaps and implicit invariants in one place. The old file was deleted in `1a1b065`.
+- **`agent-sharp-edges.md` → `decisionLog.md` + technical splits:** The standalone doc was removed in `1a1b065` in favor of `docs/memory/decisionLog.md`. Section B/C full text lives in [`code-behavior-gaps.md`](../technical/code-behavior-gaps.md) and [`implicit-invariants.md`](../technical/implicit-invariants.md) (`34efb2b`); the Memory Bank keeps summaries and links.
 - **Separate directories for different audiences:** `docs/memory/` (AI/contributor context), `docs/product/` (product requirements, domain terms), `docs/technical/` (architecture, dev setup).
-- **Root-level `decisionLog.md` redirect:** A one-line pointer file exists at the repo root (`1a1b065`), directing readers to `docs/memory/decisionLog.md`.
-- **Cursor rule for Memory Bank:** `.cursor/rules/memory-bank.mdc` with `alwaysApply: true` ensures agents read the Memory Bank at the start of every task (`3c3700f`). Prescribes reading order and update protocol.
+- **Decision log location:** Canonical file is `docs/memory/decisionLog.md`. A root-level redirect existed in `1a1b065` but was removed in `649e956`.
+- **Cursor rule for Memory Bank:** `.cursor/rules/memory-bank.mdc` (`alwaysApply: true`) — added in `649e956`, anti-churn and no-circular-reads clarification in `34efb2b`. Prescribes reading order, update protocol, and **anti-churn** meta-edits (`docs/memory/decisionLog.md` section 8).
 
 ## Blockers & risks
 

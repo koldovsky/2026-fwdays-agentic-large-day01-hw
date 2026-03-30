@@ -2,12 +2,12 @@
 
 ## Architecture shape
 
-- For a full technical write-up, see `[architecture.md](../technical/architecture.md)`.
-- For undocumented behavior, doc/implementation gaps, and refactor hazards (scene render cycle, `componentDidUpdate` ordering, flagged `TODO`/`FIXME`/`HACK` clusters), see `[decisionLog.md](./decisionLog.md)`.
+- For a full technical write-up, see [architecture.md](../technical/architecture.md).
+- For undocumented behavior, doc/implementation gaps, and refactor hazards (scene render cycle, `componentDidUpdate` ordering, flagged `TODO`/`FIXME`/`HACK` clusters), see [decisionLog.md](./decisionLog.md).
 - Monorepo with clear separation between:
   - product application (`excalidraw-app`)
   - reusable library package (`packages/excalidraw`)
-  - lower-level shared modules (`packages/common`, `element`, `math`, `utils`)
+  - lower-level shared modules (`packages/common`, `packages/element`, `packages/math`, `packages/utils`)
   - integration samples (`examples/*`)
 - Internal packages are consumed through stable `@excalidraw/*` aliases defined in `tsconfig.json` `paths` and mirrored in `vitest.config.mts` and `excalidraw-app/vite.config.mts`, so imports like `@excalidraw/element` resolve to local source (`./packages/element/src/index.ts`) during development and tests.
 
@@ -101,28 +101,26 @@ Flat domain modules under `src/`: `Scene.ts`, `store.ts`, `binding.ts`, `resizeE
 - `packages/excalidraw/index.tsx` exports:
   - primary `Excalidraw` component
   - hooks, helper functions, and typed subpath exports
-  - grouped exports from internal `@excalidraw/`* packages
+  - grouped exports from internal `@excalidraw/`\* packages
 - Package exports map in `packages/excalidraw/package.json` controls runtime and type entrypoints.
 
-
+<a id="cicd-pipeline"></a>
 
 ## CI/CD pipeline
 
-
-| Workflow                     | Trigger               | What it does                                                        |
-| ---------------------------- | --------------------- | ------------------------------------------------------------------- |
-| `lint.yml`                   | PR                    | `yarn test:other` + `yarn test:code` + `yarn test:typecheck`        |
-| `test-coverage-pr.yml`       | PR                    | `yarn test:coverage` + vitest-coverage-report-action                |
-| `semantic-pr-title.yml`      | PR                    | Enforces semantic PR titles (`amannn/action-semantic-pull-request`) |
-| `size-limit.yml`             | PR to `master`        | Size-limit check on `packages/excalidraw` (`build:esm`)             |
-| `test.yml`                   | Push to `master`      | `yarn test:app`                                                     |
-| `cancel.yml`                 | Various               | Cancels superseded runs for `release` / PR workflows                |
-| `locales-coverage.yml`       | Push to `l10n_master` | `yarn locales-coverage`, may commit `percentages.json`              |
-| `autorelease-excalidraw.yml` | Push to `release`     | `yarn release --tag=next`                                           |
-| `build-docker.yml`           | Push to `release`     | `docker build -t excalidraw .`                                      |
-| `publish-docker.yml`         | Push to `release`     | Buildx multi-arch push `excalidraw/excalidraw:latest`               |
-| `sentry-production.yml`      | Push to `release`     | Build app, Sentry release + sourcemaps upload                       |
-
+| Workflow | Trigger | What it does |
+| --- | --- | --- |
+| `lint.yml` | PR | `yarn test:other` + `yarn test:code` + `yarn test:typecheck` |
+| `test-coverage-pr.yml` | PR | `yarn test:coverage` + vitest-coverage-report-action |
+| `semantic-pr-title.yml` | PR | Enforces semantic PR titles (`amannn/action-semantic-pull-request`) |
+| `size-limit.yml` | PR to `master` | Size-limit check on `packages/excalidraw` (`build:esm`) |
+| `test.yml` | Push to `master` | `yarn test:app` |
+| `cancel.yml` | Various | Cancels superseded runs for `release` / PR workflows |
+| `locales-coverage.yml` | Push to `l10n_master` | `yarn locales-coverage`, may commit `percentages.json` |
+| `autorelease-excalidraw.yml` | Push to `release` | `yarn release --tag=next` |
+| `build-docker.yml` | Push to `release` | `docker build -t excalidraw .` |
+| `publish-docker.yml` | Push to `release` | Buildx multi-arch push `excalidraw/excalidraw:latest` |
+| `sentry-production.yml` | Push to `release` | Build app, Sentry release + sourcemaps upload |
 
 ## Source-verified references
 

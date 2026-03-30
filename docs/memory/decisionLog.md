@@ -3,8 +3,8 @@
 This file records two categories of decisions and observations:
 
 - **Section A — Documentation decisions:** Choices made during the `day-1` documentation effort (since `b9f16d4`, 2026-03-26).
-- **Section B — Code behavior: doc vs implementation gaps:** Mismatches between written documentation/comments and actual runtime behavior.
-- **Section C — Code behavior: implicit invariants and refactor hazards:** Under-documented contracts that break when surrounding code is changed.
+- **Section B — Code behavior: doc vs implementation gaps:** Mismatches between written documentation/comments and actual runtime behavior. → Full details in [`code-behavior-gaps.md`](../technical/code-behavior-gaps.md).
+- **Section C — Code behavior: implicit invariants and refactor hazards:** Under-documented contracts that break when surrounding code is changed. → Full details in [`implicit-invariants.md`](../technical/implicit-invariants.md).
 
 Sections B and C complement [`architecture.md`](../technical/architecture.md) (happy-path data flow). Statements are tied to the current TypeScript sources in this workspace unless noted.
 
@@ -42,13 +42,13 @@ Sections B and C complement [`architecture.md`](../technical/architecture.md) (h
 
 ---
 
-### 4. Root-level `decisionLog.md` redirect
+### 4. Root-level `decisionLog.md` redirect (superseded)
 
-**Decision:** A one-line file at the repo root (`decisionLog.md`) points to `docs/memory/decisionLog.md`.
+**Decision:** A one-line file at the repo root (`decisionLog.md`) pointed to `docs/memory/decisionLog.md`.
 
-**Context:** Created in `1a1b065` as a convenience pointer. The root location is discoverable; the actual content lives in the Memory Bank.
+**Context:** Created in `1a1b065` as a convenience pointer. **Removed** in `649e956` (root file deleted). Canonical location remains `docs/memory/decisionLog.md`.
 
-**Recorded:** 2026-03-29 (`1a1b065`).
+**Recorded:** 2026-03-29 (`1a1b065`); removal `649e956`.
 
 ---
 
@@ -58,7 +58,7 @@ Sections B and C complement [`architecture.md`](../technical/architecture.md) (h
 
 **Rationale:** Reduces drift between sessions and keeps homework/repo context consistent without relying on chat history.
 
-**Recorded:** 2026-03-29 (`3c3700f`).
+**Recorded:** 2026-03-29 (`649e956`).
 
 ---
 
@@ -68,175 +68,66 @@ Sections B and C complement [`architecture.md`](../technical/architecture.md) (h
 
 **Rationale:** Heading-based slugs differ across GitHub, VS Code, and other Markdown viewers; a fixed `id` keeps deep links reliable.
 
-**Recorded:** 2026-03-30.
+**Recorded:** 2026-03-30 (`34efb2b`).
+
+---
+
+### 7. Split Sections B/C into technical docs
+
+**Decision:** The full-text entries for Section B (doc vs implementation gaps) and Section C (implicit invariants and refactor hazards) were extracted from this file into `docs/technical/code-behavior-gaps.md` and `docs/technical/implicit-invariants.md`, respectively. This file retains concise summaries and links.
+
+**Rationale:** `decisionLog.md` exceeded the 200-line Memory Bank file limit. Sections B and C are developer-facing reference material with a different update cadence from the decision records in Section A; `docs/technical/` is the appropriate home.
+
+**Recorded:** 2026-03-30 (`34efb2b`).
+
+---
+
+### 8. Anti-churn: Memory Bank and Cursor rule meta-edits
+
+**Decision:** Extend `.cursor/rules/memory-bank.mdc` with (1) an explicit note that the Memory Bank reading list does not include this rule file, so there is no circular read dependency, and (2) a **single-pass** policy for tasks that only edit `docs/memory/*` and/or the rule: one `activeContext.md` update at the end, no repeated “context changed” loops, and `progress.md` / `decisionLog.md` only when something material changed (including a protocol change to the rule itself, recorded once in Section A).
+
+**Rationale:** With `alwaysApply: true`, the rule and Memory Bank files that describe the rule are often in scope together. Without a stop condition, agents can over-update `activeContext.md`, `progress.md`, and `decisionLog.md` for bookkeeping that does not add new project context.
+
+**Recorded:** 2026-03-30 (`34efb2b`).
 
 ---
 
 ## B. Code behavior: documentation vs implementation gaps
 
-### 1. `updateScene`: JSDoc default for `captureUpdate` vs implementation
+> Full details with code references: [`code-behavior-gaps.md`](../technical/code-behavior-gaps.md)
 
-**Documented:** The JSDoc on `App.updateScene` marks `captureUpdate` with `@default CaptureUpdateAction.EVENTUALLY` and describes three capture modes when the option is used.
-
-**Actual:** `scheduleMicroAction` runs only inside `if (captureUpdate)`. If the host **omits** `captureUpdate`, **no** micro-action is scheduled for that call. That is **not** the same as explicitly passing `CaptureUpdateAction.EVENTUALLY`, which does enqueue a micro-action with that action type.
-
-**Why it matters:** Integrators migrating from the old `commitToHistory: false` default may assume "unspecified" equals `EVENTUALLY`; the runtime default is "do nothing in the Store for capture," not `EVENTUALLY`.
-
-**References:** `packages/excalidraw/components/App.tsx` (`updateScene`, ~4532–4566); `packages/excalidraw/CHANGELOG.md` (captureUpdate migration narrative).
-
----
-
-### 2. `syncActionResult`: architecture doc vs when `setState` runs
-
-**Documented:** `docs/technical/architecture.md` §2 step 4 says that when `actionResult.appState` applies, `setState` merges into React state (with editing-text and controlled-prop handling).
-
-**Actual:** The branch is taken when `actionResult.appState || editingTextElement || this.state.contextMenu`. At this point in the function `editingTextElement` is still always `null`, so in practice the extra trigger beyond `appState` is **`this.state.contextMenu`**: if a **context menu is open**, the editor still enters the large `setState` merge **even when** `actionResult.appState` is absent — among other effects it **forces `contextMenu: null`**, clearing the menu on unrelated actions.
-
-**Why it matters:** Hosts or tests reasoning only from "appState in the action result" miss this coupling between open context menu and forced state refresh.
-
-**References:** `packages/excalidraw/components/App.tsx` (`syncActionResult`, condition ~2755–2800); `docs/technical/architecture.md` §2.
-
----
-
-### 3. `updateFrameRendering`: API comment vs independent flags and hit-testing
-
-**Documented:** `ExcalidrawImperativeAPI` in `types.ts` says `updateFrameRendering` "disables rendering of frames (**including element clipping**)" and that frames stay interactive unless view mode is used.
-
-**Actual:** `updateFrameRendering` merges **`enabled`**, **`clip`**, **`name`**, and **`outline`** independently (each field defaults to the previous value when omitted). Clipping is not inherently tied to `enabled` in one boolean. Separately, hit-testing uses **`frameRendering.enabled && frameRendering.clip`** to decide whether elements inside a frame require the cursor to be inside the frame; if `enabled` is false, that check is skipped and the filter behaves differently than the prose "disable rendering + clipping" bundle suggests.
-
-**Why it matters:** Embedders cannot treat "turn off frames" as a single switch matching the comment; they must set the combination they want for draw, clip, labels, outlines, and pointer behavior.
-
-**References:** `packages/excalidraw/types.ts` (~949–954); `packages/excalidraw/components/App.tsx` (`updateFrameRendering` ~4242–4260; hit-test filter ~6015–6022).
-
----
-
-### 4. `syncActionResult`: "nothing changed" path vs files-only updates
-
-**Documented:** Architecture §2 step 5: if nothing changed the scene or state, `scene.triggerUpdate()` still runs.
-
-**Actual:** The `didUpdate` flag is set only when `actionResult.elements` or the app-state branch runs. Updates that **only** set `actionResult.files` (and `captureUpdate`) **do not** set `didUpdate`, so execution falls through to `triggerUpdate()` even though **file maps and image cache** were updated. The doc's "nothing changed" is easy to read as "no meaningful editor work," which is false for files-only paths.
-
-**Why it matters:** Observers relying on scene nonce / render triggers vs file cache updates can misread this as a no-op path.
-
-**References:** `packages/excalidraw/components/App.tsx` (`syncActionResult` ~2749–2815); `docs/technical/architecture.md` §2 step 5.
-
----
-
-### 5. `restore` + `deleteInvisibleElements`: silent deletion and versioning
-
-**Documented:** In-repo technical notes focus on restore shape migration and general restore behavior; option names like `deleteInvisibleElements` appear in code but are not spelled out as "may mark elements deleted and bump version without a user-visible delete" in product-facing docs.
-
-**Actual:** When `opts.deleteInvisibleElements` is set, empty text (and invisibly small elements in another branch) can be rewritten with **`isDeleted: true`** and version bumps (`bumpVersion` / version fields). Inline **TODO** in the same area flags that this can disagree with how collaboration / deltas record deletes.
-
-**Why it matters:** Callers enabling `deleteInvisibleElements` get semantic deletes and version changes that may not match documentation or mental models of "restore = normalize," affecting sync and conflict behavior.
-
-**References:** `packages/excalidraw/data/restore.ts` (~407–410, ~694–701).
+| # | Topic | Key mismatch |
+| --- | --- | --- |
+| 1 | `updateScene` / `captureUpdate` | JSDoc `@default EVENTUALLY` but omitting the option means "no capture," not `EVENTUALLY` |
+| 2 | `syncActionResult` / `setState` | Branch also fires when `this.state.contextMenu` is truthy, not just `actionResult.appState` |
+| 3 | `updateFrameRendering` | Four independent flags; comment implies a single "disable rendering + clipping" switch |
+| 4 | `syncActionResult` / files-only | Files-only updates skip `didUpdate` and fall through to `triggerUpdate()` — not truly "nothing changed" |
+| 5 | `restore` / `deleteInvisibleElements` | Silently sets `isDeleted: true` and bumps version; may conflict with collab delta expectations |
 
 ---
 
 ## C. Code behavior: implicit invariants and refactor hazards
 
-These items are either **under-documented in high-level architecture** or live mainly in **code comments**; they are not always "wrong docs," but they behave like undocumented contracts once you change surrounding code.
+> Full details with code references: [`implicit-invariants.md`](../technical/implicit-invariants.md)
 
-### Scene updates and full `App` render
-
-**What happens:** `Scene.triggerUpdate()` bumps `sceneNonce` and invokes all `onUpdate` callbacks. In `App.componentDidMount`, the editor registers `this.scene.onUpdate(this.triggerRender)`. For the common case, `triggerRender` calls `this.setState({})` — an **empty** React state update — so React still runs a full reconciliation and `App.render` runs. Render passes `sceneNonce` into `this.renderer.getRenderableElements(...)`, which drives cache invalidation for visible elements and canvas props.
-
-**Why it matters:** Skipping React updates when "no AppState field changed," or bypassing `triggerUpdate` while mutating elements, can leave **stale memoized visibility** or break ordering with `componentDidUpdate`'s `store.commit` and `onChange`.
-
-**Documented elsewhere:** The subscription and high-level sequence appear in [`architecture.md`](../technical/architecture.md) (sections on scene mutation and React render). The implementation detail that the mechanism is **`setState({})`** is easy to misread as redundant.
-
-**Primary references:** `packages/excalidraw/components/App.tsx` (`triggerRender`, `componentDidMount`), `packages/element/src/Scene.ts` (`triggerUpdate`, `sceneNonce`).
-
----
-
-### `componentDidUpdate` ordering and side effects
-
-**What happens (actual order):**
-
-1. **`_initialized` gate (first).** If `!this._initialized && !this.state.isLoading`, the code sets `this._initialized = true`, emits `editor:initialize` on `editorLifecycleEvents`, and calls `this.props.onInitialize?.(this.api)`. This is a **one-way implicit state machine** (`false` → `true`, not reset in normal lifecycle). The comment directly above this block in `App.tsx` says it **must** be updated _before_ "state change listeners are triggered below" — i.e. before step 2.
-
-2. **`this.appStateObserver.flush(prevState)`.** That method (`packages/excalidraw/components/AppStateObserver.ts`) is what **fires `onStateChange` subscribers**: it walks registered listeners and invokes callbacks when `predicate(currentState, prevState)` holds. It runs immediately after the `_initialized` gate and before the rest of the method's branching.
-
-3. **Near the end:** `this.store.commit(elementsMap, this.state)`, then `onChange` / `onChangeEmitter` **only when** `!this.state.isLoading` (avoids clobbering persistence when the tab is unfocused during init, per inline comment).
-
-**Additional implicit transitions:** When `selectedLinearElement?.isEditing` is true but the element is no longer selected, a **`setTimeout`** schedules `actionFinalize` so capture flags are not reset incorrectly — another ordering-sensitive path.
-
-**Why it matters:** Running `flush` before `_initialized` / `onInitialize` can notify **`onStateChange`** consumers before the editor has emitted **`editor:initialize`** or flipped the flag. Reordering `flush`, `commit`, or `onChange`, or calling `onChange` while loading, can break **history**, **observers**, or **local persistence**.
-
-**Primary references:** `packages/excalidraw/components/App.tsx` (`componentDidUpdate`, `_initialized`), `packages/excalidraw/components/AppStateObserver.ts` (`flush`).
-
----
-
-### Pointer, touch, and double-click
-
-**What happens:** A **TODO** in `App` describes the current approach as a **hack**: mixing native browser click/double-click with manual touch handling, with flags such as `lastPointerUpIsDoubleClick` carrying state across events.
-
-**Why it matters:** Consolidating handlers or deduplicating events without preserving this implicit machine can break **double-click to edit**, **text entry**, or **mobile** behavior.
-
-**Primary references:** `packages/excalidraw/components/App.tsx` (fields and comments near `lastPointerUpIsDoubleClick`).
-
----
-
-### `Excalidraw` wrapper props and `React.memo`
-
-**What happens:** The `Excalidraw` component merges `UIOptions` with defaults. A **FIXME** notes that normalization should happen so the **memo comparator** compares stable values; otherwise shallow equality can disagree with semantic prop changes.
-
-**Why it matters:** Tweaking `memo` or prop shape without aligning defaults can cause **stale UI options** or confusing render frequency.
-
-**Primary references:** `packages/excalidraw/index.tsx`.
-
----
-
-### Mobile: linear elements and transform handles
-
-**What happens:** A **HACK** gates hit-testing so **transform handles are disabled** for linear elements on mobile (and for two-point lines under a broader condition), until a better UX exists.
-
-**Why it matters:** "Fixing" mobile/desktop parity for handles without redesign can **re-enable broken** resize/transform behavior on small screens.
-
-**Primary references:** `packages/excalidraw/components/App.tsx` (hover / handle selection path; search for `HACK:`).
-
----
-
-### `Store.scheduleCapture` and undo
-
-**What happens:** `scheduleCapture` schedules work that becomes **durable increments** and affects the **undo stack**. A **TODO** in `store.ts` flags that it is "called so many places" and feels **error-prone**.
-
-**Why it matters:** New code paths that mutate elements or app state must use the same **capture** conventions as surrounding actions; otherwise **history** can be empty, duplicated, or inconsistent.
-
-**Primary references:** `packages/element/src/store.ts`, [`architecture.md`](../technical/architecture.md) (capture modes on `updateScene` / `Store`).
-
----
-
-### `Scene.mutateElement` and React batching
-
-**What happens:** The JSDoc on `Scene.mutateElement` requires callers to invoke it from a **React event handler** or within **`unstable_batchedUpdates`**, so updates batch correctly with the editor's React cycle.
-
-**Why it matters:** Calling mutation from arbitrary async ticks or non-UI entry points without batching can cause **extra renders** or **visible inconsistency** between React state and scene.
-
-**Primary references:** `packages/element/src/Scene.ts` (`mutateElement`).
-
----
-
-### Comment inventory (high-signal)
-
-There is **no** `WORKAROUND` tag in `.ts`/`.tsx` in this repo at the time of writing. **`HACK`** appears in the linear-element mobile handle path in `App.tsx`. **`FIXME`** and **`TODO`** appear across packages; clusters worth manual review before large refactors include:
-
-| Theme | Example locations |
+| Topic | Risk summary |
 | --- | --- |
-| History / deltas / `#7348` | `packages/element/src/delta.ts`, `packages/excalidraw/tests/history.test.tsx`, `packages/excalidraw/actions/actionFinalize.tsx` |
-| Export / tests | `packages/utils/tests/export.test.ts` (SVG and deleted elements) |
-| Flaky or incorrect tests | `packages/excalidraw/wysiwyg/textWysiwyg.test.tsx`, `packages/element/tests/zindex.test.tsx` |
-| Types / migration | `packages/math/src/types.ts`, `packages/math/src/point.ts` |
-| Theming / wysiwyg | `packages/excalidraw/wysiwyg/textWysiwyg.tsx` |
-
-Use ripgrep for `\b(TODO|FIXME|HACK)\b` when preparing a change that touches those areas.
+| Scene updates / full `App` render | `triggerUpdate` → `setState({})` drives render; bypassing it leaves stale memoized state |
+| `componentDidUpdate` ordering | `_initialized` gate → `flush` → `commit` → `onChange`; reordering breaks history/observers |
+| Pointer / touch / double-click | Manual state machine with `lastPointerUpIsDoubleClick`; consolidating handlers breaks mobile |
+| `Excalidraw` wrapper / `React.memo` | FIXME: unstable defaults defeat memo comparator |
+| Mobile linear-element handles | HACK disables transform handles on mobile; "fixing" parity re-enables broken UX |
+| `Store.scheduleCapture` / undo | Called in many places (TODO: error-prone); new paths must follow same capture conventions |
+| `Scene.mutateElement` / batching | Must run in React event handler or `unstable_batchedUpdates`; async calls cause extra renders |
+| Comment inventory (high-signal) | `HACK`, `FIXME`, `TODO` clusters — see [`implicit-invariants.md`](../technical/implicit-invariants.md#comment-inventory-high-signal) for table |
 
 ---
 
 ## Related documentation
 
 - [`architecture.md`](../technical/architecture.md) — end-to-end editor architecture and file index.
+- [`code-behavior-gaps.md`](../technical/code-behavior-gaps.md) — full Section B entries.
+- [`implicit-invariants.md`](../technical/implicit-invariants.md) — full Section C entries.
 - [`systemPatterns.md`](./systemPatterns.md) — monorepo and composition patterns at a glance.
 
-_Last updated: 2026-03-30._
+_Last updated: 2026-03-30 — Section A §§6–8 and B/C technical split landed in `34efb2b`; Cursor rule origin `649e956`._
