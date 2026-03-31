@@ -1,0 +1,49 @@
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+.eslintcache
+.history
+.idea
+.vercel
+.vscode
+.yarn
+*.log
+*.tgz
+*.min.js
+*.min.css
+*.snap
+build
+dist
+firebase
+logs
+node_modules
+npm-debug.log*
+package-lock.json
+yarn.lock
+yarn-debug.log*
+yarn-error.log*
+packages/excalidraw/types
+coverage
+.nyc_output/
+dev-dist
+html
+meta*.json
+.claude
+# Generated workspace build outputs
+excalidraw-app/build
+excalidraw-app/dist
+excalidraw-app/dev-dist
+packages/*/build
+packages/*/dist
+examples/*/build
+examples/*/dist
+# Generated example/framework artifacts
+examples/*/.next
+examples/*/out
+# Generated TypeScript incremental metadata
+*.tsbuildinfo
+# Packed / generated repo dumps
+repomix-output.xml
