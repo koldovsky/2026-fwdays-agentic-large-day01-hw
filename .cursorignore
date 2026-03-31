@@ -12,6 +12,9 @@
 .yarn
 *.log
 *.tgz
+*.min.js
+*.min.css
+*.snap
 build
 dist
 firebase
@@ -19,10 +22,12 @@ logs
 node_modules
 npm-debug.log*
 package-lock.json
+yarn.lock
 yarn-debug.log*
 yarn-error.log*
 packages/excalidraw/types
 coverage
+.nyc_output/
 dev-dist
 html
 meta*.json
@@ -40,3 +45,5 @@ examples/*/.next
 examples/*/out
 # Generated TypeScript incremental metadata
 *.tsbuildinfo
+# Packed / generated repo dumps
+repomix-output.xml
