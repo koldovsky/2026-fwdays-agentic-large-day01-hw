@@ -1,0 +1,61 @@
+Model: Opus 4.6
+Excalidraw — Monorepo
+Призначення
+Це форк (або клон) Excalidraw — open-source інструменту для малювання діаграм і скетчів у стилі «від руки» прямо в браузері. Основна ідея — надати простий, колаборативний whiteboard-додаток, а також бібліотеку-компонент (@excalidraw/excalidraw), який можна вбудовувати у власні React-додатки.
+Репозиторій використовується як домашнє завдання для fwdays 2026 Agentic Large Day01.
+
+Стек технологій
+Шар   Технології
+Мова    TypeScript 5.9, JavaScript
+UI    React 19 (functional components + hooks)
+Збірка    Vite 5, Rollup (через Vite)
+Тестування    Vitest 3, jsdom, vitest-canvas-mock, Chai
+Лінтинг / Форматування    ESLint, Prettier
+PWA   vite-plugin-pwa, service-worker
+Package manager   Yarn 1 (Classic) з workspaces
+CI/Deploy   Vercel, Docker
+Колаборація   Firebase (Firestore, Storage) + WebSocket (Portal/Collab)
+Моніторинг    Sentry
+WASM    woff2-bindings (font subsetting)
+
+Структура репозиторію
+
+excalidraw-monorepo/
+│
+├── packages/                  # NPM-пакети (yarn workspaces)
+│   ├── excalidraw/            # Основний React-компонент (@excalidraw/excalidraw)
+│   │   ├── components/        #   UI-компоненти (діалоги, меню, sidebar, TTD…)
+│   │   ├── actions/           #   Дії (undo, redo, export, align…)
+│   │   ├── data/              #   Імпорт/експорт (JSON, Blob, filesystem)
+│   │   ├── renderer/          #   Canvas-рендеринг
+│   │   ├── scene/             #   Логіка сцени
+│   │   ├── tests/             #   Тести
+│   │   ├── fonts/, subset/    #   Шрифти та WASM font-subsetting
+│   │   └── types.ts           #   Основні типи (AppState, ExcalidrawImperativeAPI…)
+│   │
+│   ├── element/               # @excalidraw/element — робота з елементами
+│   ├── math/                  # @excalidraw/math — геометрія (Point, Segment, Curve, Ellipse…)
+│   │   └── src/types.ts       #   Типи: Point, Vector, Line, Polygon тощо
+│   ├── common/                # @excalidraw/common — утиліти, константи, colors, keys, Queue…
+│   └── utils/                 # @excalidraw/utils — експорт (exportToBlob, exportToSvg…)
+│
+├── excalidraw-app/            # Головний веб-додаток (excalidraw.com)
+│   ├── App.tsx                #   Кореневий React-компонент
+│   ├── collab/                #   Real-time колаборація (Firebase + WebSocket)
+│   ├── data/                  #   Firebase integration, файловий менеджер
+│   └── components/            #   AI, меню, sidebar, error boundary
+│
+├── examples/                  # Приклади використання
+│   ├── with-nextjs/           #   Next.js-інтеграція
+│   └── with-script-in-browser/#   Vanilla browser-інтеграція (Vite)
+│
+├── scripts/                   # Скрипти збірки, релізу, changelog
+├── firebase-project/          # Firebase rules & indexes
+├── public/                    # Статика (шрифти, іконки, og-image)
+│
+├── vitest.config.mts          # Глобальна конфігурація тестів
+├── tsconfig.json              # Кореневий TypeScript-конфіг
+├── docker-compose.yml / Dockerfile
+└── package.json               # Workspaces root, скрипти (start, build, test, release)
+
+Ключові зв'язки: пакети common → math → element → excalidraw утворюють ланцюжок залежностей; excalidraw-app — це кінцевий додаток, який використовує всі пакети. Alias-и для @excalidraw/* налаштовані у vite.config.mts та vitest.config.mts.
