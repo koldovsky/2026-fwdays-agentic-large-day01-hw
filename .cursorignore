@@ -1,0 +1,55 @@
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.envrc
+.eslintcache
+.history
+.idea
+.vercel
+.vscode
+.yarn
+*.log
+*.tgz
+build
+dist
+# build outputs (including nested package builds)
+**/build/
+**/dist/
+# recursive dependency and framework caches (improves indexing)
+**/node_modules/
+**/.yarn/
+**/.vite/
+**/.next/
+**/.turbo/
+**/.cache/
+**/.svelte-kit/
+**/.firebase/
+*.tsbuildinfo
+firebase
+logs
+node_modules
+npm-debug.log*
+package-lock.json
+yarn-debug.log*
+yarn-error.log*
+coverage
+dev-dist
+# Vite/monorepo build outputs (including nested)
+**/dev-dist/
+html
+# html build artifacts (if generated)
+**/html/
+meta*.json
+.claude
+coverage/
+# coverage outputs can be generated in nested folders
+**/coverage/
+.nyc_output/
+.git/
+.vscode/
+
+*.min.js
+*.min.css
+*.snap
