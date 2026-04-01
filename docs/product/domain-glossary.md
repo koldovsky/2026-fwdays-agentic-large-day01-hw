@@ -61,21 +61,23 @@
 
 **Персистентність:** контролюється `APP_STATE_STORAGE_CONF` — per-key map з трьома прапорцями: `browser` (localStorage), `export` (JSON-файл), `server` (Firebase). Більшість полів зберігаються лише в `browser`.
 
-**Де використовується:** `packages/excalidraw/types.ts` (інтерфейс `AppState`, рядок ~272), `packages/excalidraw/appState.ts` (defaults + `APP_STATE_STORAGE_CONF`), `packages/excalidraw/components/App.tsx` (React state).
+**Де використовується:** `packages/excalidraw/types.ts` (інтерфейс `AppState`), `packages/excalidraw/appState.ts` (defaults + `APP_STATE_STORAGE_CONF`), `packages/excalidraw/components/App.tsx` (React state).
 
 **НЕ плутати з:** станом елементів — елементи живуть у `Scene`, а `AppState` описує все навколо них (UI, viewport, tool). Це два паралельних потоки даних.
 
 ---
 
-## Tool (`ToolType` / `ActiveTool`)
+## Tool (`ToolType` / `ActiveTool` / `AppState.activeTool`)
 
-**Визначення.** **Режим взаємодії** з canvas — що відбувається при кліку/drag: малювання фігури, виділення, переміщення, стирання тощо. У коді — union-тип `ToolType` з 16 значеннями.
+**Визначення.** **Режим взаємодії** з canvas — що відбувається при кліку/drag: малювання фігури, виділення, переміщення, стирання тощо.
 
-**Значення `ToolType`:** `"selection"`, `"lasso"`, `"rectangle"`, `"diamond"`, `"ellipse"`, `"arrow"`, `"line"`, `"freedraw"`, `"text"`, `"image"`, `"eraser"`, `"hand"`, `"frame"`, `"magicframe"`, `"embeddable"`, `"laser"`.
+**`ToolType`:** union з 16 рядкових літералів — `"selection"`, `"lasso"`, `"rectangle"`, `"diamond"`, `"ellipse"`, `"arrow"`, `"line"`, `"freedraw"`, `"text"`, `"image"`, `"eraser"`, `"hand"`, `"frame"`, `"magicframe"`, `"embeddable"`, `"laser"`.
 
-**`ActiveTool`:** розширений тип, що зберігається в `AppState.activeTool` — додає `locked` (зафіксований інструмент після малювання), `lastActiveTool` (для повернення з eraser/hand), `fromSelection`, підтримку `customType` для розширень.
+**`ActiveTool`:** не обгортка навколо `AppState`, а окремий тип у `packages/excalidraw/types.ts` — дискримінований union: або `{ type: ToolType; customType: null }`, або `{ type: "custom"; customType: string }` для сторонніх інструментів. Поля `locked`, `lastActiveTool`, `fromSelection` до **`ActiveTool` не входять**.
 
-**Де використовується:** `packages/excalidraw/types.ts` (`ToolType`, `ActiveTool`), `packages/common/src/constants.ts` (`TOOL_TYPE`), `packages/excalidraw/components/App.tsx` (`setActiveTool`), toolbar-компоненти.
+**`AppState.activeTool`:** об’єкт типу `{ lastActiveTool: ActiveTool | null; locked: boolean; fromSelection: boolean } & ActiveTool` — тут зберігається поточний інструмент разом із метаданими: фіксація інструменту після малювання (`locked`), попередній інструмент для виходу з `eraser` / `hand` (`lastActiveTool`), тимчасове перемикання з режиму виділення (`fromSelection`).
+
+**Де використовується:** `packages/excalidraw/types.ts` (`ToolType`, `ActiveTool`, поле `activeTool` в `AppState`), `packages/common/src/constants.ts` (`TOOL_TYPE`), `packages/excalidraw/components/App.tsx` (`setActiveTool`), toolbar-компоненти.
 
 **НЕ плутати з:** Action. Tool — це *режим* (що робитиму), Action — це *команда* (зроби зараз). Деякі Action можуть перемикати Tool (наприклад, `actionSetFrameAsActiveTool`).
 
@@ -184,8 +186,8 @@
 
 **Варіанти:**
 - `ExcalidrawFrameElement` — звичайний frame з опціональним `name`
-- `ExcalidrawMagicFrameElement` — frame для AI-генерації (Text-to-Diagram)
+- `ExcalidrawMagicFrameElement` — magic frame; генерація контенту вимагає налаштованого клієнтського бекенду (`VITE_APP_AI_BACKEND` у `packages/excalidraw/vite-env.d.ts`), а не вбудованого сервера в репозиторії
 
-**Де використовується:** `packages/element/src/types.ts` (типи), `packages/excalidraw/actions/actionFrame.ts` (actions), `packages/excalidraw/frame.ts` (утиліти), `packages/excalidraw/renderer/` (clip rendering).
+**Де використовується:** `packages/element/src/types.ts` (типи), `packages/excalidraw/actions/actionFrame.ts` (actions), `packages/excalidraw/frame.ts` (утиліти), `packages/excalidraw/components/App.tsx` (`onMagicFrameGenerate`), `packages/excalidraw/renderer/` (clip rendering).
 
 **НЕ плутати з:** HTML `<iframe>` або animation frame. Frame в Excalidraw — це **логічний контейнер** на canvas, аналог artboard у Figma.

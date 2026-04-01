@@ -1,3 +1,11 @@
+# Generated / locks / tooling (see .coderabbit.yaml path_instructions)
+*.min.js
+*.min.css
+*.snap
+.nyc_output/
+.git/
+yarn.lock
+
 .DS_Store
 .env.development.local
 .env.local

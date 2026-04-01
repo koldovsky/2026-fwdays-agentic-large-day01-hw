@@ -1,17 +1,14 @@
 # Архітектура кодової бази (за вихідним кодом)
 
-Цей документ описує лише те, що прямо випливає з реалізації в репозиторії `excalidraw-monorepo`: кореневий `package.json` оголошує workspaces `excalidraw-app`, `packages/*`, `examples/*` і збирає пакети в порядку `common` → `math` → `element` → `excalidraw` (скрипт `build:packages`).
+Цей документ описує **потік даних, шари пакетів, рендер і залежності між модулями**. Огляд продукту та структури репо — у [projectbrief.md](../memory/projectbrief.md); **версії залежностей, команди збірки та тестів** — у [techContext.md](../memory/techContext.md); загальні патерни — у [systemPatterns.md](../memory/systemPatterns.md).
 
-Нижче розділи **«Контекст проєкту»**, **«TypeScript і збірка»**, **«excalidraw-app»** та **«Версії й команди»** узгоджені з фактами з `docs/memory/projectbrief.md`, `docs/memory/techContext.md` та `docs/memory/systemPatterns.md` і перевірені по вихідних файлах репозиторію.
+Кореневий `package.json` оголошує workspaces `excalidraw-app`, `packages/*`, `examples/*` і збирає пакети в порядку `common` → `math` → `element` → `excalidraw` (скрипт `build:packages`).
 
 ---
 
 ## Контекст проєкту
 
-- **Ім’я workspace** у корені: `excalidraw-monorepo` (`package.json`, поле `name`).
-- Це **монорепозиторій Excalidraw**: веб-додаток для дошки / діаграм і npm-пакети `@excalidraw/*` для вбудовування редактора як React-компонента (`packages/excalidraw/package.json`: `description` — «Excalidraw as a React component»).
-- **Шари пакетів** (за `description` / роллю в дереві залежностей): `packages/common` — спільні константи й утиліти; `packages/math` — геометрія; `packages/element` — логіка елементів; `packages/utils` — додаткові утиліти (окремий пакет); `packages/excalidraw` — UI редактора, дані, i18n, публічний API; `excalidraw-app` — оболонка продукту (точка входу `excalidraw-app/index.tsx` рендерить `ExcalidrawApp` з `./App`).
-- **Приклади інтеграції:** workspace `examples/with-nextjs`, `examples/with-script-in-browser` (кореневий `package.json`, `workspaces`).
+Стисло: монорепозиторій `excalidraw-monorepo`, пакети `@excalidraw/*`, застосунок-оболонка `excalidraw-app`, приклади в `examples/*`. Детальний бриф — [projectbrief.md](../memory/projectbrief.md).
 
 ---
 
@@ -207,7 +204,7 @@ flowchart TB
 - **Пакети** збирають артефакти в `dist/` через скрипти на **esbuild** (`scripts/buildPackage.js`, `scripts/buildBase.js`, `scripts/buildUtils.js` — викликаються з `package.json` підпакетів як `build:esm`).
 - **Vite** (`excalidraw-app/vite.config.mts`): для dev-сервера налаштовані **alias**, які дзеркалять ту саму схему, що й `tsconfig` (прямий резолв сирців); `envDir: "../"` — змінні з кореневих `.env*`; `server.port` — з `VITE_APP_PORT` або **3000** за замовчуванням.
 - Плагіни у `vite.config.mts` (імпорти на початку файлу): `@vitejs/plugin-react`, `vite-plugin-svgr`, `vite-plugin-ejs`, `vite-plugin-pwa`, `vite-plugin-checker`, `vite-plugin-html`, `vite-plugin-sitemap`, `woff2BrowserPlugin` з `../scripts/woff2/woff2-vite-plugins`.
-- **Тести:** кореневий `vitest.config.mts` використовує ті самі alias `@excalidraw/*`, що й TypeScript / Vite (`docs/memory/systemPatterns.md` узгоджує це з практикою репозиторію).
+- **Тести:** кореневий `vitest.config.mts` використовує ті самі alias `@excalidraw/*`, що й TypeScript / Vite (див. також [systemPatterns.md](../memory/systemPatterns.md)).
 
 ---
 
@@ -222,24 +219,9 @@ flowchart TB
 
 ---
 
-## Версії ключових залежностей і команди
+## Версії залежностей і команди
 
-| Область | Значення (за `package.json`) |
-|--------|-------------------------------|
-| Менеджер пакетів | Yarn Classic `yarn@1.22.22` (корінь `package.json`, `packageManager`) |
-| Node.js | `>=18.0.0` (корінь та `excalidraw-app/package.json`, `engines`) |
-| TypeScript | `5.9.3` (корінь `devDependencies`) |
-| Vite | `5.0.12` (корінь `devDependencies`) |
-| Vitest | `3.0.6` (корінь `devDependencies`) |
-| React / React DOM | `19.0.0` (`excalidraw-app/dependencies`) |
-| Пакети `@excalidraw/common`, `element`, `math`, `excalidraw` | `0.18.0` (відповідні `packages/*/package.json`) |
-| `@excalidraw/utils` | `0.1.2` (`packages/utils/package.json`) |
-| Jotai | `2.11.0` (`excalidraw-app` та `packages/excalidraw` `dependencies`) |
-| Firebase | `11.3.1` (`excalidraw-app`) |
-| `socket.io-client` | `4.7.2` (`excalidraw-app`) |
-| `@sentry/browser` | `9.0.1` (`excalidraw-app`) |
-
-**Корисні команди з кореневого `package.json`:** `yarn start` → dev у `excalidraw-app` (`vite`); `yarn build` → збірка застосунку; `yarn build:packages` → послідовна збірка пакетів; `yarn test` / `yarn test:app` → Vitest; `yarn test:all` → typecheck + eslint + prettier + тести застосунку; `yarn test:typecheck` → `tsc`; `yarn start:example` → приклад зі скриптом після `build:packages`; `yarn rm:build`, `yarn clean-install`, `yarn fix` — див. скрипти в корені.
+Актуальні версії пакетів і перелік команд (`yarn start`, `yarn build`, тести тощо) зібрані в [techContext.md](../memory/techContext.md), щоб не дублювати їх у цьому файлі.
 
 ---
 
@@ -268,4 +250,4 @@ flowchart TB
 
 ---
 
-*Документ згенеровано за станом вихідного коду в репозиторії; при зміні архітектури оновлюйте відповідні файли та цей опис. Розділи на основі `docs/memory/*` варто синхронізувати при зміні цих файлів.*
+*Документ відображає архітектуру за вихідним кодом; зміни в стеку та командах оновлюйте в [techContext.md](../memory/techContext.md), короткий опис продукту — у [projectbrief.md](../memory/projectbrief.md).*
