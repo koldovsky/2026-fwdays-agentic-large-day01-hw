@@ -1,408 +1,201 @@
-# Excalidraw Monorepo Architecture (Code-Derived)
+# Архітектура репозиторію (за вихідним кодом)
+
+Документ описує фактичну структуру з коду в цьому репозиторії. Посилання на файли відносні до кореня репозиторію.
+
+**Охоплення:** верхній рівень workspaces, потік даних між `App`, `Scene`, `Store` та `ActionManager`, поділ canvas-рендеру, залежності `package.json` пакетів `packages/*`, а також відмінності між шаром бібліотеки (`packages/excalidraw`) і додатком `excalidraw-app`.
+
+---
 
 ## High-level Architecture
 
-### Monorepo Layout
+Монорепозиторій на Yarn workspaces (`package.json`, поле `workspaces`: `excalidraw-app`, `packages/*`, `examples/*`).
 
-- Root package name: `excalidraw-monorepo`.
-- Workspace manager: Yarn workspaces (`workspaces`: `excalidraw-app`, `packages/*`, `examples/*`).
-- Application entry package for web app: `excalidraw-app`.
-- Core editor package: `@excalidraw/excalidraw`.
-- Core domain package for element logic: `@excalidraw/element`.
-- Shared utilities/constants package: `@excalidraw/common`.
-- Math primitives package: `@excalidraw/math`.
-- Utility package with export helpers and other helpers: `@excalidraw/utils`.
-
-### Runtime Building Blocks
-
-- React UI shell is built by `Excalidraw` component (`packages/excalidraw/index.tsx`).
-- Main stateful runtime class is `App extends React.Component<AppProps, AppState>` (`packages/excalidraw/components/App.tsx`).
-- Scene model is managed by `Scene` class (`packages/element/src/Scene.ts`).
-- Action dispatch and command/shortcut handling is managed by `ActionManager` (`packages/excalidraw/actions/manager.tsx`).
-- Rendering visibility filtering is managed by `Renderer` class (`packages/excalidraw/scene/Renderer.ts`).
-- Canvas rendering is split into:
-  - static scene renderer (`renderStaticScene`) for element drawing,
-  - interactive scene renderer (`renderInteractiveScene`) for UI overlays.
-
-### High-level Mermaid Diagram
+- **`excalidraw-app`** — Vite-додаток, точка входу `excalidraw-app/index.tsx` монтує `ExcalidrawApp` з `excalidraw-app/App.tsx`. У `excalidraw-app/vite.config.mts` налаштовані аліаси `resolve.alias`, які підміняють імпорти `@excalidraw/common`, `@excalidraw/element`, `@excalidraw/excalidraw`, `@excalidraw/math`, `@excalidraw/utils` на вихідні `.ts`/`.tsx` у `packages/`.
+- **`packages/excalidraw`** — React-компонент редактора: головний клас `App` у `packages/excalidraw/components/App.tsx`, публічний вхід `packages/excalidraw/index.tsx` (`Excalidraw`, провайдери API тощо).
+- **`packages/element`** — домен сцени: `Scene`, `Store`, типи елементів, мутації; `Store` залежить від інстансу `App` (конструктор `constructor(private readonly app: App)` у `packages/element/src/store.ts`).
+- **`packages/common`**, **`packages/math`** — спільні константи, утиліти та 2D-математика; `math` залежить від `common` (`packages/math/package.json`).
+- **`packages/utils`** — окремий пакет утиліт експорту/геометрії; його імпортують модулі в `packages/excalidraw` (наприклад `exportToCanvas` у `packages/excalidraw/components/ImageExportDialog.tsx`).
 
 ```mermaid
-flowchart LR
-  Host[Host App / excalidraw-app] --> ExcalidrawComp[Excalidraw React Component]
-  ExcalidrawComp --> AppClass[App class component]
+flowchart TB
+  subgraph workspaces["Yarn workspaces"]
+    app["excalidraw-app"]
+    excal["@excalidraw/excalidraw\n(packages/excalidraw)"]
+    el["@excalidraw/element\n(packages/element)"]
+    cm["@excalidraw/common"]
+    mt["@excalidraw/math"]
+    ut["@excalidraw/utils\n(packages/utils)"]
+  end
 
-  AppClass --> AM[ActionManager]
-  AppClass --> Scene[Scene model]
-  AppClass --> Renderer[Scene Renderer]
-  AppClass --> Store[Store]
-  AppClass --> History[History]
+  app -->|"Vite alias → вихідний код"| excal
+  excal --> el
+  excal --> cm
+  excal --> mt
+  el --> cm
+  el --> mt
+  mt --> cm
+  excal --> ut
 
-  AM -->|perform actions| Scene
-  AM -->|actionResult.appState| AppState[React AppState]
+  subgraph core["Ядро редактора (клас App)"]
+    scene["Scene"]
+    store["Store"]
+    am["ActionManager"]
+    rend["Renderer"]
+  end
 
-  Scene -->|elements + maps + nonce| Renderer
-  Renderer -->|visibleElements + elementsMap| StaticCanvas[StaticCanvas component]
-  Renderer -->|visibleElements + elementsMap| InteractiveCanvas[InteractiveCanvas component]
-
-  StaticCanvas --> StaticRender[renderStaticScene]
-  InteractiveCanvas --> InteractiveRender[renderInteractiveScene]
-
-  StaticRender --> CanvasStatic[(Static canvas)]
-  InteractiveRender --> CanvasInteractive[(Interactive canvas)]
-
-  Store --> History
-  AppClass -->|onChange callback + emitter| Host
+  excal --> core
+  store -->|"посилання на App"| excal
+  scene --> el
+  store --> el
 ```
 
-### Package/Layer Boundaries
+---
 
-- `@excalidraw/excalidraw` composes UI, app lifecycle, actions, rendering orchestration.
-- `@excalidraw/element` owns domain logic for elements, scene container, selection, geometry-aware mutations.
-- `@excalidraw/common` provides cross-package constants/helpers/types used by editor and element/math packages.
-- `@excalidraw/math` provides geometric primitives and transforms used heavily by renderer and element logic.
-- `@excalidraw/utils` provides helper utilities for export/import and other auxiliary operations.
+## Data Flow: рух даних
 
-### App Composition Facts
+1. **Ініціалізація сцени.** У `App` після завантаження викликається `initializeScene` (`packages/excalidraw/components/App.tsx`): з `props.initialData` відновлюються елементи через `restoreElements`, стан — через `restoreAppState`, далі викликається `syncActionResult` з `captureUpdate: CaptureUpdateAction.NEVER` (ініціалізація не потрапляє в undo одразу за цим шляхом).
 
-- `Excalidraw` component wraps `App` inside:
-  - `EditorJotaiProvider`,
-  - `InitializeApp`.
-- `Excalidraw` merges incoming `UIOptions` with `DEFAULT_UI_OPTIONS`.
-- `Excalidraw` exposes API context via `ExcalidrawAPIContext` / `ExcalidrawAPISetContext`.
-- `App` creates internal API object containing methods such as:
-  - `updateScene`,
-  - `applyDeltas`,
-  - `mutateElement`,
-  - `resetScene`,
-  - `getSceneElements`,
-  - `getAppState`,
-  - `registerAction`,
-  - event subscriptions (`onChange`, `onPointerDown`, `onPointerUp`, etc.).
+2. **Оновлення з дій користувача.** `ActionManager.executeAction` викликає `action.perform(elements, appState, value, app)`, результат передається в `updater`, який у конструкторі `ActionManager` прив’язаний до `syncActionResult` з `App` (`packages/excalidraw/actions/manager.tsx`, `packages/excalidraw/components/App.tsx`).
 
-## Data Flow: як дані рухаються через систему
+3. **`syncActionResult`.** Послідовність у коді `syncActionResult`:
+   - `this.store.scheduleAction(actionResult.captureUpdate)`;
+   - за наявності `actionResult.elements` — `this.scene.replaceAllElements(actionResult.elements)`;
+   - за наявності файлів — `addMissingFiles` / кеш зображень;
+   - за зміни `appState` — `this.setState(...)` з урахуванням `viewModeEnabled`/`zenModeEnabled` з пропсів;
+   - якщо жодної зміни не було — `this.scene.triggerUpdate()`.
 
-### 1) Initialization Flow
+4. **`updateScene` (імперативний API).** Публічний метод `App.updateScene` (`packages/excalidraw/components/App.tsx`): за наявності `captureUpdate` планує мікродію через `this.store.scheduleMicroAction({ action: captureUpdate, elements, appState: observedAppState })`; опційно `setState` для `appState`, `scene.replaceAllElements(elements)`, оновлення `collaborators`.
 
-- `App` constructor initializes `this.state` from `getDefaultAppState()` plus runtime values (`width`, `height`, offsets, theme, flags).
-- Constructor creates:
-  - `Library`,
-  - `ActionManager`,
-  - `Scene`,
-  - base canvas + roughjs instance (`this.canvas`, `this.rc`),
-  - `Renderer`,
-  - `Store`,
-  - `History`,
-  - `Fonts`.
-- Actions are registered in `ActionManager` via `registerAll(actions)` plus undo/redo actions.
-- On mount:
-  - `scene.onUpdate(this.triggerRender)` subscribes render triggering to scene updates.
-  - initial data is loaded/restored (`restoreElements`, `restoreAppState`).
-  - API and lifecycle callbacks are emitted (`onMount`, `onExcalidrawAPI`).
+5. **Після кожного рендеру React.** У `componentDidUpdate` зчитуються `this.scene.getElementsIncludingDeleted()` та `this.scene.getElementsMapIncludingDeleted()`, викликається `this.store.commit(elementsMap, this.state)`. Якщо `!this.state.isLoading`, викликаються `this.props.onChange?.(elements, this.state, this.files)` та `this.onChangeEmitter.trigger(...)`.
 
-### 2) User Interaction to State/Scene
+6. **Споживачі змін Store.** `ExcalidrawImperativeAPI` експонує `onIncrement: (cb) => this.store.onStoreIncrementEmitter.on(cb)` у `createExcalidrawAPI` (`packages/excalidraw/components/App.tsx`). `History` створюється з `this.store` у тому ж конструкторі.
 
-- Pointer/keyboard handlers in `App` route interactions.
-- Keyboard shortcuts are resolved by `ActionManager.handleKeyDown()`.
-- `ActionManager` filters matching actions by:
-  - UI options (`canvasActions`),
-  - `keyTest`,
-  - priority (`keyPriority`).
-- If action is valid, `ActionManager` executes `action.perform(...)`.
-- Result (`ActionResult`) is passed to `App.syncActionResult`.
+7. **Допоміжний глобальний стан UI (Jotai).** `packages/excalidraw/editor-jotai.ts`: `createIsolation()` з `jotai-scope`, окремий `createStore()` як `editorJotaiStore`. Частина UI (бібліотека, i18n-код мови тощо) оновлює атоми через `updateEditorAtom` у `App`, який викликає `editorJotaiStore.set` і `this.triggerRender()`.
 
-### 3) ActionResult Application
+### Обгортка `Excalidraw` (публічний компонент)
 
-- `syncActionResult` can update:
-  - elements (`scene.replaceAllElements`),
-  - files (`addMissingFiles`, cache updates),
-  - appState (`this.setState(...)` merge).
-- If no explicit update happened, `scene.triggerUpdate()` is called to refresh rendering.
-- `Store.scheduleAction(actionResult.captureUpdate)` captures updates for increment/history pipeline.
+- У `packages/excalidraw/index.tsx` компонент `ExcalidrawBase` обгортає дерево в такому порядку: `EditorJotaiProvider` з `store={editorJotaiStore}` → `InitializeApp` (пропси `langCode`, `theme`) → клас `App` з повним набором `ExcalidrawProps` (`onChange`, `initialData`, `onExcalidrawAPI`, `UIOptions`, обробники вводу тощо).
+- `handleExcalidrawAPI` синхронізує API з `ExcalidrawAPISetContext`, щоб хости могли отримати `ExcalidrawImperativeAPI` через `ExcalidrawAPIProvider`.
+- Експортований `Excalidraw` — це `React.memo(ExcalidrawBase, areEqual)` з власною функцією порівняння пропсів (зокрема нормалізація `UIOptions` і `canvasActions`).
+- З того ж файлу реекспортуються публічні API: функції з `@excalidraw/element` (`getSceneVersion`, `getNonDeletedElements`, …), відновлення даних з `./data/restore`, `reconcileElements`, експорт з `@excalidraw/utils/export`, серіалізація JSON, завантаження з blob тощо (повний перелік — у кінці `packages/excalidraw/index.tsx`).
 
-### 4) External/Imperative API Data Flow
+### Хост-додаток `excalidraw-app`
 
-- Host can call `updateScene({ elements, appState, collaborators, captureUpdate })`.
-- `updateScene`:
-  - optionally captures micro action to store,
-  - updates React `appState` via `setState`,
-  - updates `Scene` elements via `replaceAllElements`,
-  - updates collaborators via `setState`.
-- Host can call `applyDeltas(deltas)`:
-  - deltas are squashed,
-  - applied to cloned `nextElements` and `nextAppState`,
-  - result returned as tuple.
+- `excalidraw-app/App.tsx` імпортує `Excalidraw`, `CaptureUpdateAction`, `reconcileElements`, хелпери відновлення з пакетів `@excalidraw/excalidraw` та `@excalidraw/element`, а також власні модулі колаборації (`collab/Collab.tsx`), Firebase, локальні сховища в `data/`. Це окремий шар поверх бібліотеки; синхронізація сцени з мережею реалізована в цьому додатку, а не в базовому класі `App` як обов’язкова залежність.
 
-### 5) Scene to Render Data
+---
 
-- During `App.render()`:
-  - selected elements are derived by `scene.getSelectedElements(this.state)`.
-  - `sceneNonce` is read from `scene.getSceneNonce()`.
-  - `renderer.getRenderableElements(...)` derives:
-    - `elementsMap`,
-    - `visibleElements`.
-  - all non-deleted map is read as `scene.getNonDeletedElementsMap()`.
-- `LayerUI`, canvas components, overlays consume current state and element collections.
+## State Management: `appState`, елементи, `ActionManager`
 
-### 6) Commit/Notification Data Flow
+### `AppState`
 
-- In update lifecycle, `store.commit(elementsMap, this.state)` persists observed state/elements snapshot.
-- When not loading:
-  - `props.onChange?.(elements, this.state, this.files)` fires,
-  - internal `onChangeEmitter.trigger(elements, this.state, this.files)` fires.
-- Durable increments from store are recorded into `History` via `history.record(increment.delta)`.
+- Тип оголошено як `interface AppState` у `packages/excalidraw/types.ts`. Серед полів (неповний перелік за кодом): контекстне меню та відкриті меню/діалоги/сайдбар; тимчасові елементи створення (`newElement`, `selectionElement`, `multiElement`, `resizingElement`); інструмент `activeTool` і `preferredSelectionTool`; параметри поточного малювання (`currentItem*`); перегляд (`scrollX`/`scrollY`, `zoom`, `viewBackgroundColor`, `viewModeEnabled`, `zenModeEnabled`); виділення (`selectedElementIds`, `selectedGroupIds`, `editingGroupId`); колаборація (`collaborators`, `userToFollow`, `followedBy`); стан пошуку, кадрування, прив’язок (`snapLines`, `suggestedBinding`, `isBindingEnabled`); розміри viewport (`width`, `height`, `offsetTop`, `offsetLeft`); `stats`, `toast`, `fileHandle` тощо.
+- Початкові значення (без `offsetTop`/`offsetLeft`/`width`/`height`) задає `getDefaultAppState()` у `packages/excalidraw/appState.ts`; конструктор `App` зливає їх з пропсами (`viewModeEnabled`, `zenModeEnabled`, `gridModeEnabled`, `theme`, `name`, розміри вікна).
+- Об’єкт `APP_STATE_STORAGE_CONF` у `packages/excalidraw/appState.ts` для кожного ключа `AppState` зберігає прапорці `browser` / `export` / `server` (чи залишати поле при збереженні в локальне сховище, експорті у файл або для сервера). На основі цього реалізовані `clearAppStateForLocalStorage`, `cleanAppStateForExport`, `clearAppStateForDatabase` — вони відфільтровують поля за відповідним типом сховища.
+- Типи `ObservedAppState`, `ObservedStandaloneAppState`, `ObservedElementsAppState` у `packages/excalidraw/types.ts` описують підмножину полів, яка береться до уваги при інкрементальних оновленнях сховища (на кшталт імені, фону, виділення) — використовується в шляху `updateScene` разом із `getObservedAppState`.
+- Для рендеру canvas використовуються вужчі типи `StaticCanvasAppState` та `InteractiveCanvasAppState` у `packages/excalidraw/types.ts` — підмножини полів `AppState`, передані відповідно в статичний та інтерактивний шари (`_CommonCanvasAppState` плюс специфічні поля для кожного шару).
 
-### 7) File/Binary Data Path
+### Елементи сцени (`Scene`)
 
-- Binary files are tracked in `this.files` map.
-- Action results and imports can provide files.
-- SVG files are normalized and may have version bumped if dataURL changes.
-- Image-related caches (`imageCache`, `ShapeCache`) are updated/cleared across operations.
+- Клас `Scene` у `packages/element/src/Scene.ts` тримає приватні поля: масив усіх елементів (`elements`), мапи `elementsMap` / `nonDeletedElementsMap`, кешовані списки не видалених елементів і фреймів, кеш `selectedElementsCache` для `getSelectedElements`, а також `sceneNonce`.
+- Коментар у коді щодо `sceneNonce`: «Random integer regenerated each scene update… renderer cache-invalidation nonce at the moment» — тобто значення не є версією елементів.
+- Оновлення сцени викликає зареєстровані колбеки через `callbacks: Set<SceneStateCallback>`; `triggerUpdate()` виставляє новий `sceneNonce` через `randomInteger()` і викликає всі колбеки. Підписка: `onUpdate(cb)` повертає функцію-ремувер (`packages/element/src/Scene.ts`).
+- Публічні методи, на які спирається `App`, включають `getNonDeletedElements`, `getNonDeletedElementsMap`, `getElementsIncludingDeleted`, `getElementsMapIncludingDeleted`, `replaceAllElements`, `mutateElement`, `insertElement`, `triggerUpdate`, `getSceneNonce`, `getSelectedElements` (сигнатури та додаткові методи — у повному файлі класу).
 
-## State Management: детальний опис (appState, elements, actionManager)
+### `Store` (історія та інкременти)
 
-### appState (React state in `App`)
+- `packages/element/src/store.ts`: `Store` «захоплює спостережувані зміни та емітує їх як `StoreIncrement`» (коментар у файлі).
+- `CaptureUpdateAction` визначає три режими: `IMMEDIATELY`, `NEVER`, `EVENTUALLY` (документація призначення — у JSDoc у цьому ж файлі).
+- `commit(elements, appState)` виконується з `App.componentDidUpdate` після оновлення React-стану.
+- API `updateScene` документовано в JSDoc у `App.updateScene` щодо параметра `captureUpdate` і зв’язку з undo/redo.
 
-- Type: `AppState` interface in `packages/excalidraw/types.ts`.
-- Holds UI, interaction, viewport, tool, selection, collaboration, export, and transient editing state.
+### `ActionManager` та тип `Action`
 
-### appState Main Domains
+- У `packages/excalidraw/actions/types.ts` визначено `ActionSource`: `"ui" | "keyboard" | "contextMenu" | "api" | "commandPalette"`.
+- `ActionResult` — або `false` (дію заблоковано), або об’єкт з опційними `elements`, `appState`, `files`, `replaceFiles` та обов’язковим `captureUpdate` типу `CaptureUpdateActionType` з `@excalidraw/element`.
+- Функція дії має сигнатуру `ActionFn`: приймає поточні впорядковані елементи, `appState`, `formData`, екземпляр `App` (`AppClassProperties`), повертає `ActionResult` або `Promise<ActionResult>`.
+- Клас `ActionManager` у `packages/excalidraw/actions/manager.tsx`:
+  - поле `actions: Record<ActionName, Action>`;
+  - `registerAction` / `registerAll`;
+  - `executeAction(action, source, value)` викликає `action.perform(...)` і передає результат у `this.updater` (тобто в `syncActionResult`); для `Promise` результат обробляється асинхронно в конструкторі;
+  - `handleKeyDown` фільтрує зареєстровані дії за `keyTest`, пріоритетом `keyPriority` та `UIOptions.canvasActions`, у view mode пропускає лише дії з `viewMode === true`;
+  - `renderAction(name, data)` рендерить `PanelComponent` дії, якщо вона є, і передає `updateData`, який знову викликає `perform` через `updater`.
+- Модуль `packages/excalidraw/actions/register.ts` експортує `register(action)`, який додає дію до масиву `actions`, зібраного для подальшого імпорту в `actions/index.ts`.
+- У конструкторі `App` створюється `new ActionManager(this.syncActionResult, () => this.state, () => this.scene.getElementsIncludingDeleted(), this)`, далі `registerAll(actions)` з `packages/excalidraw/actions/index.ts` та додатково `createUndoAction` / `createRedoAction` для історії.
+- Імперативно можна реєструвати дії через `api.registerAction` у `createExcalidrawAPI`.
 
-- **Tooling state**
-  - `activeTool`, `preferredSelectionTool`, `penMode`, `penDetected`.
-- **Element interaction state**
-  - `newElement`, `multiElement`, `selectionElement`, `resizingElement`,
-  - `selectedLinearElement`, `suggestedBinding`, `startBoundElement`.
-- **Selection/grouping**
-  - `selectedElementIds`, `hoveredElementIds`, `selectedGroupIds`, `editingGroupId`.
-- **Viewport/canvas**
-  - `zoom`, `scrollX`, `scrollY`, `width`, `height`, `offsetLeft`, `offsetTop`.
-- **UI overlays/dialogs**
-  - `contextMenu`, `openMenu`, `openPopup`, `openSidebar`, `openDialog`, `toast`.
-- **Mode flags**
-  - `viewModeEnabled`, `zenModeEnabled`, `gridModeEnabled`, `objectsSnapModeEnabled`.
-- **Visual/render flags**
-  - `theme`, `viewBackgroundColor`, `frameRendering`, `shouldCacheIgnoreZoom`.
-- **Collaboration**
-  - `collaborators`, `userToFollow`, `followedBy`.
-- **Image/cropping/search/locking**
-  - `isCropping`, `croppingElementId`, `searchMatches`, `activeLockedId`, `lockedMultiSelections`.
+### `History`
 
-### appState Defaults and Sanitization
+- Клас `History` у `packages/excalidraw/history.ts` приймає в конструкторі `Store`; містить `undoStack` та `redoStack` масивів `HistoryDelta`, емітер `onHistoryChangedEmitter`.
+- `HistoryDelta` розширює `StoreDelta` з `@excalidraw/element` і перевизначає `applyTo` для узгодження зі снапшотом історії; при застосуванні до елементів виключаються властивості `version` та `versionNonce` (див. коментар у коді щодо колаборації та undo/redo).
+- Очищення історії: `api.history.clear` у `createExcalidrawAPI` викликає `resetHistory` → `this.history.clear()`.
 
-- `getDefaultAppState()` returns base default object (tool defaults, scroll/zoom defaults, flags, etc.).
-- AppState storage config (`APP_STATE_STORAGE_CONF`) defines per-key export policy for:
-  - browser storage,
-  - export payloads,
-  - server/database payloads.
-- Functions:
-  - `clearAppStateForLocalStorage`,
-  - `cleanAppStateForExport`,
-  - `clearAppStateForDatabase`,
-  use this config to strip non-allowed keys.
+---
 
-### elements (Scene-owned source of truth)
+## Rendering Pipeline: від React до canvas
 
-- Scene stores:
-  - full ordered element list (`elements`, includes deleted),
-  - non-deleted list (`nonDeletedElements`),
-  - full map (`elementsMap`),
-  - non-deleted map (`nonDeletedElementsMap`),
-  - frame collections (`frames`, `nonDeletedFramesLikes`),
-  - `sceneNonce` for renderer cache invalidation.
-- Scene update primitive: `replaceAllElements(nextElements)`.
-- `replaceAllElements`:
-  - validates/syncs indices (`validateFractionalIndices`, `syncInvalidIndices`),
-  - rebuilds maps and frame collections,
-  - triggers scene update (`triggerUpdate`).
-- Selection caching:
-  - `getSelectedElements()` caches by selected IDs + option hash.
-- Mutation path:
-  - `mutateElement()` delegates to element-level mutate logic,
-  - triggers update only when version changed and mutation should inform.
+1. **Клас `App` (React-компонент)** у рендері передає в дочірні компоненти дані сцени та стану: наприклад, елементи з `this.scene.getNonDeletedElements()`, `sceneNonce` з `this.scene.getSceneNonce()`, стан з `this.state` (фрагменти з `packages/excalidraw/components/App.tsx` навколо JSX з `StaticCanvas` / `InteractiveCanvas`).
 
-### actionManager (Command dispatcher)
+2. **`Renderer` (`packages/excalidraw/scene/Renderer.ts`).** Створюється як `new Renderer(this.scene)` у конструкторі `App`. Метод `getRenderableElements` (мемоізований) для поточного `Scene` обчислює `RenderableElementsMap` і список видимих елементів: спочатку відфільтровує елементи з урахуванням `editingTextElement` / `newElement`, потім для viewport викликає `isElementInViewport` з `@excalidraw/element` з параметрами zoom/scroll/розмірів з `AppState`.
 
-- Holds registry: `actions: Record<ActionName, Action>`.
-- Constructed with:
-  - updater callback (`syncActionResult` bridge),
-  - `getAppState`,
-  - `getElementsIncludingDeleted`,
-  - `app` instance.
-- Main responsibilities:
-  - register actions (`registerAction`, `registerAll`),
-  - keyboard dispatch (`handleKeyDown`),
-  - direct execution (`executeAction`),
-  - UI action rendering (`renderAction` for panel components),
-  - gating via action predicates (`isActionEnabled`).
-- Keyboard flow includes:
-  - candidate filtering by key tests and canvas action toggles,
-  - `viewModeEnabled` guard for non-view actions,
-  - event preventDefault/stopPropagation,
-  - updater invocation with `action.perform(...)` result.
+3. **Статичний шар — `StaticCanvas` (`packages/excalidraw/components/canvases/StaticCanvas.tsx`).** У `useEffect` викликається `renderStaticScene({ canvas, rc, scale, elementsMap, allElementsMap, visibleElements, appState, renderConfig }, isRenderThrottlingEnabled())`. Розміри canvas виставляються з `appState.width`/`height` і `scale`. DOM: обгортка `div.excalidraw__canvas-wrapper`, canvas з класами `excalidraw__canvas static`.
 
-### Store + History Integration
+4. **Інтерактивний шар — `InteractiveCanvas` (`packages/excalidraw/components/canvases/InteractiveCanvas.tsx`).** Рендерить `<canvas className="excalidraw__canvas interactive">` з обробниками подій (pointer, context menu тощо). Після підготовки `InteractiveSceneRenderConfig` (у т.ч. дані колабораторів з `appState.collaborators`) запускається `AnimationController.start` з ключем `INTERACTIVE_SCENE_ANIMATION_KEY`, у кадрі викликається `renderInteractiveScene` з `packages/excalidraw/renderer/interactiveScene.ts` і передається `callback: props.renderInteractiveSceneCallback`.
 
-- `Store` tracks captured updates/increments.
-- `History` subscribes to durable increments and records deltas.
-- Undo/redo are regular actions registered into `ActionManager`.
-- `captureUpdate` strategy controls what becomes undoable.
+5. **`renderInteractiveSceneCallback` у `App`** (`private renderInteractiveSceneCallback` у `packages/excalidraw/components/App.tsx`): оновлює глобальні scrollbars, за потреби `setState({ scrolledOutside })`, викликає `scheduleImageRefresh`.
 
-## Rendering Pipeline: від React component до canvas
+6. **Експорт / SVG.** `packages/excalidraw/scene/export.ts` імпортує `renderStaticScene` з `../renderer/staticScene` та `renderSceneToSvg` з `../renderer/staticSvgScene` для відокремлених шляхів експорту.
 
-### Step 1: React render phase in `App.render()`
+7. **Тротлінг статичного шару.** У `packages/excalidraw/renderer/staticScene.ts` експортуються `renderStaticSceneThrottled` (обгортка з `throttleRAF`) та `renderStaticScene`, яка або делегує тротленій версії залежно від прапорця, або викликає внутрішній `_renderStaticScene` безпосередньо — це відповідає другому аргументу виклику з `StaticCanvas` (`isRenderThrottlingEnabled()` з `packages/excalidraw/reactUtils`).
 
-- `App.render()` reads selection via `scene.getSelectedElements`.
-- Reads `sceneNonce` from scene.
-- Calls `renderer.getRenderableElements(...)` with viewport+state context.
-- Receives:
-  - `elementsMap` (renderable, filtered),
-  - `visibleElements` (viewport-filtered).
-- Computes `allElementsMap = scene.getNonDeletedElementsMap()`.
-- Renders UI tree and canvas layers (including `LayerUI`, SVG trail layer, etc.).
+8. **Rough.js.** У конструкторі `App`: `this.canvas = document.createElement("canvas")`, `this.rc = rough.canvas(this.canvas)` — контекст для `renderStaticScene` передається як `rc` типу `RoughCanvas`.
 
-### Step 2: Renderability and visibility derivation (`Renderer`)
+9. **Подвійний canvas.** У розмітці `App` використовуються два canvas-елементи: один для статичного шару (`StaticCanvas`), інший для інтерактивного (`InteractiveCanvas`) — відповідно до поділу `renderStaticScene` / `renderInteractiveScene` у коді.
 
-- `Renderer.getRenderableElements` is memoized.
-- Internally:
-  - excludes current `newElementId`,
-  - excludes currently edited text element from static render map,
-  - computes viewport visibility with `isElementInViewport`.
-- Uses scene nonce and viewport/app-state params for cache invalidation.
+---
 
-### Step 3: Static canvas pipeline (`StaticCanvas` -> `renderStaticScene`)
+## Package Dependencies: зв’язки між пакетами
 
-- `StaticCanvas` syncs HTML canvas CSS size and pixel buffer size with `scale`.
-- `renderStaticScene(...)` is called (optionally throttled).
-- Static renderer flow:
-  - bootstraps context (`bootstrapCanvas`),
-  - applies zoom transform,
-  - optionally draws grid (`strokeGrid`),
-  - renders visible non-iframe elements via `renderElement`,
-  - renders bound text with containers,
-  - renders link icons where applicable,
-  - renders iframe-like elements on top,
-  - draws pending flowchart nodes.
-- Frame clipping logic is applied via `frameClip` when frame rendering clip is enabled.
+Нижче — залежності з полів `dependencies` у `package.json` кожного пакета в `packages/`, плюс факт імпорту вихідного коду там, де пакет не перелічений у JSON, але використовується через workspace / збірку.
 
-### Step 4: Interactive canvas pipeline (`InteractiveCanvas` -> `renderInteractiveScene`)
+| Пакет | Залежності (workspace / npm) |
+|--------|---------------------------|
+| `@excalidraw/common` | `tinycolor2` |
+| `@excalidraw/math` | `@excalidraw/common` |
+| `@excalidraw/element` | `@excalidraw/common`, `@excalidraw/math` |
+| `@excalidraw/utils` | `@braintree/sanitize-url`, `@excalidraw/laser-pointer`, `browser-fs-access`, `pako`, `perfect-freehand`, PNG-chunk пакети, `roughjs` (повний список — `packages/utils/package.json`) |
+| `@excalidraw/excalidraw` | `@excalidraw/common`, `@excalidraw/element`, `@excalidraw/math`, а також зовнішні бібліотеки (наприклад `jotai`, `jotai-scope`, `roughjs`, `radix-ui`, `@codemirror/*` тощо — див. `packages/excalidraw/package.json`) |
 
-- `InteractiveCanvas` builds render config including:
-  - remote collaborator pointers/usernames/buttons,
-  - remote selected element IDs,
-  - selection color and scrollbar setting.
-- Starts animation loop through `AnimationController` keyed by `INTERACTIVE_SCENE_ANIMATION_KEY`.
-- Every frame calls `renderInteractiveScene(...)`.
-- Interactive renderer overlays include:
-  - selection rectangle,
-  - transform handles,
-  - linear point handles,
-  - crop handles,
-  - binding highlights,
-  - frame/element highlight boxes,
-  - search match highlights,
-  - snapping guides,
-  - remote cursors,
-  - scrollbars.
+Експортні шляхи пакета `@excalidraw/excalidraw` (`packages/excalidraw/package.json`, поле `exports`) включають корінь `.`, а також підшляхи `./common/*`, `./element/*`, `./math/*`, `./utils/*` для типів зібраного дистрибутива.
 
-### Step 5: Callback bridge back to App
+**Типова напрямленість залежностей:** `common` (база) ← `math` ← `element` ← `excalidraw`; `utils` — окремий набір утиліт, який імпортується з коду `excalidraw`. `element` при цьому містить `Store`, який імпортує тип/клас `App` з `@excalidraw/excalidraw/components/App` (`packages/element/src/store.ts`), тобто на рівні модулів є залежність логіки сховища від шару додатка.
 
-- `renderInteractiveScene` invokes callback with:
-  - `atLeastOneVisibleElement`,
-  - `elementsMap`,
-  - optional `scrollBars`.
-- `App.renderInteractiveSceneCallback`:
-  - updates global scrollbar reference,
-  - computes `scrolledOutside`,
-  - schedules image refresh.
+**Збірка пакетів з кореня репозиторію** (`package.json`, скрипт `build:packages`): послідовно `build:common`, `build:math`, `build:element`, `build:excalidraw` (окремо є `build:utils` для `@excalidraw/utils`).
 
-### Step 6: Re-render triggers
+**Додаток `excalidraw-app`:** у власному `package.json` не оголошено залежність `@excalidraw/excalidraw`; підключення до пакетів відбувається через Vite-аліаси до джерел у `packages/`.
 
-- Scene changes call `scene.triggerUpdate()` -> callbacks -> `App.triggerRender`.
-- `triggerRender(force)`:
-  - if forced: triggers scene update,
-  - otherwise: `setState({})` to refresh React render cycle.
-- Resize, pointer interactions, action results, and updateScene all feed this loop.
+**Приклади** у `examples/*` (наприклад `examples/with-nextjs`) підключають збірку workspace через скрипти на кшталт `build:packages` у `package.json` прикладу.
 
-## Package Dependencies: взаємозв'язки між packages
+**Скрипти збірки в корені** (`package.json`): `build:common` викликає `yarn --cwd ./packages/common build:esm` (аналогічно `build:math`, `build:element` через `buildBase.js`); `build:excalidraw` використовує `scripts/buildPackage.js`; `build:utils` — `scripts/buildUtils.js` для `@excalidraw/utils`. Команди `test:typecheck` (`tsc`), `test:app` (`vitest`), `test:code` (`eslint`) перевіряють узгодженість монорепозиторію.
 
-### Workspace Dependency Topology
+**Шрифти в рантаймі редактора.** У конструкторі `App` створюється `new Fonts(this.scene)` (`packages/excalidraw/fonts/Fonts.ts`); після `initializeScene` викликається `this.fonts.loadSceneFonts()` з подальшим `this.fonts.onLoaded` — це частина шляху підготовки тексту до відмальовки.
 
-- Root workspace contains:
-  - `excalidraw-app`,
-  - `packages/common`,
-  - `packages/math`,
-  - `packages/element`,
-  - `packages/excalidraw`,
-  - `packages/utils`,
-  - examples.
+---
 
-### Direct Internal Package Dependencies (from package manifests)
+## Додаткові прив’язки (факти з коду)
 
-- `@excalidraw/common`
-  - no internal `@excalidraw/*` dependencies.
-- `@excalidraw/math`
-  - depends on `@excalidraw/common`.
-- `@excalidraw/element`
-  - depends on `@excalidraw/common`,
-  - depends on `@excalidraw/math`.
-- `@excalidraw/excalidraw`
-  - depends on `@excalidraw/common`,
-  - depends on `@excalidraw/element`,
-  - depends on `@excalidraw/math`.
-- `@excalidraw/utils`
-  - no direct internal monorepo deps listed in its package manifest.
+- `packages/excalidraw/index.tsx` імпортує `EditorJotaiProvider` та `editorJotaiStore` з `./editor-jotai` і обгортає дерево редактора провайдером Jotai.
+- `ExcalidrawImperativeAPI` формується в `createExcalidrawAPI` і містить `updateScene`, `getAppState`, `getSceneElements`, доступ до історії, `onChange` / `onIncrement` тощо (`packages/excalidraw/components/App.tsx`).
+- Тести посилаються на `renderStaticScene` / `renderInteractiveScene` як на точки рендер-пайплайна (`packages/excalidraw/tests/selection.test.tsx` та ін.).
+- Бінарні файли зображень на рівні `App` зберігаються у властивості `files` типу `BinaryFiles` (`Record` за id елемента); `syncActionResult` обробляє `actionResult.files` через `addMissingFiles`. Колбек `onChange` у `componentDidUpdate` передає третім аргументом `this.files`.
+- `App.applyDeltas` делегує до `StoreDelta.applyTo` з `@excalidraw/element` для застосування масиву дельт до копії мапи елементів і копії `appState` (публічний API для сценаріїв узгодження/колаборації).
+- `excalidraw-app/App.tsx` використовує окремий `app-jotai.ts` (імпорт `Provider`, `useAtom`, `appJotaiStore`) для стану самого веб-додатка (поряд з `@excalidraw/excalidraw`), тобто глобальний стан хоста не змішується з `editorJotaiStore` пакета без явного імпорту.
+- Компоненти UI (`packages/excalidraw/components/LayerUI.tsx`, меню, діалоги експорту) отримують `actionManager: ActionManager` пропсом або через контекстні хуки на кшталт `useExcalidrawActionManager` з `packages/excalidraw/components/App` (точний набір імпортів — у відповідних файлах компонентів).
 
-### App-to-Package Wiring in Development
+- Еміттери подій на екземплярі `App` (`packages/excalidraw/components/App.tsx`): `onChangeEmitter`, `onPointerDownEmitter`, `onPointerUpEmitter`, `onScrollChangeEmitter`, `onUserFollowEmitter` тощо — дублюють або розширюють колбеки з пропсів для підписників через імперативний API.
 
-- `excalidraw-app/vite.config.mts` defines aliases mapping package names to local source:
-  - `@excalidraw/common` -> `../packages/common/src/*`,
-  - `@excalidraw/element` -> `../packages/element/src/*`,
-  - `@excalidraw/excalidraw` -> `../packages/excalidraw/*`,
-  - `@excalidraw/math` -> `../packages/math/src/*`,
-  - `@excalidraw/utils` -> `../packages/utils/src/*`.
-- This means app dev build consumes monorepo source directly via Vite aliases.
+- У `componentDidMount` (`packages/excalidraw/components/App.tsx`) підписується `this.scene.onUpdate(this.triggerRender)`, `this.store.onDurableIncrementEmitter` оновлює `history.record`, за наявності `props.onIncrement` — підписка на `store.onStoreIncrementEmitter`, викликається `addEventListeners()` та ініціалізація сцени через `updateDOMRect(this.initializeScene)` (за відсутності web-share target). Метод `addEventListeners` містить ранній вихід `if (this.state.viewModeEnabled) { return; }` перед блоком «edit-mode listeners only».
 
-### Cross-package Runtime Usage Patterns
+- `componentWillUnmount` скидає `renderer`, перестворює порожній `Scene` і `Fonts`, очищає емітери store, викликає `removeEventListeners` та інші очищувачі кешів (`ShapeCache`, `SnapCache` тощо) — деталі в тілі методу в `App.tsx`.
 
-- `packages/excalidraw` imports domain and rendering primitives heavily from:
-  - `@excalidraw/element`,
-  - `@excalidraw/common`,
-  - `@excalidraw/math`.
-- `packages/element` exports `Scene` and element operations consumed by `packages/excalidraw`.
-- `packages/excalidraw/index.tsx` re-exports several APIs from `@excalidraw/element` and `@excalidraw/common`.
-
-### Build/Publish Structure
-
-- Root scripts build packages individually:
-  - `build:common`,
-  - `build:math`,
-  - `build:element`,
-  - `build:excalidraw`.
-- `@excalidraw/excalidraw` exports typed entrypoints and scoped subpaths (`./common/*`, `./element/*`, `./math/*`, `./utils/*`).
-- Package builds output `dist/dev`, `dist/prod`, and `dist/types` style artifacts.
-
-### Dependency Graph (Internal Packages)
-
-```mermaid
-flowchart LR
-  common[@excalidraw/common]
-  math[@excalidraw/math]
-  element[@excalidraw/element]
-  excalidraw[@excalidraw/excalidraw]
-  utils[@excalidraw/utils]
-  app[excalidraw-app]
-
-  math --> common
-  element --> common
-  element --> math
-  excalidraw --> common
-  excalidraw --> element
-  excalidraw --> math
-
-  app --> excalidraw
-  app --> element
-  app --> common
-  app --> math
-  app --> utils
-```
-
+- Імперативний API після розмонтування замінює методи `get*` та підписки на помилки з поясненням у `componentWillUnmount` (цикл оновлення `this.api` з прапором `isDestroyed`).
