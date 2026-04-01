@@ -1,3 +1,7 @@
+## Details
+For detailed architecture → see docs/technical/architecture.md
+For domain glossary → see docs/product/domain-glossary.md
+
 # Active Context
 
 ## What The Project Appears Focused On Now
@@ -78,6 +82,6 @@
 - `packages/excalidraw/index.tsx`
 - `examples/with-nextjs/package.json`
 - `examples/with-script-in-browser/package.json`
-- `projectbrief.md`
-- `decisionLog.md`
-- `systemPatterns.md`
+- `docs/memory/projectbrief.md`
+- `docs/decisionLog.md`
+- `docs/memory/systemPatterns.md`

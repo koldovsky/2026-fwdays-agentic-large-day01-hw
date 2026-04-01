@@ -22,6 +22,25 @@ In code, concrete elements share a common base shape and include types such as r
 Do not confuse it with a generic DOM element or React element.
 Here it means an editor-domain object stored in the scene and rendered on the canvas.
 
+## Bound Element
+
+**Definition in this project**
+
+A Bound Element is an element that is attached to another element through the editor's binding/container relationships.
+In the codebase, this appears through fields such as `boundElements` on container elements and `containerId` on text elements, so the relationship is part of the scene model rather than a visual grouping only.
+
+**Where it is used**
+
+- `packages/element/src/types.ts`
+- `packages/excalidraw/data/restore.ts`
+- `packages/excalidraw/wysiwyg/textWysiwyg.tsx`
+- `packages/utils/src/withinBounds.ts`
+
+**Do NOT confuse with**
+
+Do not confuse it with a generic parent-child UI hierarchy or a grouped selection.
+Here it means a specific editor relationship used for attached text and other element-to-element bindings that must be restored and maintained in scene data.
+
 ## ExcalidrawElement
 
 **Definition in this project**
@@ -40,6 +59,25 @@ The type comment in `packages/element/src/types.ts` says these elements should b
 
 Do not confuse it with “any object on screen.”
 In this project it is a specific serialized editor data model used for storage, sync, and rendering.
+
+## Linear Element
+
+**Definition in this project**
+
+A Linear Element is the Excalidraw element family whose geometry is defined by ordered points rather than only width and height.
+In this repository, arrows and lines are treated as linear elements, and the runtime has dedicated state and editing flows for point creation, point dragging, and linear-element-specific selection behavior.
+
+**Where it is used**
+
+- `packages/excalidraw/types.ts`
+- `packages/excalidraw/components/App.tsx`
+- `packages/excalidraw/renderer/interactiveScene.ts`
+- `packages/utils/src/withinBounds.ts`
+
+**Do NOT confuse with**
+
+Do not confuse it with any shape that merely looks straight.
+Here it means a specific element category with point-based editing rules and dedicated runtime handling in the editor.
 
 ## Scene
 
