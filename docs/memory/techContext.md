@@ -1,7 +1,5 @@
 # Tech Context
 
-## Базовий стек
-
 ## Runtime і пакетний менеджер
 - Node.js: `>=18.0.0` (root `engines.node`).
 - Yarn classic: `yarn@1.22.22` (root `packageManager`).
