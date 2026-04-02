@@ -1,0 +1,40 @@
+# Build artifacts
+dist/
+build/
+.next/
+
+# Dependencies
+node_modules/
+
+# Generated / minified
+*.min.js
+*.min.css
+*.snap
+
+# Lock files (великі, не несуть семантики для AI)
+yarn.lock
+package-lock.json
+
+# Coverage & reports
+coverage/
+.nyc_output/
+
+# IDE-specific (не наш контекст)
+.git/
+.vscode/
+
+# OS-specific
+.DS_Store/
+Thumbs.db
+
+# Project-specific generated files
+packages/excalidraw/locales/percentages.json
+excalidraw-app/build/version.json
+packages/excalidraw/fonts/wasm/*.ts
+excalidraw-app/build/sw.js
+excalidraw-app/build/workbox-*.js
+excalidraw-app/build/manifest.webmanifest
+
+# Optional: large semi-generated font descriptors
+packages/excalidraw/fonts/Xiaolai/index.ts
+packages/excalidraw/fonts/ComicShanns/index.ts
