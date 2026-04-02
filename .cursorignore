@@ -76,3 +76,8 @@ dev-dist
 html
 meta*.json
 .claude
++*.min.css
++*.min.js
++*.snap
++.next/
++.nyc_output/
