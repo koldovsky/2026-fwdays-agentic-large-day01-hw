@@ -1,0 +1,50 @@
+# Build outputs
+excalidraw-app/build/
+excalidraw-app/dist/
+excalidraw-app/dev-dist/
+packages/*/dist/
+packages/*/build/
+examples/*/build/
+examples/*/dist/
+
+# Dependencies
+node_modules/
+excalidraw-app/node_modules/
+packages/*/node_modules/
+
+# Test snapshots (large, auto-generated)
+**/__snapshots__/
+
+# Yarn
+.yarn/
+yarn.lock
+
+# Fonts and binary assets
+public/fonts/
+**/*.woff
+**/*.woff2
+**/*.ttf
+**/*.otf
+
+# Images and fixtures
+packages/excalidraw/tests/fixtures/
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.svg
+!docs/**/*.svg
+
+# Coverage reports
+coverage/
+
+# Environment files with secrets
+.env.local
+.env.*.local
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/settings.json
+
+# Logs
+*.log
