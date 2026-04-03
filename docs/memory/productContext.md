@@ -18,7 +18,7 @@ Additionally, mainstream tools require accounts, subscriptions, or installs. Exc
 
 ## User Journey (Core Flow)
 
-```
+```text
 Open excalidraw.com
   → Start drawing immediately (no account needed)
   → Optionally: Share → Get encrypted link

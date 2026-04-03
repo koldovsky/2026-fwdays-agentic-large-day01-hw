@@ -7,7 +7,7 @@
 
 ## 1. Product Vision
 
-Excalidraw is a **privacy-first, collaborative whiteboard** for creating hand-drawn style diagrams, wireframes, and sketches in the browser. It is designed to feel as low-friction as paper while enabling real-time collaboration with strong privacy guarantees.
+Excalidraw is a **privacy-first, collaborative whiteboard** for creating hand-drawn-style diagrams, wireframes, and sketches in the browser. It is designed to feel as low-friction as paper while enabling real-time collaboration with strong privacy guarantees.
 
 **North star:** Anyone should be able to open a blank canvas, draw something meaningful, and share it securely — in under 60 seconds, without creating an account.
 

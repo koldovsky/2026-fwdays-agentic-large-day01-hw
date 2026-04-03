@@ -77,7 +77,7 @@ Hot module replacement (HMR) is enabled — changes to React components reload i
 
 ## 4. Project Structure
 
-```
+```text
 excalidraw/
 ├── excalidraw-app/          # Web app
 │   ├── App.tsx              # Root application component
@@ -136,19 +136,24 @@ yarn test:all
 ## 7. Building
 
 ### Build the web app
+
 ```bash
 yarn build:app
 ```
+
 Output: `excalidraw-app/build/`
 
 ### Build npm packages
+
 ```bash
 yarn build:packages    # Builds common, math, element, excalidraw in order
 yarn build:excalidraw  # Build @excalidraw/excalidraw only
 ```
+
 Output: `packages/*/dist/`
 
 ### Docker build
+
 ```bash
 yarn build:app:docker
 docker build -t excalidraw .
@@ -158,12 +163,15 @@ docker run -p 80:80 excalidraw
 ## 8. Making Changes
 
 ### Core component changes (`packages/excalidraw`)
+
 Changes are picked up by HMR in the dev server without rebuilding packages — Vite resolves workspace packages via path aliases.
 
 ### If you add a new package export
+
 Update `packages/excalidraw/package.json` `exports` field and run `yarn build:excalidraw` to verify the output.
 
 ### Adding a new Action
+
 1. Create a file in `packages/excalidraw/actions/`
 2. Define an `Action` object with `name`, `perform`, and optionally `keyTest` + `PanelComponent`
 3. Register it in `packages/excalidraw/actions/index.ts`
@@ -207,14 +215,17 @@ Set these in `.env.local` or browser console:
 ## Related Documentation
 
 ### Memory Bank
+
 - [Tech Context](../memory/techContext.md) - Technology stack
 - [System Patterns](../memory/systemPatterns.md) - Architecture patterns
 - [Project Brief](../memory/projectbrief.md) - Project overview
 - [Decision Log](../memory/decisionLog.md) - Undocumented behaviors
 
 ### Technical Documentation
+
 - [Architecture](architecture.md) - System architecture
 
 ### Product Documentation
+
 - [PRD](../product/PRD.md) - Product requirements
 - [Domain Glossary](../product/domain-glossary.md) - Terminology

@@ -20,13 +20,7 @@
 ### React Component State (Primary)
 **Location**: App.tsx class component, 472 properties
 
-**Categories**:
-- Canvas: width, height, scrollX, scrollY, zoom, offsetLeft, offsetTop
-- Tools: activeTool, selectedElementIds, newElement, multiElement
-- Editing: editingTextElement, resizingElement, selectionElement
-- UI: openDialog, openPopup, contextMenu, toast, theme
-- Selection: selectedGroupIds, editingGroupId, hoveredElementIds
-- Modes: viewModeEnabled, zenModeEnabled, gridModeEnabled
+**Categories**: Canvas (width, height, scrollX, scrollY, zoom), Tools (activeTool, selectedElementIds), Editing (editingTextElement, resizingElement), UI (openDialog, openPopup, contextMenu, toast, theme), Selection (selectedGroupIds, editingGroupId), Modes (viewModeEnabled, zenModeEnabled, gridModeEnabled)
 
 **Update Patterns**:
 1. Direct: `this.setState({ isLoading: false })`
@@ -36,10 +30,7 @@
 5. Synchronous: `flushSync(() => this.setState({ bindMode: 'skip' }))`
 
 ### Jotai (Secondary)
-**Location**: `packages/excalidraw/editor-jotai.ts`
-**Scope**: Component UI state only (not app state)
-**Setup**: `createIsolation()` prevents atom conflicts between instances
-**Atoms**: convertElementTypePopupAtom, activeConfirmDialogAtom, isSidebarDockedAtom
+**Location**: `packages/excalidraw/editor-jotai.ts`, **Scope**: Component UI state only, **Setup**: `createIsolation()` prevents atom conflicts, **Atoms**: convertElementTypePopupAtom, activeConfirmDialogAtom, isSidebarDockedAtom
 
 ## Key Patterns
 
@@ -89,10 +80,7 @@ Public API: `updateScene`, `resetScene`, `setActiveTool`, `onChange`, `onPointer
 Standard parent → child data flow
 
 ### 2. React Context (9 providers)
-- AppContext, ExcalidrawAPIContext, ExcalidrawAppStateContext
-- ExcalidrawSetAppStateContext, ExcalidrawElementsContext
-- ExcalidrawActionManagerContext, EditorInterfaceContext
-- ExcalidrawContainerContext, TunnelsContext
+AppContext, ExcalidrawAPIContext, ExcalidrawAppStateContext, ExcalidrawSetAppStateContext, ExcalidrawElementsContext, ExcalidrawActionManagerContext, EditorInterfaceContext, ExcalidrawContainerContext, TunnelsContext
 
 ### 3. Event Emitters
 onChange, onPointerDown/Up, onScrollChange, onUserFollow
@@ -102,7 +90,7 @@ User Action → executeAction() → perform() → ActionResult → syncActionRes
 
 ## Component Hierarchy
 
-```
+```text
 <ExcalidrawBase>
   └─ <EditorJotaiProvider>
       └─ <App> (12,818 lines)
@@ -119,7 +107,7 @@ User Action → executeAction() → perform() → ActionResult → syncActionRes
 
 ## Data Flow
 
-```
+```text
 User Interaction
   ↓
 ActionManager.executeAction()
@@ -142,7 +130,7 @@ Event emitters fire
 ```
 
 ### Rendering Pipeline
-```
+```text
 Scene.elements
   ↓
 Renderer (visibility culling)
@@ -155,25 +143,13 @@ Canvas API + rough.js
 ## Lifecycle (App.tsx)
 
 ### componentDidMount
-1. API setup
-2. Store + History integration
-3. Scene updates subscription
-4. Event listeners
-5. ResizeObserver
-6. Scene initialization
+1. API setup, 2. Store + History integration, 3. Scene updates subscription, 4. Event listeners, 5. ResizeObserver, 6. Scene initialization
 
 ### componentDidUpdate
-1. State observer flush
-2. Props synchronization
-3. Scroll notifications
-4. Eraser mode handling
+1. State observer flush, 2. Props synchronization, 3. Scroll notifications, 4. Eraser mode handling
 
 ### componentWillUnmount
-1. API invalidation
-2. Resource cleanup (renderer, scene, fonts)
-3. Event listeners removal
-4. Emitters clear
-5. Cache cleanup
+1. API invalidation, 2. Resource cleanup (renderer, scene, fonts), 3. Event listeners removal, 4. Emitters clear, 5. Cache cleanup
 
 ## Performance
 
@@ -195,14 +171,10 @@ Canvas API + rough.js
 ## Related Documentation
 
 ### Memory Bank
-- [Tech Context](techContext.md) - Technology stack and build tools
-- [Project Brief](projectbrief.md) - Project overview
-- [Decision Log](decisionLog.md) - Undocumented behaviors
+[Tech Context](techContext.md) • [Project Brief](projectbrief.md) • [Decision Log](decisionLog.md)
 
 ### Technical Documentation
-- [Architecture](../technical/architecture.md) - Detailed architecture
-- [Dev Setup](../technical/dev-setup.md) - Development environment
+[Architecture](../technical/architecture.md) • [Dev Setup](../technical/dev-setup.md)
 
 ### Product Documentation
-- [PRD](../product/PRD.md) - Product requirements
-- [Domain Glossary](../product/domain-glossary.md) - Terminology
+[PRD](../product/PRD.md) • [Domain Glossary](../product/domain-glossary.md)

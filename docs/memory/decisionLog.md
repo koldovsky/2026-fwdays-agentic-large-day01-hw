@@ -57,7 +57,7 @@ The `@excalidraw/excalidraw` package loads fonts and other static assets from a 
 **File:** `excalidraw-app/data/index.ts`, `excalidraw-app/collab/Collab.tsx`
 
 **What the code does:**
-```
+```text
 Room URL format: https://excalidraw.com/#room=<roomId>,<base64Key>
 ```
 

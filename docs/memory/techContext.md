@@ -46,14 +46,12 @@
 - **Sentry**: 9.0.1 (monitoring)
 
 ### Vite Plugins
-- @vitejs/plugin-react: 3.1.0
-- vite-plugin-pwa: 0.21.1
-- vite-plugin-svgr: 4.2.0
+- @vitejs/plugin-react: 3.1.0, vite-plugin-pwa: 0.21.1, vite-plugin-svgr: 4.2.0
 
 ## Workspace Structure
 
 ### Packages
-```
+```text
 excalidraw-app/               # Standalone app
 packages/
   ├── excalidraw/ (0.18.0)   # Core library (@excalidraw/excalidraw)
@@ -67,7 +65,7 @@ examples/
 ```
 
 ### TypeScript Paths (tsconfig.json)
-```
+```text
 @excalidraw/common      → packages/common/src/index.ts
 @excalidraw/excalidraw  → packages/excalidraw/index.tsx
 @excalidraw/element     → packages/element/src/index.ts
@@ -128,9 +126,7 @@ yarn release:next      # @next tag
 - No Emit: true (type checking only)
 
 ### Paths
-- BaseUrl: "."
-- Include: packages, excalidraw-app
-- Exclude: examples, dist, types, tests
+- BaseUrl: ".", Include: packages/excalidraw-app, Exclude: examples/dist/types/tests
 
 ## Package Exports (@excalidraw/excalidraw)
 
@@ -151,44 +147,25 @@ yarn release:next      # @next tag
 ## Browser Support
 
 ### Production
-- >0.2%, not dead, not IE <=11
-- Safari >=12, Edge >=79, Chrome >=70
-- Not Opera Mini, KaiOS >2.5
+- >0.2%, not dead, not IE <=11, Safari >=12, Edge >=79, Chrome >=70, Not Opera Mini, KaiOS >2.5
 
 ### Development
 - Last Chrome/Firefox/Safari version
 
 ## File Structure
-```
+```text
 .
-├── excalidraw-app/
-│   ├── App.tsx              # Main app (39KB)
-│   ├── index.tsx            # Entry
-│   ├── components/          # App components
-│   ├── collab/              # Collaboration
-│   └── data/                # Data handling
-│
-├── packages/excalidraw/
-│   ├── components/          # UI (100+ components)
-│   │   └── App.tsx          # Core (12,818 lines)
-│   ├── actions/             # User actions (32+)
-│   ├── scene/               # Scene management
-│   ├── renderer/            # Rendering
-│   ├── data/                # Persistence
-│   ├── fonts/               # Font files (.woff2)
-│   └── locales/             # i18n
-│
-├── packages/
-│   ├── common/src/          # Shared utils
-│   ├── element/src/         # Element types
-│   ├── math/src/            # Geometry
-│   └── utils/src/           # Helpers
-│
-├── scripts/                 # Build scripts
-│   ├── buildPackage.js
-│   ├── build-version.js
-│   └── release.js
-│
+├── excalidraw-app/          # Standalone web app
+│   ├── App.tsx, index.tsx
+│   ├── components/, collab/, data/
+├── packages/excalidraw/     # Core library
+│   ├── components/ (App.tsx 12,818 lines)
+│   ├── actions/ (32+), scene/, renderer/
+│   ├── data/, fonts/, locales/
+├── packages/                # Utilities
+│   ├── common/src/, element/src/
+│   ├── math/src/, utils/src/
+├── scripts/                 # Build tools
 └── docs/memory/             # Documentation
 ```
 
@@ -200,13 +177,10 @@ yarn release:next      # @next tag
 ## Related Documentation
 
 ### Memory Bank
-- [System Patterns](systemPatterns.md) - Architecture and patterns
-- [Project Brief](projectbrief.md) - Project overview
-- [Product Context](productContext.md) - Product vision
+[System Patterns](systemPatterns.md) • [Project Brief](projectbrief.md) • [Product Context](productContext.md)
 
 ### Technical Documentation
-- [Architecture](../technical/architecture.md) - Architecture details
-- [Dev Setup](../technical/dev-setup.md) - Development guide
+[Architecture](../technical/architecture.md) • [Dev Setup](../technical/dev-setup.md)
 
 ### Product Documentation
-- [Domain Glossary](../product/domain-glossary.md) - Terminology
+[Domain Glossary](../product/domain-glossary.md)
