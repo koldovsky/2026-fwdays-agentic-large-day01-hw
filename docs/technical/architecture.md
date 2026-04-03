@@ -162,5 +162,5 @@ Package exports use the `exports` field in `package.json` for conditional `devel
 ## Related Docs
 
 - Developer onboarding: [`dev-setup.md`](dev-setup.md)
-- Memory Bank system patterns: [`../../memory-bank/systemPatterns.md`](../../memory-bank/systemPatterns.md)
-- Decision log: [`../../memory-bank/decisionLog.md`](../../memory-bank/decisionLog.md)
+- Memory Bank system patterns: [`../memory/systemPatterns.md`](../memory/systemPatterns.md)
+- Decision log: [`../memory/decisionLog.md`](../memory/decisionLog.md)

@@ -170,6 +170,6 @@ Named WebSocket event types used in the collaboration protocol:
 
 ## Related Docs
 
-- Product context: [`../../memory-bank/productContext.md`](../../memory-bank/productContext.md)
+- Product context: [`../memory/productContext.md`](../memory/productContext.md)
 - PRD: [`PRD.md`](PRD.md)
-- System patterns: [`../../memory-bank/systemPatterns.md`](../../memory-bank/systemPatterns.md)
+- System patterns: [`../memory/systemPatterns.md`](../memory/systemPatterns.md)

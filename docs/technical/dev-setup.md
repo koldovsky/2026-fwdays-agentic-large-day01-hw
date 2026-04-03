@@ -207,4 +207,4 @@ Set these in `.env.local` or browser console:
 ## Related Docs
 
 - Architecture overview: [`architecture.md`](architecture.md)
-- Tech context: [`../../memory-bank/techContext.md`](../../memory-bank/techContext.md)
+- Tech context: [`../memory/techContext.md`](../memory/techContext.md)

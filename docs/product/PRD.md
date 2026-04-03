@@ -169,7 +169,7 @@ Excalidraw is a **privacy-first, collaborative whiteboard** for creating hand-dr
 
 ## Related Docs
 
-- Product context: [`../../memory-bank/productContext.md`](../../memory-bank/productContext.md)
+- Product context: [`../memory/productContext.md`](../memory/productContext.md)
 - Domain glossary: [`domain-glossary.md`](domain-glossary.md)
 - Architecture: [`../technical/architecture.md`](../technical/architecture.md)
-- Project brief: [`../../memory-bank/projectbrief.md`](../../memory-bank/projectbrief.md)
+- Project brief: [`../memory/projectbrief.md`](../memory/projectbrief.md)
