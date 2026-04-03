@@ -307,4 +307,4 @@ Reasonable minimum: `yarn test:code && yarn test:typecheck && yarn test:app` (or
 
 ---
 
-**Note:** This file lives at `docs/development/dev-setup.md`. If another checklist in the repo references `docs/technical/dev-setup.md`, align paths in that checklist — **path discrepancy** between templates and this guide is **not verified** as intentional.
+**Note:** This file lives at `docs/technical/dev-setup.md`. If another checklist in the repo references `docs/technical/dev-setup.md`, align paths in that checklist — **path discrepancy** between templates and this guide is **not verified** as intentional.

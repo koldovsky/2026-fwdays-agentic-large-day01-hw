@@ -126,7 +126,7 @@ yarn release:next      # @next tag
 - No Emit: true (type checking only)
 
 ### Paths
-- BaseUrl: ".", Include: packages + excalidraw-app, Exclude: examples, dist, types, tests
+- BaseUrl: ".", Include: excalidraw-app (та workspace packages), Exclude: examples/dist/types/tests
 
 ## Package Exports (@excalidraw/excalidraw)
 
