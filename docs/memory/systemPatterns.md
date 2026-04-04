@@ -103,4 +103,4 @@ Real-time collaboration via Socket.io:
 - **Scene coordinates** — infinite 2D plane, elements positioned absolutely
 - **Viewport coordinates** — visible browser window area
 - Transforms: `sceneCoordsToViewportCoords()` / `viewportCoordsToSceneCoords()`
-- Zoom range: 0.1 to 16 (10% to 1600%)
+- Zoom range: 0.1 to 30 (10% to 3000%)

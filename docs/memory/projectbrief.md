@@ -2,7 +2,7 @@
 
 ## Overview
 
-Excalidraw is an open-source, browser-based collaborative whiteboard application that produces hand-drawn style diagrams. It is published both as a standalone web app (excalidraw.com) and as an embeddable React component (`@excalidraw/excalidraw`).
+Excalidraw is an open-source, browser-based collaborative whiteboard application that produces hand-drawn-style diagrams. It is published both as a standalone web app (excalidraw.com) and as an embeddable React component (`@excalidraw/excalidraw`).
 
 ## Core Purpose
 
@@ -10,14 +10,14 @@ Enable individuals and teams to create sketches, diagrams, wireframes, and visua
 
 ## Key Capabilities
 
-- Infinite canvas with zoom (10%–1600%) and pan
+- Infinite canvas with zoom (10%–3000%) and pan
 - Shape tools: rectangle, diamond, ellipse, arrow, line, freedraw, text, frame, embeddable
 - Hand-drawn rendering via Rough.js for a sketch-like look
 - Real-time multiplayer collaboration with live cursors and presence
 - Export to PNG, SVG, JSON; import from JSON and clipboard
 - Library system for reusable element templates
 - Embeddable as a React component in third-party applications
-- i18n support with 61+ locales
+- i18n support with 58 locales
 - Progressive Web App (offline-capable)
 
 ## Target Users

@@ -29,7 +29,7 @@ This installs dependencies for the root workspace and all packages (`packages/co
 yarn start
 ```
 
-The app will be available at `http://localhost:3000` with hot module replacement.
+The app will be available at `http://localhost:5173` with hot module replacement.
 
 ## Common Development Commands
 
@@ -141,7 +141,7 @@ If a hook fails, fix the issue and commit again. Do not skip hooks with `--no-ve
 | Problem | Solution |
 |---------|----------|
 | `yarn install` fails | Delete `node_modules/` and `yarn.lock`, then `yarn install` |
-| Port 3000 in use | Kill the process: `lsof -ti:3000 \| xargs kill` |
+| Port 5173 in use | Kill the process: `lsof -ti:5173 | xargs kill` |
 | Canvas tests fail | Ensure `vitest-canvas-mock` is installed |
 | Type errors after pull | Run `yarn build:packages` to rebuild type definitions |
 | Stale build artifacts | Run `yarn rm:build && yarn build` |

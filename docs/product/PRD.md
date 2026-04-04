@@ -73,7 +73,7 @@ Each element must support configurable visual properties:
 ### FR-3: Canvas Operations
 
 - **Infinite canvas** — no boundary limits in any direction
-- **Zoom** — 10% to 1600%, via Ctrl+scroll, pinch, or toolbar
+- **Zoom** — 10% to 3000%, via Ctrl+scroll, pinch, or toolbar
 - **Pan** — via Hand tool, Space+drag, or scroll
 - **Grid** — optional alignment grid with configurable size
 - **Snapping** — snap to grid, snap to elements, snap to midpoints
@@ -181,7 +181,7 @@ The React component must support:
 
 ### Internationalization
 
-- 61+ locale translations
+- 58 locale translations
 - RTL layout support
 - Unicode text rendering on canvas
 

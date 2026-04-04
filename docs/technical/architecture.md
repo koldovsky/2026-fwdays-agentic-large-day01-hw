@@ -4,7 +4,7 @@
 
 Excalidraw is a monorepo containing five npm packages and a standalone web application. The core library (`packages/excalidraw`) is an embeddable React component that renders an infinite-canvas drawing editor. The web app (`excalidraw-app/`) adds collaboration, persistence, and hosting on top.
 
-```
+```text
 ┌─────────────────────────────────────────────────┐
 │                 excalidraw-app                    │
 │  (Firebase, collaboration, file persistence)     │
@@ -141,9 +141,34 @@ The standalone web app hosted at excalidraw.com. Adds features not in the librar
 - `share/` — link sharing and room creation
 - `components/AI.tsx` — AI-powered features UI
 
+## State Management
+
+Excalidraw's state is divided into three core layers, all governed by the Action System.
+
+### AppState
+
+The global editor state object defined in `packages/excalidraw/appState.ts`. Tracks UI concerns: active tool, viewport position (`scrollX`, `scrollY`), zoom level, selected element IDs, grid settings, theme, and collaboration status. Updated exclusively through action `perform()` return values.
+
+### Elements (SceneElementsMap)
+
+The collection of all drawing elements, stored as an indexed map in `packages/element/src/store.ts`. Elements are immutable — updates create new objects via `newElementWith()`. The store records `StoreDelta` objects for each change, enabling both undo/redo and real-time collaboration sync.
+
+### ActionManager
+
+The central dispatcher defined in `packages/excalidraw/actions/manager.tsx`. All state transitions flow through it:
+
+1. User event (click, key press, API call) triggers an action
+2. `ActionManager.executeAction()` calls `action.perform(elements, appState)`
+3. The action returns updated `{ elements, appState }` (partial updates allowed)
+4. The store records a `StoreDelta` for history tracking
+5. React re-renders based on changed state
+6. If in a collaborative room, the delta is broadcast via `Portal`
+
+Actions are registered in `packages/excalidraw/actions/index.ts` (48 actions total). Each action optionally defines `keyTest` (keyboard shortcut), `predicate` (availability guard), `PanelComponent` (properties panel UI), and `trackEvent` (analytics).
+
 ## Data Flow
 
-```
+```text
 User Event (click/key/touch)
     │
     ▼
@@ -190,7 +215,7 @@ Key transforms:
 
 ## Collaboration Architecture
 
-```
+```text
 Client A                    Server (Socket.io)              Client B
    │                            │                              │
    │── StoreDelta ──────────────│──────────────────────────────▶│
@@ -217,7 +242,7 @@ Client A                    Server (Socket.io)              Client B
 
 ## Build Pipeline
 
-```
+```text
 Source (TypeScript + React)
     │
     ├── packages/* → ESBuild → dist/dev/ + dist/prod/ + dist/types/

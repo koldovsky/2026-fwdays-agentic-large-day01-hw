@@ -23,7 +23,7 @@
 | Pako 2.0 | zlib compression for data serialization |
 | Nanoid 3.3 | Unique element ID generation |
 | Fractional-indexing 3.2 | Collaborative element ordering |
-| i18next | Internationalization (61+ locales) |
+| i18next | Internationalization (58 locales) |
 | Socket.io-client 4.7 | Real-time collaboration transport |
 
 ## Testing
@@ -51,7 +51,7 @@
 
 ```bash
 yarn install          # Install dependencies
-yarn start            # Dev server on port 3000
+yarn start            # Dev server on port 5173 (Vite default)
 yarn build            # Production build
 yarn test:all         # Run all tests
 yarn test:app         # Unit/integration tests (Vitest)

@@ -10,23 +10,30 @@ node_modules/
 
 # Lock files
 yarn.lock
+package-lock.json
 
-# Test coverage
+# Test coverage and snapshots
 .nyc_output/
 coverage/
+**/*.snap
 
 # Generated/minified assets
+*.min.js
+*.min.css
+*.map
 public/fonts/
 public/locales/
 packages/excalidraw/locales/
 packages/excalidraw/fonts/assets/
+packages/excalidraw/types/
 
 # Environment files
 .env
 .env.local
 .env.*.local
 
-# IDE and OS files
+# IDE, OS, and VCS files
+.git/
 .idea/
 .vscode/
 *.swp

@@ -26,4 +26,4 @@ This repository is a fork of the main Excalidraw project, used for the fwdays Ag
 - `yarn.lock` must not be manually edited
 - Build must pass via `yarn build` before PR submission
 - TypeScript strict mode enforced — no `any` types without justification
-- i18n keys must be added for any user-visible strings (61+ locales)
+- i18n keys must be added for any user-visible strings (58 locales)

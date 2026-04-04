@@ -17,8 +17,8 @@
 
 ## Key Findings
 
-- Excalidraw is a monorepo with 5 packages and a standalone app
-- Canvas-based rendering with multi-layer architecture (static, interactive, new element)
-- Sophisticated delta-based history and collaboration system
-- 48 registered actions govern all state changes
-- 6+ undocumented behaviors documented in decisionLog.md
+- Excalidraw is a monorepo with 5 packages and a standalone app — see `package.json` (workspaces) and `packages/` directory
+- Canvas-based rendering with multi-layer architecture (static, interactive, new element) — see `packages/excalidraw/renderer/staticScene.ts`, `packages/excalidraw/renderer/interactiveScene.ts`
+- Sophisticated delta-based history and collaboration system — see `packages/excalidraw/history.ts`, `packages/element/src/store.ts`
+- 48 registered actions govern all state changes — see `packages/excalidraw/actions/index.ts`, `packages/excalidraw/actions/manager.tsx`
+- 6 undocumented behaviors documented in `docs/memory/decisionLog.md`
