@@ -15,6 +15,15 @@ node_modules/
 repomix-output.*
 repomix-*.txt
 
+# WASM: бінарники (scripts/wasm) і згенеровані TS з base64 (buildWasm.js → subset/*-wasm.ts)
+scripts/wasm/*.wasm
+packages/excalidraw/subset/**/*-wasm.ts
+
+# Шрифти: бінарні woff2 і джерела .sfd (шум у Repomix / контексті)
+packages/excalidraw/fonts/**/*.woff2
+packages/excalidraw/fonts/**/*.sfd
+public/**/*.woff2
+
 # Згенеровані типи пакета excalidraw (tsc → dist/types)
 packages/excalidraw/types/
 
