@@ -22,6 +22,11 @@ package-lock.json
 yarn-debug.log*
 yarn-error.log*
 packages/excalidraw/types
+
+# Repomix / LLM repo dumps
+repomix-output.*
+repomix-*.txt
+
 coverage
 dev-dist
 html
