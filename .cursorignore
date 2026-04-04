@@ -1,0 +1,59 @@
+# Build artifacts
+packages/*/dist/
+packages/*/dist-cjs/
+excalidraw-app/dist/
+.vite/
+
+# Dependencies
+node_modules/
+.yarn/
+
+# Lock files
+yarn.lock
+package-lock.json
+
+# Test coverage and snapshots
+.nyc_output/
+coverage/
+**/*.snap
+
+# Generated/minified assets
+*.min.js
+*.min.css
+*.map
+public/fonts/
+public/locales/
+packages/excalidraw/locales/
+packages/excalidraw/fonts/assets/
+packages/excalidraw/types/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE, OS, and VCS files
+.git/
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+docker-compose.yml
+
+# Firebase
+firebase-project/
+
+# CI/CD
+.github/workflows/
+.github/assets/
+
+# Misc generated
+*.tgz
+*.log
+.next/
+.codesandbox/
