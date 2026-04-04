@@ -1,46 +1,48 @@
 # Project Brief — Excalidraw
 
-## Що це за проєкт
+## Що це за продукт
 
-Це **навчальний воркшоп «Agentic IDE, День 1»** від **fwdays** (2026).
-Репозиторій є **форком офіційного монорепо [Excalidraw](https://github.com/excalidraw/excalidraw)**,
-доповненим конфігурацією для **автоматичної перевірки (auto-grading) домашніх завдань**
-учасників воркшопу через CodeRabbit AI.
+**Excalidraw** — відкритий (open-source) веб-інструмент для створення діаграм, схем і ілюстрацій у стилі hand-drawn sketch. Ескізний, навмисно «нечіткий» стиль (через [Rough.js](https://roughjs.com/)) знижує когнітивний бар'єр: користувач фокусується на ідеї, а не на форматуванні.
 
----
-
-## Призначення
-
-- **Веб-редактор** діаграм у стилі скетчу (схеми, малюнки «від руки»).
-- **Бібліотека** `@excalidraw/excalidraw` — React-компонент для вбудовування редактора в інші застосунки.
-- **`excalidraw-app`** — повний продуктовий застосунок; **`examples/`** — приклади інтеграції.
-
-Учасники форкають цей репозиторій і виконують завдання кроками, які перевіряє CodeRabbit у PR:
-
-| Крок | Завдання |
-|------|----------|
-| **Крок 2** | Створити `.cursorignore` з патернами виключення для великого монорепо |
-| **Крок 4** | **Memory Bank** — три файли в `docs/memory/`: `projectbrief.md`, `techContext.md`, `systemPatterns.md` |
-| **Крок 5** | **Technical Docs** — `docs/technical/architecture.md` + **Product Docs** — `docs/product/domain-glossary.md` та `docs/product/PRD.md` |
-
-Весь auto-grading описаний у `.coderabbit.yaml` в корені — мовою навчання: **Ukrainian** (`uk-UA`).
+**Ключова цінність:** *відкрив → одразу малюєш* — без реєстрації, без налаштувань, zero friction.
 
 ---
 
-## Основний стек технологій
+## Основні можливості
+
+| Можливість | Деталі |
+|------------|--------|
+| **Whiteboard-редактор** | 16+ інструментів (прямокутники, стрілки, freehand, текст, зображення, фрейми тощо), ~80 дій (align, rotate, z-order, crop…) |
+| **Realtime Collaboration** | Socket.io + Firebase; link-based кімнати без accounts; видимі курсори, follow-mode, laser pointer |
+| **Export / Import** | PNG, SVG, `.excalidraw` JSON, Mermaid-імпорт, clipboard, shareable URL + QR |
+| **Бібліотека шаблонів** | IndexedDB каталог, публічні бібліотеки з `libraries.excalidraw.com` |
+| **AI (optional/experimental)** | Text-to-Diagram (`TTDDialog`), Magic Frame — потребують зовнішнього AI-бекенду (`VITE_APP_AI_BACKEND`) |
+| **Embeddable компонент** | NPM-пакет `@excalidraw/excalidraw` — React-компонент для вбудовування в інші застосунки |
+
+---
+
+## Архітектура продукту
+
+| Рівень | Опис |
+|--------|------|
+| **excalidraw.com** | Повний Vite-застосунок (`excalidraw-app/`): Firebase persistence, Socket.io collab, Sentry, PWA, i18n (80+ мов) |
+| **@excalidraw/excalidraw** | NPM-пакет v0.18.0 — embeddable React-компонент; peerDeps: React 17–19 |
+
+---
+
+## Стек технологій
 
 | Категорія | Технології |
 |-----------|------------|
-| **UI / Бібліотека** | **React 19**, **TypeScript 5.9** |
-| **Збірка** | **Vite 5**, Yarn Workspaces (Yarn 1.22) |
-| **Стан у застосунку** | **Jotai 2** |
-| **Бекенд / реалтайм** | **Firebase 11**, **Socket.io-client 4** |
-| **Моніторинг** | **Sentry** |
+| **UI / Бібліотека** | React 19, TypeScript 5.9 |
+| **Збірка** | Vite 5, Yarn Workspaces (Yarn 1.22) |
+| **Стан** | Jotai 2 |
+| **Бекенд / Realtime** | Firebase 11, Socket.io-client 4 |
+| **Моніторинг** | Sentry |
 | **i18n** | i18next, Crowdin |
-| **Тестування** | **Vitest 3**, jsdom, vitest-canvas-mock |
+| **Тестування** | Vitest 3, jsdom, vitest-canvas-mock |
 | **Якість коду** | ESLint, Prettier, Husky, lint-staged |
 | **CI/CD** | GitHub Actions, Vercel, Docker |
-| **Auto-review** | **CodeRabbit** (`assertive` profile, Ukrainian) |
 | **Вимоги** | Node ≥ 18 |
 
 ---
@@ -50,43 +52,38 @@
 ```
 .
 ├── excalidraw-app/          # Головний Vite-застосунок (excalidraw.com)
-│   ├── App.tsx              # Кореневий React-компонент (~40 KB)
+│   ├── App.tsx              # Кореневий React-компонент
 │   ├── collab/              # Логіка колаборації (Socket.io)
 │   ├── components/          # UI-компоненти застосунку
 │   ├── data/                # Серіалізація, persistence, Firebase
 │   └── share/               # Функціональність "поділитись"
 │
 ├── packages/                # Монорепо-пакети (Yarn workspaces)
-│   ├── excalidraw/          # @excalidraw/excalidraw — публікуємий React-компонент
+│   ├── excalidraw/          # @excalidraw/excalidraw — React-компонент
 │   ├── element/             # Логіка елементів (фігури, трансформації)
-│   ├── common/              # Спільні утиліти між пакетами
+│   ├── common/              # Спільні утиліти
 │   ├── math/                # Геометрія та математика
 │   └── utils/               # Загальні утиліти
 │
-├── examples/
-│   ├── with-nextjs/         # Інтеграція з Next.js
-│   └── with-script-in-browser/  # Вбудовування через <script>
-│
+├── examples/                # Приклади інтеграції (Next.js, browser script)
 ├── scripts/                 # Допоміжні скрипти (release, locales, build)
 ├── firebase-project/        # Firebase конфігурація
 ├── .github/workflows/       # CI: lint, test, docker, sentry, coverage
-├── .coderabbit.yaml         # ← Конфігурація auto-grading воркшопу
 ├── vitest.config.mts        # Конфігурація тестів
 └── package.json             # Корінь монорепо
 ```
 
 ---
 
-## Підсумок
+## Контекст воркшопу
 
-Це Excalidraw (відкритий whiteboard-редактор з collaborative малюванням) як навчальна
-платформа для відпрацювання навичок роботи з Agentic IDE (Cursor) — учасники вивчають,
-як AI-агент орієнтується у великій кодовій базі, налаштовують Memory Bank та документують
-архітектуру проєкту.
+Цей репозиторій також використовується як навчальна платформа **fwdays «Agentic IDE, День 1» (2026)**. Учасники форкають репо та виконують кроки, які автоматично перевіряє CodeRabbit AI (конфігурація у `.coderabbit.yaml`).
 
 ---
 
 ## Додаткова документація
 
-For detailed architecture → see [docs/technical/architecture.md](../technical/architecture.md)
-For domain glossary → see [docs/product/domain-glossary.md](../product/domain-glossary.md)
+- [Architecture](../technical/architecture.md) — data flow, rendering pipeline
+- [Domain Glossary](../product/domain-glossary.md) — термінологія проєкту
+- [Dev Setup](../technical/dev-setup.md) — онбординг розробника
+- [PRD](../product/PRD.md) — Product Requirements Document
