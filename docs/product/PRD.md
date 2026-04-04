@@ -60,7 +60,6 @@ Verified from `TOOL_TYPE` constant (`packages/common/src/constants.ts:447`):
 | Text | `text` | Inline WYSIWYG editor |
 | Image | `image` | Paste / drag-drop, stored as `BinaryFiles` |
 | Frame | `frame` | Named container with clip region |
-| Magic Frame | `magicframe` | AI-generated content container |
 | Embeddable | `embeddable` | Embed iframes (YouTube, Figma, etc.) |
 | Eraser | `eraser` | Animated erase trail |
 | Hand | `hand` | Pan canvas without accidentally drawing |
