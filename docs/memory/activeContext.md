@@ -77,9 +77,5 @@
 
 | Документ | Що містить |
 |---|---|
-| [`docs/memory/projectbrief.md`](./projectbrief.md) | Мета проєкту, публічне API |
-| [`docs/memory/techContext.md`](./techContext.md) | Стек, команди |
-| [`docs/memory/systemPatterns.md`](./systemPatterns.md) | Архітектура |
-| [`docs/memory/productContext.md`](./productContext.md) | UX goals, сценарії |
 | [`docs/technical/architecture.md`](../technical/architecture.md) | Детальна архітектура |
 | [`docs/product/domain-glossary.md`](../product/domain-glossary.md) | Словник термінів |

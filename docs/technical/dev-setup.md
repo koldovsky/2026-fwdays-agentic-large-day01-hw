@@ -325,11 +325,3 @@ Language: Ukrainian (`uk-UA`). Response within ~1–2 minutes.
 
 ---
 
-## See also
-
-| Document | Contents |
-|---|---|
-| [`docs/memory/techContext.md`](../memory/techContext.md) | Full tech stack with versions |
-| [`docs/technical/architecture.md`](./architecture.md) | System architecture & data flow |
-| [`docs/memory/systemPatterns.md`](../memory/systemPatterns.md) | Key patterns & conventions |
-| [`docs/memory/activeContext.md`](../memory/activeContext.md) | Current focus & task status |

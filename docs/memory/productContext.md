@@ -184,8 +184,5 @@ onPointerUpdate   // рух курсора (для collab)
 
 | Документ | Що містить |
 |---|---|
-| [`docs/memory/projectbrief.md`](./projectbrief.md) | Мета проєкту, можливості, публічне API |
-| [`docs/memory/techContext.md`](./techContext.md) | Стек, версії, команди |
-| [`docs/memory/systemPatterns.md`](./systemPatterns.md) | Архітектура, патерни |
 | [`docs/technical/architecture.md`](../technical/architecture.md) | Data flow, rendering pipeline |
 | [`docs/product/domain-glossary.md`](../product/domain-glossary.md) | Словник термінів |

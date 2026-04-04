@@ -128,6 +128,5 @@ Bonus:     4 / 6  (67%)
 
 | Документ | Що містить |
 |---|---|
-| [`docs/memory/activeContext.md`](./activeContext.md) | Поточний фокус, наступні кроки |
 | [`docs/technical/architecture.md`](../technical/architecture.md) | Детальна архітектура |
 | [`docs/product/domain-glossary.md`](../product/domain-glossary.md) | Словник термінів |

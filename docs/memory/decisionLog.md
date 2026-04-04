@@ -154,6 +154,4 @@
 
 | Документ | Що містить |
 |---|---|
-| [`docs/memory/activeContext.md`](./activeContext.md) | Поточний фокус і статус завдань |
-| [`docs/memory/progress.md`](./progress.md) | Детальний прогрес по завданнях |
 | [`docs/technical/architecture.md`](../technical/architecture.md) | Архітектурні рішення проєкту Excalidraw |

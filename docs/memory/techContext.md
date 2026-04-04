@@ -161,7 +161,5 @@ packages/excalidraw/types/  # Згенеровані .d.ts (у .gitignore)
 
 | Документ | Що містить |
 |---|---|
-| [`docs/memory/projectbrief.md`](./projectbrief.md) | Мета проєкту, можливості, публічне API |
-| [`docs/memory/systemPatterns.md`](./systemPatterns.md) | Архітектура, патерни, component tree |
 | [`docs/technical/architecture.md`](../technical/architecture.md) | Детальна архітектура з mermaid-діаграмами, data flow, rendering pipeline |
 | [`docs/product/domain-glossary.md`](../product/domain-glossary.md) | Словник термінів (ExcalidrawElement, Scene, AppState, Action, ...) |

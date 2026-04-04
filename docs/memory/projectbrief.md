@@ -95,7 +95,5 @@ export { Sidebar, Button, Footer, MainMenu, WelcomeScreen }
 
 | Документ | Що містить |
 |---|---|
-| [`docs/memory/techContext.md`](./techContext.md) | Стек, версії, команди, конфіги |
-| [`docs/memory/systemPatterns.md`](./systemPatterns.md) | Архітектура, патерни, component tree |
 | [`docs/technical/architecture.md`](../technical/architecture.md) | Детальна архітектура з mermaid-діаграмами, data flow, rendering pipeline |
 | [`docs/product/domain-glossary.md`](../product/domain-glossary.md) | Словник термінів (ExcalidrawElement, Scene, AppState, Action, ...) |
