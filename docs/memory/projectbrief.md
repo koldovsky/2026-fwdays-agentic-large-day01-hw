@@ -49,7 +49,7 @@
 
 ## Структура репозиторію
 
-```
+```text
 .
 ├── excalidraw-app/          # Головний Vite-застосунок (excalidraw.com)
 │   ├── App.tsx              # Кореневий React-компонент

@@ -72,7 +72,7 @@
 
 **471 рядків, 19 термінів** (потрібно ≥5). Кожен з: визначення, файли, "не плутати з".
 
-Обов'язкові: Action ✅, AppState ✅, ExcalidrawElement ✅, Scene ✅, ToolType ✅.
+Обов'язкові: Action ✅, AppState ✅, ExcalidrawElement ✅, Scene ✅, Tool (ToolType) ✅.
 Бажані: Collaborator ✅, Library ✅, Frame ✅.
 
 ### 5.4 `docs/product/PRD.md` ✅
@@ -110,11 +110,9 @@ git push origin HEAD
 ```
 
 **Поточний git статус:**
-```
- M yarn.lock              ← НЕ додавати (не стосується завдань)
+```text
 ?? .cursorignore          ← Крок 2 ✅
 ?? docs/                  ← Кроки 4–5 ✅
-?? repomix-compressed.txt ← НЕ додавати (побічний артефакт)
 ```
 
 ---

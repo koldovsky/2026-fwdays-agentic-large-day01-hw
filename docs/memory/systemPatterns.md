@@ -6,23 +6,18 @@
 
 ## Загальна структура каталогу
 
-```
+```text
 packages/excalidraw/
-├── index.tsx            ← публічна точка входу (Excalidraw компонент + re-exports)
-├── types.ts             ← AppState, ExcalidrawProps, всі ключові типи
-├── editor-jotai.ts      ← Jotai store для editor-subtree
-├── actions/             ← 46 файлів: ActionManager, register, action*.tsx
-├── components/          ← 277 файлів: App.tsx + весь UI
-│   └── canvases/        ← StaticCanvas, InteractiveCanvas
-├── scene/               ← Renderer.ts, scroll, zoom, export
-├── renderer/            ← staticScene.ts, interactiveScene.ts, SVG export
-├── data/                ← persistence, JSON, blob, library, restore
-├── hooks/               ← React hooks (useExcalidrawAPI, тощо)
-├── fonts/               ← завантаження шрифтів (woff2)
-├── i18n/                ← переклади
-├── wysiwyg/             ← текстовий редактор прямо на канвасі
-├── lasso/               ← інструмент лассо
-└── css/                 ← SCSS стилі
+├── index.tsx         ← публічна точка входу (Excalidraw + re-exports)
+├── types.ts          ← AppState, ExcalidrawProps, ключові типи
+├── editor-jotai.ts   ← Jotai store для editor-subtree
+├── actions/          ← ActionManager + action*.tsx
+├── components/       ← App.tsx + весь UI; canvases/ (StaticCanvas, InteractiveCanvas)
+├── scene/            ← Renderer.ts, scroll, zoom, export
+├── renderer/         ← staticScene.ts, interactiveScene.ts, SVG export
+├── data/             ← persistence, JSON, blob, library, restore
+├── hooks/            ← React hooks (useExcalidrawAPI тощо)
+└── fonts/ | i18n/ | wysiwyg/ | lasso/ | css/
 ```
 
 ---
@@ -30,16 +25,8 @@ packages/excalidraw/
 ## Точка входу — `index.tsx`
 
 Публічний компонент `Excalidraw` — тонка обгортка (`React.memo`):
-
-```
-EditorJotaiProvider        ← scoped Jotai store
-  └─ InitializeApp         ← первинна ініціалізація
-       └─ App              ← реальна реалізація (components/App.tsx)
-```
-
-Також експортує: `MainMenu`, `Sidebar`, `Footer`, `TTDDialog`, хуки
-(`useExcalidrawAPI`, `useExcalidrawStateValue`), утиліти з `@excalidraw/element`,
-`@excalidraw/common`, `@excalidraw/utils`.
+`EditorJotaiProvider` → `InitializeApp` → `App` (components/App.tsx).
+Також експортує: `MainMenu`, `Sidebar`, `Footer`, `TTDDialog`, хуки (`useExcalidrawAPI`), утиліти.
 
 ---
 
@@ -72,15 +59,7 @@ EditorJotaiProvider        ← scoped Jotai store
 editor-дерева (не замінює React state повністю).
 
 **Цикл оновлення через Action:**
-
-```
-action.perform(elements, appState, ...)
-  → ActionResult { elements, appState, captureUpdate }
-  → App.syncActionResult()
-      ├─ store.scheduleAction(captureUpdate)   ← history batching
-      ├─ scene.replaceAllElements(elements)    ← оновлення елементів
-      └─ this.setState(appState)               ← оновлення UI стану
-```
+`action.perform()` → `ActionResult` → `syncActionResult()` → `store.scheduleAction` + `scene.replaceAllElements` + `this.setState`.
 
 ---
 
@@ -90,17 +69,7 @@ action.perform(elements, appState, ...)
 `_ExcalidrawElementBase` містить: `id`, `x/y`, `width/height`, `angle`, кольори,
 `opacity`, `roughness`, `version`, `groupIds`, `frameId`, `isDeleted`, тощо.
 
-Конкретні типи (discriminated union):
-
-```
-ExcalidrawElement =
-  | rectangle | diamond | ellipse
-  | text
-  | linear (line/arrow) | freedraw
-  | image | frame | magicframe
-  | iframe | embeddable
-  | selection
-```
+Конкретні типи (discriminated union): `rectangle`, `diamond`, `ellipse`, `text`, `linear` (line/arrow), `freedraw`, `image`, `frame`, `magicframe`, `iframe`, `embeddable`, `selection`.
 
 ---
 
@@ -130,7 +99,7 @@ ExcalidrawElement =
 
 Два незалежних canvas-шари:
 
-```
+```text
 ┌─────────────────────────────────────────────┐
 │  InteractiveCanvas (поверх)                 │
 │  - handles, selection box, remote cursors   │
@@ -144,7 +113,7 @@ ExcalidrawElement =
 
 **Потік рендерингу:**
 
-```
+```text
 1. scene/Renderer.ts
    └─ getRenderableElements() [мемоїзовано]
        ├─ фільтрує in-flight newElement та текст, що редагується
@@ -166,7 +135,7 @@ ExcalidrawElement =
 
 ## Взаємозв'язки між модулями
 
-```
+```text
 index.tsx (Excalidraw)
     │
     └─► components/App.tsx  ◄──────────────────────────┐

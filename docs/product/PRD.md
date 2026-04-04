@@ -111,7 +111,7 @@ Keyboard shortcuts, Command Palette (`⌘K`), Search Menu (`Ctrl+F`), Radix UI, 
 
 ### 4.8 Imperative API
 
-`ExcalidrawImperativeAPI` (через `ref`): `updateScene`, `getSceneElements`, `setActiveTool`, `addFiles`, `resetScene`, `onChange`, `onIncrement`, `scrollToContent`, `history.clear`.
+`ExcalidrawImperativeAPI` (через `ref`) — includes, but is not limited to: `updateScene`, `getSceneElements`, `getAppState`, `getFiles`, `setActiveTool`, `setCursor`, `addFiles`, `resetScene`, `mutateElement`, `updateLibrary`, `setToast`, `toggleSidebar`, `scrollToContent`, `onChange`, `onIncrement`, `onPointerDown`, `onPointerUp`, `history.clear`. Повний інтерфейс: `packages/excalidraw/types.ts` (рядки 917–987).
 
 ---
 

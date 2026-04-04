@@ -18,7 +18,7 @@ graph TD
     subgraph "@excalidraw/excalidraw"
         PKG_ENTRY["packages/excalidraw/index.tsx<br/>public API + providers"]
         APP_CLASS["packages/excalidraw/components/App.tsx<br/>class App extends React.Component"]
-        ACTIONS["packages/excalidraw/actions/<br/>ActionManager + ~60 actions"]
+        ACTIONS["packages/excalidraw/actions/<br/>ActionManager + ~80 registered actions"]
         RENDERER_S["packages/excalidraw/renderer/staticScene.ts"]
         RENDERER_I["packages/excalidraw/renderer/interactiveScene.ts"]
         SCENE_R["packages/excalidraw/scene/Renderer.ts<br/>memoised viewport culling"]
@@ -187,7 +187,7 @@ Two separate Jotai stores exist:
 
 The editor uses **two separate `<canvas>` elements** that are layered on top of each other:
 
-```
+```text
 ┌──────────────────────────────────────────────┐
 │  InteractiveCanvas  (top, pointer events)    │  selection handles, remote cursors, snap guides
 ├──────────────────────────────────────────────┤

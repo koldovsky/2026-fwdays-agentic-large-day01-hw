@@ -50,7 +50,7 @@
 - `jsx`: react-jsx
 - **Path aliases** (вирішуються у Vite та Vitest теж):
 
-```
+```text
 @excalidraw/common    → packages/common/src/index.ts
 @excalidraw/excalidraw → packages/excalidraw/index.tsx
 @excalidraw/element   → packages/element/src/index.ts
@@ -94,7 +94,7 @@
 | Бібліотека | Версія | Роль |
 |------------|--------|------|
 | **Firebase** | 11.3.1 | Persistence, sharing (excalidraw-app) |
-| **Socket.io-client** | 4.7.2 | Colaboration / realtime sync |
+| **Socket.io-client** | 4.7.2 | Collaboration / realtime sync |
 | `idb-keyval` | 6.0.3 | IndexedDB key-value store |
 
 ---

@@ -358,7 +358,7 @@ Throttling рендерингу статичного canvas реалізован
 
 ---
 
-## ToolType / ActiveTool
+## Tool (ToolType / ActiveTool)
 
 **Визначення.** `ToolType` — union string literal-тип усіх інструментів редактора. `ActiveTool` — поточний активний інструмент у `AppState.activeTool`, разом з метаданими `lastActiveTool`, `locked`, `fromSelection`.
 

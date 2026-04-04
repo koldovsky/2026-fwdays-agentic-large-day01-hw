@@ -397,15 +397,15 @@ All CI runs on GitHub Actions. Here is what triggers on a PR to `master`:
 | `size-limit.yml` | PR to master | Bundle size check for `@excalidraw/excalidraw` |
 | `semantic-pr-title.yml` | PR opened/edited | Validates conventional commit title format |
 
-Additional workflows (triggered on pushes to `release` branch):
+Additional workflows (triggered on push):
 
-| Workflow | What it does |
-|----------|-------------|
-| `test.yml` | Runs `test:app` on push to master |
-| `build-docker.yml` | Builds Docker image |
-| `publish-docker.yml` | Pushes multi-arch image to Docker Hub |
-| `autorelease-excalidraw.yml` | Publishes `@excalidraw/excalidraw` to NPM |
-| `sentry-production.yml` | Uploads sourcemaps to Sentry |
+| Workflow | Trigger | What it does |
+|----------|---------|-------------|
+| `test.yml` | push to `master` | Runs `test:app` |
+| `build-docker.yml` | push to `release` | Builds Docker image |
+| `publish-docker.yml` | push to `release` | Builds multi-arch image and pushes to Docker Hub |
+| `autorelease-excalidraw.yml` | push to `release` | Publishes `@excalidraw/excalidraw` to NPM (`next` tag) |
+| `sentry-production.yml` | push to `release` | Builds app, uploads sourcemaps to Sentry |
 
 **All CI must be green before a PR can be merged.**
 

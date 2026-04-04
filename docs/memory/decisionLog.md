@@ -49,7 +49,7 @@
 - Поля класу: `Scene`, `Store`, `History`, `Renderer`, `Fonts`, `Library`, `ActionManager`, `BinaryFiles`, `imageCache` — поза React state
 
 **Наслідки:**
-- 37 ручних `addEventListener` у `addEventListeners()`, всі очищаються через `onRemoveEventListenersEmitter`
+- ~22 реєстрацій `addEventListener` у `addEventListeners()` (~36 загалом у файлі), всі очищаються через `onRemoveEventListenersEmitter`
 - Нові фічі важко переносити на hooks без рефакторингу
 - `window.h.state` / `window.h.app` доступні в dev-режимі для тестів і дебагу
 
@@ -66,7 +66,7 @@
 **Рішення:** Елементи живуть у `this.scene` (`Scene` з `@excalidraw/element`) — повністю поза React state.
 
 **Цикл оновлення:**
-```
+```text
 action.perform(elements, appState) → ActionResult
   → syncActionResult()
       ├─ scene.replaceAllElements(elements)  ← елементи (без setState)
@@ -135,7 +135,7 @@ action.perform(elements, appState) → ActionResult
 - **`componentDidMount`**: API recreate → Store→History wire → Scene trigger → event listeners → ResizeObserver → `initializeScene`
 - **`componentDidUpdate`**: `appStateObserver.flush()` → embeddables → collab sync → theme → `store.commit()` → `props.onChange`
 - **`componentWillUnmount`**: renderer, scene, files, ResizeObserver, listeners, library, caches, timers
-- 57 × `addEventListener`; `AnimationFrameHandler` для trails; `debounce`/`throttle` на scroll/pointer
+- ~36 × `addEventListener` (verified against source); `AnimationFrameHandler` для trails; `debounce`/`throttle` на scroll/pointer
 
 ---
 

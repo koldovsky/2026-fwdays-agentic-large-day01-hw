@@ -57,15 +57,15 @@
 
 ---
 
-### Крок 5 — Technical & Product Docs ❌ Ще не виконано
+### Крок 5 — Technical & Product Docs ✅ Виконано
 
 Необхідні файли (per `.coderabbit.yaml` pre-merge checks):
 
 | Файл | Вимога | Статус |
 |------|--------|--------|
-| `docs/technical/architecture.md` | 100–700 рядків, 3+ секції | ❌ відсутній |
-| `docs/product/domain-glossary.md` | ≥5 термінів з визначеннями | ❌ відсутній |
-| `docs/product/PRD.md` | 50–300 рядків, 3+ секції | ❌ відсутній |
+| `docs/technical/architecture.md` | 100–700 рядків, 3+ секції | ✅ присутній (306 рядків) |
+| `docs/product/domain-glossary.md` | ≥5 термінів з визначеннями | ✅ присутній (471 рядок, 19 термінів) |
+| `docs/product/PRD.md` | 50–300 рядків, 3+ секції | ✅ присутній (177 рядків) |
 
 **Що потрібно для `architecture.md`:**
 - High-level Architecture (бажано Mermaid-діаграма)
@@ -85,12 +85,10 @@
 
 ## Поточний git стан
 
-```
+```text
 ## master...origin/master
- M yarn.lock          ← зміна пакетного менеджера (не критично)
 ?? .cursorignore      ← Крок 2: готово, не закомічено
 ?? docs/              ← Кроки 4-5: файли готові, не закомічені
-?? repomix-compressed.txt  ← побічний файл (не потрібен у PR)
 ```
 
 **Перед відкриттям PR:**
@@ -108,7 +106,7 @@
 - `this.setState` викликається 218 раз; `withBatchedUpdates` — 27 разів
 - **Scene (елементи) поза React state** — `this.scene.replaceAllElements(...)`
 - 9 важких об'єктів як поля класу: `Scene`, `Store`, `History`, `Renderer`, `Fonts`, `Library`, `ActionManager`, `BinaryFiles`, `imageCache`
-- 37 реєстрацій `addEventListener`; всі очищуються через `onRemoveEventListenersEmitter`
+- ~36 реєстрацій `addEventListener` (verified against source); всі очищуються через `onRemoveEventListenersEmitter`
 - 3 emitter-и для lifecycle: `editor:mount`, `editor:initialize`, `editor:unmount`
 
 ---
