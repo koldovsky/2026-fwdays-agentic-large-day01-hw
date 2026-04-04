@@ -1,47 +1,61 @@
 # Technical context — Excalidraw monorepo
 
-## Stack (verified from repository manifests)
+## Stack (from `package.json` manifests in this repo)
 
-- **Language**: TypeScript (workspace `typescript` **5.9.3** in root `package.json`).
-- **UI**: React **19.0.0** / React DOM **19.0.0** (`excalidraw-app/package.json`).
-- **App bundling / dev server**: **Vite** **5.0.12** (root devDependencies); the web app uses Vite scripts under `excalidraw-app/`.
-- **Package manager**: **Yarn Classic** **1.22.22** (`packageManager` field in root `package.json`).
-- **Tests / lint**: **Vitest** **3.0.6**, ESLint, Prettier (root `package.json` scripts).
-- **State (app)**: **Jotai** **2.11.0** is a direct dependency of `excalidraw-app` and `@excalidraw/excalidraw`.
+| Layer | Technology | Where |
+|--------|------------|--------|
+| Language | **TypeScript** **5.9.3** | Root `devDependencies` |
+| UI | **React** **19.0.0** / **react-dom** **19.0.0** | `excalidraw-app/package.json` |
+| Bundler (app) | **Vite** **5.0.12** | Root `devDependencies`; config `excalidraw-app/vite.config.mts` |
+| Package manager | **Yarn Classic** **1.22.22** | Root `packageManager` |
+| Unit tests | **Vitest** **3.0.6** | Root `devDependencies`, `yarn test:app` |
+| Lint / format | ESLint, Prettier | `yarn test:code`, `yarn test:other` |
+| Editor state (React) | **Jotai** **2.11.0** (+ **jotai-scope** in library package) | `excalidraw-app` & `packages/excalidraw/package.json` |
+| Sketch rendering | **roughjs** **4.6.4** | `packages/excalidraw/package.json` |
 
-## Monorepo layout (`workspaces` in root `package.json`)
+## Monorepo layout
 
-- **`excalidraw-app/`** — Vite-based web application entrypoint (`yarn start` runs `vite` here).
-- **`packages/common/`**, **`packages/element/`**, **`packages/math/`**, **`packages/excalidraw/`**, **`packages/utils/`** — shared libraries; the published-style package is **`@excalidraw/excalidraw`** (see `packages/excalidraw/package.json`, version **0.18.0** in this tree).
-- **`examples/*`** — integration examples (e.g. Next.js, script tag).
+Root `workspaces`: `excalidraw-app`, `packages/*`, `examples/*`.
 
-## Key dependency versions (library package)
+- **`excalidraw-app/`** — Vite app: `yarn start` runs `vite` here; production build output under app-specific `build`/dist dirs (see `vite.config.mts` / scripts).
+- **`packages/excalidraw/`** — **`@excalidraw/excalidraw`** **0.18.0** — main editor, actions, renderer, public React API.
+- **`packages/element/`**, **`packages/common/`**, **`packages/math/`**, **`packages/utils/`** — shared internals; versions **0.18.0** align with the excalidraw package for internal packages.
+- **`examples/with-nextjs`**, **`examples/with-script-in-browser`** — embed patterns (client-only / dynamic import for SSR frameworks).
 
-From `packages/excalidraw/package.json` (non-exhaustive but representative):
+## App-only dependencies (web shell)
 
-- `@excalidraw/common`, `@excalidraw/element`, `@excalidraw/math`: **0.18.0** (aligned with the package version).
-- **roughjs** **4.6.4** — stroke/fill rendering style.
-- **jotai** **2.11.0**, **jotai-scope** **0.7.2**.
+`excalidraw-app/package.json` also includes, among others:
 
-## Commands (use **yarn** — not npm/pnpm — for this repo)
+- **socket.io-client** **4.7.2** — collaboration transport (`excalidraw-app/collab/`).
+- **firebase** **11.3.1** — storage/sync paths used by collab/file flows where configured.
+- **@sentry/browser** **9.0.1** — error reporting; **hostname-gated** in `excalidraw-app/sentry.ts` (see `decisionLog.md` UB-002).
 
-Run from the **repository root** unless noted:
+## Commands (always **yarn** from repo root)
 
 | Task | Command |
 |------|---------|
 | Install | `yarn` |
-| Dev server (app) | `yarn start` → `yarn --cwd ./excalidraw-app vite` |
+| Dev server | `yarn start` |
 | Production build (app) | `yarn build` |
-| Build all internal packages (ESM) | `yarn build:packages` |
-| Unit tests | `yarn test` or `yarn test:app` |
+| Build internal packages (ESM) | `yarn build:packages` |
+| Vitest | `yarn test` / `yarn test:app` |
+| Vitest once (CI-style) | `yarn test:app --watch=false` |
 | Typecheck | `yarn test:typecheck` |
-| Lint | `yarn test:code` |
-| Full CI-like suite | `yarn test:all` |
+| ESLint | `yarn test:code` |
+| Prettier check | `yarn test:other` |
+| Full gate | `yarn test:all` |
+| Auto-fix | `yarn fix` |
 
-## Runtime requirements
+## Runtime & CI
 
-- **Node**: `>=18.0.0` (root and `excalidraw-app` `engines`).
+- **Node**: `>=18.0.0` (`engines`); GitHub Actions use **Node 20.x** (e.g. `.github/workflows/lint.yml`).
+- **Dev server port**: default **3000** via `VITE_APP_PORT` or Vite default (`excalidraw-app/vite.config.mts`).
 
-## Build artifacts (typical)
+## Build artifacts
 
-- App output under `excalidraw-app/build` / dist-style folders; packages emit under each package’s `dist/` via `build:esm` scripts—see individual `packages/*/package.json`.
+- **`yarn rm:build`** (root script) removes common `build`/`dist` outputs under `excalidraw-app`, `packages/*`, `examples/*`.
+- Library packages emit **`dist/`** via per-package `build:esm` scripts.
+
+## Onboarding
+
+- Step-by-step clone → PR: `docs/technical/dev-setup.md`.

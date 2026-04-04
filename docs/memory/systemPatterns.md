@@ -1,37 +1,51 @@
 # System patterns — Excalidraw architecture
 
-## High-level shape
+## Layered model
 
-- **React component shell** (`packages/excalidraw/components/`, `App.tsx` and related) hosts UI, menus, and hooks into the editor.
-- **Scene model** combines:
-  - **`ExcalidrawElement[]`** — serializable drawing primitives (rectangles, lines, text, etc.) owned and validated in **`@excalidraw/element`** (`packages/element/`).
-  - **`AppState`** — UI/camera/tool settings (zoom, selection, view mode, etc.), defined and defaulted in the excalidraw package (e.g. `appState`, `types`).
-- **Rendering** turns the scene + app state into **canvas** (and SVG for export) output using **`roughjs`** for the sketch style and dedicated render modules under `packages/excalidraw/renderer/` (e.g. static SVG export via `renderer/staticSvgScene.ts`).
+1. **Shell** — React tree in `packages/excalidraw/` (`components/App.tsx`, menus, hooks) plus, for the full product, **`excalidraw-app/App.tsx`** wiring collab, library adapters, and app-only props (e.g. `detectScroll={false}` — see `decisionLog.md` UB-003).
+2. **Scene** — ordered **`ExcalidrawElement[]`** with validation and history helpers in **`@excalidraw/element`** (`packages/element/`).
+3. **Application state** — **`AppState`** (tool, zoom, selection, view mode, etc.) in the excalidraw package (`appState`, `types.ts`).
+4. **Rendering** — HTML **Canvas** for interactive frames; **Rough.js** for stroke style; SVG export via **`renderer/staticSvgScene.ts`** (`renderSceneToSvg`, etc.) and **`@excalidraw/utils`** export helpers (`exportToSvg`, `exportToCanvas` in tests/APIs).
 
 ## Action system
 
-- User operations (toolbar, keyboard shortcuts, context menu) are modeled as **actions** registered with an **`ActionManager`** (`packages/excalidraw/actions/manager` and related action modules).
-- Components obtain the manager via **`useExcalidrawActionManager()`** (see `components/App` and consumers such as `components/main-menu/DefaultItems.tsx`).
-- Actions call into mutations of elements / `AppState` and integrate with history where applicable.
+- **`ActionManager`** (`packages/excalidraw/actions/manager.tsx` and action modules) registers **actions** (menu, keyboard, API).
+- UI uses **`useExcalidrawActionManager()`** from `components/App` (e.g. `components/main-menu/DefaultItems.tsx`).
+- **Pattern**: one action → consistent mutation path → history capture where applicable (not every `AppState` field participates in undo—see upstream changelog for edge cases).
 
-## State management patterns
+## State: Jotai vs scene
 
-- **Transient UI and global editor state** use **Jotai** atoms/scopes in the React layer (`jotai`, `jotai-scope` in `packages/excalidraw/package.json`).
-- **Scene + history** remain tied to the element graph and app-state reducers—not “generic React state” for every pixel—keeping undo/redo and collaboration semantics tractable.
+- **Jotai** (`jotai`, `jotai-scope`) backs editor-scoped and UI state in React.
+- **Elements + `AppState`** remain the **authoritative drawing model** for serialization, export, and collaboration sync—not ad hoc React state per graphic primitive.
+
+## Collaboration (app package only)
+
+- **`excalidraw-app/collab/`** — `Collab` + `Portal` use **Socket.IO** rooms; optional **Firebase** for file payloads when room keys exist.
+- **Not mounted** when `isRunningInIframe()` (`excalidraw-app/App.tsx`) — collaboration stack is absent in that mode (`decisionLog.md` UB-001).
 
 ## Canvas vs DOM
 
-- **Primary drawing surface**: HTML **Canvas** for interactive rendering and performance.
-- **DOM**: overlays for text editing (WYSIWYG), UI chrome, and accessibility; see `wysiwyg/` and component tree under `components/`.
+- **Canvas** — primary pointer hit-testing and drawing.
+- **DOM** — WYSIWYG text (`wysiwyg/`), overlays, focusable UI; must stay in sync with canvas coordinates (scroll handling controlled by **`detectScroll`** prop).
 
-## Package boundaries (mental model)
+## Package boundaries
 
-- **`@excalidraw/element`**: geometry, binding, typing of elements, deltas for history.
-- **`@excalidraw/common`**: shared utilities and constants across packages.
-- **`@excalidraw/math`**: vector/matrix helpers for transforms and hit testing.
-- **`@excalidraw/excalidraw`**: full editor experience, actions, renderer, and public React API.
+| Package | Responsibility |
+|---------|----------------|
+| `@excalidraw/element` | Element types, bindings, geometry, history deltas |
+| `@excalidraw/common` | Shared utilities, constants, `isRunningInIframe`, etc. |
+| `@excalidraw/math` | Vector/matrix math |
+| `@excalidraw/utils` | Export helpers and shared non-UI utilities |
+| `@excalidraw/excalidraw` | Full editor, renderer, public API |
 
-## Extension points
+## Extension pattern
 
-- New **tools** and **actions** plug into the action manager and tool registration rather than bypassing the scene model.
-- **Export** flows reuse renderer helpers (e.g. `renderSceneToSvg` in `renderer/staticSvgScene.ts`) so on-screen and exported scenes stay consistent.
+- Add **tools**/**actions** through the **action manager** and existing registration flows.
+- **Export** should reuse **renderer/export** paths so pixels match the canvas.
+
+## Related reading
+
+- **Commands & versions**: `techContext.md`
+- **Product summary**: `projectbrief.md`
+- **Code vs docs gaps**: `decisionLog.md` (UB-* entries)
+- **Deeper doc (if present)**: `docs/technical/architecture.md`
