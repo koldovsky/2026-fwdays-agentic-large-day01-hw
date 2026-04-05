@@ -67,6 +67,24 @@ For technical setup -> see `docs/technical/dev-setup.md`
   - `docs/product/domain-glossary.md`
   - `docs/product/PRD.md`
 
+## Покриття PR checklist
+
+- Core checklist:
+  - [x] `.cursorignore`
+  - [x] `docs/memory/projectbrief.md`
+  - [x] `docs/memory/techContext.md`
+  - [x] `docs/memory/systemPatterns.md`
+  - [x] `docs/technical/architecture.md`
+  - [x] `docs/product/domain-glossary.md`
+  - [x] `docs/product/PRD.md`
+- Bonus checklist:
+  - [x] `docs/memory/productContext.md`
+  - [x] `docs/memory/activeContext.md`
+  - [x] `docs/memory/progress.md`
+  - [x] `docs/memory/decisionLog.md`
+  - [x] `docs/technical/dev-setup.md`
+  - [x] 3+ undocumented behaviors задокументовано в `docs/memory/decisionLog.md`
+
 ## Поточний фокус і next steps
 
 - Підтримувати узгодженість між `docs/memory/productContext.md` і `docs/product/PRD.md` при майбутніх змінах.

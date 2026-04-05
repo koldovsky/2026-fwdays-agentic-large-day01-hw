@@ -22,8 +22,7 @@ For product requirements -> see `docs/product/PRD.md`
 
 ## In Progress
 
-- Узгодження останніх memory-файлів і перевірка, що вони не дублюють product docs.
-- Перевірка completeness чеклиста в `.github/PULL_REQUEST_TEMPLATE.md` перед фіналізацією.
+- Відкритих in-progress задач по документації зараз немає.
 
 ## Open Questions
 
@@ -38,6 +37,11 @@ For product requirements -> see `docs/product/PRD.md`
 
 ## Next Actions
 
-- Перевірити міждокументні посилання (`memory` -> `product`/`technical`) на актуальність.
-- Пройтись по PR checklist і співставити наявні артефакти з пунктами завдання.
-- За потреби внести дрібні правки формулювань для покращення читабельності перед PR.
+- Підготувати фінальний опис PR (коротко: що додано в memory/product/technical docs).
+- За потреби додати дрібні редакторські правки в формулювання перед merge.
+- Підтримувати узгодженість між `docs/memory/productContext.md` і `docs/product/PRD.md` при наступних змінах.
+
+## Closed Next Actions
+
+- Перевірено міждокументні посилання (`memory` -> `product`/`technical`): усі цільові файли на місці.
+- Пройдено PR checklist і співставлено артефакти з пунктами завдання (core + bonus docs покриті).
