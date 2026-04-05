@@ -21,7 +21,8 @@ For technical setup -> see `docs/technical/dev-setup.md`
 ##### Decision
 
 - Treat editor lifecycle as a strict ordered flow: `editor:mount` is not equivalent to `editor:initialize`.
-- Treat paste handling as frame-sensitive browser logic; avoid inserting async boundaries before clipboard parsing.
+- Treat paste handling as browser-sensitive logic: avoid introducing new async boundaries before clipboard event data is captured unless required by platform APIs.
+- Exception: `parseClipboard` is async in the implementation and is awaited after data extraction, so async parsing is allowed once clipboard payload is already materialized.
 - Treat input handling (touch/pointer/double-click) as an implicit state machine; avoid isolated edits without integration tests.
 - Keep Store/History capture semantics (`IMMEDIATELY`/`NEVER`/`EVENTUALLY`) intact unless history + sync behavior is revalidated.
 - Preserve finalize/restore side effects tied to invisible elements and binding repair until a replacement design is documented.
@@ -173,7 +174,7 @@ For technical setup -> see `docs/technical/dev-setup.md`
 
 - **File**: `packages/excalidraw/components/App.tsx`
 - **Type**: non-obvious side effect
-- **What happens**: adding async boundaries before parsing clipboard data can clear `clipboardData` in some browsers.
+- **What happens**: introducing extra awaits before clipboard event data is captured can clear `clipboardData` in some browsers, but `parseClipboard` itself is async and is awaited after extraction.
 - **Where documented**: inline comment only.
 - **Risk**: paste regressions in browser-specific flows.
 

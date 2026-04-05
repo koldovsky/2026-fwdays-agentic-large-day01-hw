@@ -38,3 +38,4 @@ coverage/
 # IDE-specific (не наш контекст)
 .git/
 .vscode/
+.DS_Store
