@@ -1,5 +1,10 @@
 # Excalidraw: Tech Context
 
+## Details
+
+For detailed architecture -> see `docs/technical/architecture.md`  
+For domain glossary -> see `docs/product/domain-glossary.md`
+
 ## Runtime та менеджер пакетів
 
 - Package manager: `yarn@1.22.22` (Yarn Classic).

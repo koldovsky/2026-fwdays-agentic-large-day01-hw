@@ -1,5 +1,10 @@
 # Excalidraw: Project Brief
 
+## Details
+
+For detailed architecture -> see `docs/technical/architecture.md`  
+For domain glossary -> see `docs/product/domain-glossary.md`
+
 ## Що це за проєкт
 
 - `excalidraw` — це monorepo, де є:

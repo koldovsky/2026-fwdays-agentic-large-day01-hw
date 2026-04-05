@@ -1,5 +1,10 @@
 # Excalidraw: System Patterns
 
+## Details
+
+For detailed architecture -> see `docs/technical/architecture.md`  
+For domain glossary -> see `docs/product/domain-glossary.md`
+
 ## Архітектурний зріз
 
 - Архітектура поділена на:
