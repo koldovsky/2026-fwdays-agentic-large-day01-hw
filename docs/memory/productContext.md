@@ -4,6 +4,7 @@
 
 For detailed architecture -> see `docs/technical/architecture.md`  
 For domain glossary -> see `docs/product/domain-glossary.md`
+For reverse-engineered PRD -> see `docs/product/PRD.md`
 
 ## Роль цього документа в memory bank
 
