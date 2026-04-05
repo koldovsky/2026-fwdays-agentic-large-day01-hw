@@ -49,6 +49,25 @@ For domain glossary -> see `docs/product/domain-glossary.md`
 - Це не лише "сайт Excalidraw"; у репозиторії одночасно розвивається і reusable бібліотека.
 - Не всі можливості app є частиною публічного npm API.
 
+## Як новому розробнику використовувати docs у workflow
+
+1) Старт онбордингу
+- Пройди `docs/technical/dev-setup.md` (clone -> install -> run -> pre-PR checks).
+- Перед першим PR звір чеклист у `.github/PULL_REQUEST_TEMPLATE.md`.
+
+2) Швидке розуміння контексту перед задачею
+- Прочитай `docs/memory/projectbrief.md` (цей файл), `docs/memory/techContext.md` і `docs/memory/systemPatterns.md`.
+- Для поточного стану гілки/контексту звір `docs/memory/activeContext.md` і `docs/memory/progress.md`.
+
+3) Вибір документів за типом зміни (практичні приклади)
+- Якщо змінюєш core editor behavior (`packages/excalidraw`, `packages/element`) -> спочатку `docs/memory/decisionLog.md` + `docs/memory/systemPatterns.md`.
+- Якщо змінюєш app-level фічі (`excalidraw-app`, collab/persistence/infra) -> спочатку `docs/product/PRD.md` + `docs/memory/productContext.md`.
+- Якщо працюєш із setup/CI/tooling -> спочатку `docs/technical/dev-setup.md` + `.github/workflows/*`.
+
+4) Мінімальний doc-check перед комітом
+- Переконайся, що зміна не суперечить `docs/memory/decisionLog.md` (ADR/Undocumented behavior constraints).
+- Якщо поведінка або процес змінились суттєво, онови відповідний документ у `docs/memory/*`, `docs/product/*` або `docs/technical/*`.
+
 ## Верифіковано по source code
 
 - Monorepo/workspaces/scripts: `package.json` (repo root).
