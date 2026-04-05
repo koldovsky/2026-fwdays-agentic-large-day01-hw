@@ -1,5 +1,9 @@
 # AGENTS.md
 
+## Metadata
+
+- Last reviewed: 2026-04-05
+
 ## Purpose
 
 This file is a quick operating guide for AI/code agents working in this repo.
