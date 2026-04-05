@@ -20,6 +20,11 @@ Always read these files before starting substantial work:
 If task scope is product-heavy, also check `docs/product/PRD.md`.
 If task scope is setup/build-related, also check `docs/technical/dev-setup.md`.
 
+Canonical deeper docs:
+
+- Product docs: `docs/product/PRD.md`, `docs/product/domain-glossary.md`
+- Technical docs: `docs/technical/architecture.md`, `docs/technical/dev-setup.md`
+
 ## Repo Structure (short)
 
 - `excalidraw-app/` - product web app shell (Vite app, app-level integrations).

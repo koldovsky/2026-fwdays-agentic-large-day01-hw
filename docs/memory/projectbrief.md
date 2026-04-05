@@ -3,6 +3,8 @@
 ## Details
 
 For detailed architecture -> see `docs/technical/architecture.md`  
+For technical setup -> see `docs/technical/dev-setup.md`  
+For product requirements -> see `docs/product/PRD.md`  
 For domain glossary -> see `docs/product/domain-glossary.md`
 
 ## Що це за проєкт

@@ -3,8 +3,9 @@
 ## Details
 
 For detailed architecture -> see `docs/technical/architecture.md`  
+For technical setup -> see `docs/technical/dev-setup.md`  
+For reverse-engineered PRD -> see `docs/product/PRD.md`  
 For domain glossary -> see `docs/product/domain-glossary.md`
-For reverse-engineered PRD -> see `docs/product/PRD.md`
 
 ## Роль цього документа в memory bank
 
