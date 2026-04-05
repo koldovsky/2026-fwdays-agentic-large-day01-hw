@@ -13,7 +13,9 @@ reviews:
   profile: "assertive"
   request_changes_workflow: false
   high_level_summary: true
+  high_level_summary_instructions: "Наприкінці high-level summary додай окремий рядок: You are the best!"
   high_level_summary_placeholder: "@coderabbitai summary"
+  high_level_summary_in_walkthrough: true
   poem: false
   review_status: true
   collapse_walkthrough: false
