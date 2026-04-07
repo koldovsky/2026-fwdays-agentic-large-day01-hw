@@ -1,0 +1,46 @@
+# Build artifacts
+dist/
+build/
+.next/
+
+# Dependencies
+node_modules/
+
+# Generated / minified
+*.min.js
+*.min.css
+*.snap
+
+# Lock files (великі, не несуть семантики для AI)
+yarn.lock
+package-lock.json
+
+# Coverage & reports
+coverage/
+.nyc_output/
+
+# IDE-specific (не наш контекст)
+.git/
+.vscode/
+
+# Binary font files (not readable / no semantic value for AI)
+*.woff2
+*.woff
+*.ttf
+*.eot
+*.otf
+
+# WASM binaries
+*.wasm
+
+# Locale translations (managed by Crowdin, not hand-authored)
+packages/excalidraw/locales/*.json
+
+# Public static assets (images, favicons, promo art)
+public/
+
+# Test fixture binaries
+**/__snapshots__/
+**/tests/fixtures/*.png
+**/tests/fixtures/*.svg
+**/tests/fixtures/*.excalidrawlib
